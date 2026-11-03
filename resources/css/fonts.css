@@ -1,0 +1,42 @@
+/* The four V7 families, self-hosted as Latin-subset WOFF2 from public/fonts/.
+ *
+ * Sofia Sans Extra Condensed and Instrument Sans are variable fonts — Google
+ * serves one file covering the whole weight axis — so each is declared once
+ * with a weight range rather than one @font-face per weight.
+ *
+ * Verified in Phase 0: swapping the prototype onto these files reproduces its
+ * text metrics exactly (hero lines 589.48 / 467.44 / 760.84 / 685.42px,
+ * statement 240px, footer wordmark 930.11px — zero delta vs Google-served).
+ */
+
+@font-face {
+    font-family: 'Sofia Sans Extra Condensed';
+    src: url('/fonts/sofia-sans-extra-condensed-var.woff2') format('woff2');
+    font-weight: 700 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Instrument Sans';
+    src: url('/fonts/instrument-sans-var.woff2') format('woff2');
+    font-weight: 500 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Shoulders Display';
+    src: url('/fonts/big-shoulders-display-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Michroma';
+    src: url('/fonts/michroma-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}

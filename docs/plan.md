@@ -13,9 +13,13 @@ at the review gates.
 | Read `design/v7/README.md` and all 1048 lines of `design/v7/index.html` | done |
 | Written inventory → `docs/inventory.md` | done — 16 sections, incl. 15 discrepancies and 6 open questions |
 | Reference screenshots at 1440 / 1180 / 900 / 760 / 390 → `docs/reference/` | done — motion off, fonts loaded, full page |
-| Self-host the fonts | done — `build-assets/fonts/`, metrics verified pixel-exact (§Q5) |
-| Copy the brand PNGs | staged in `build-assets/brand/`, moves to `public/images/brand/` with the scaffold |
-| Scaffold Laravel + Vite + Filament | **blocked on Q1 and Q2** |
+| Self-host the fonts | done — `public/fonts/`, metrics verified pixel-exact (§Q5) |
+| Copy the brand PNGs | done — `public/images/brand/` |
+| Scaffold Laravel + Vite + Filament | done — Laravel 13.39.0 on PHP 8.4.27, Filament 5.11.0 at `/admin`, MySQL 8.4.9, Vite building in 541ms |
+
+All six Phase 0 questions were answered at the review: PHP 8.4 + Laravel 13 (Q1), MySQL 8 installed
+locally (Q2), all 13 SVG defs ported (Q3, default), the 1024–1180px pin band kept as drawn (Q4,
+default), fonts self-hosted (Q5), and the SOC feed fix applied (Q6 — see `docs/prototype-fixes.md`).
 
 `design/v7/` was not modified. The motion-off capture ran against a copy in the scratchpad.
 

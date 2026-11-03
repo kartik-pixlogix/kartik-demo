@@ -1,9 +1,45 @@
-@import 'tailwindcss';
+/* UB Shield — stylesheet entry.
+ *
+ * Imports only. The order below mirrors the prototype's single <style> block
+ * (docs/inventory.md §9) and MUST NOT be reordered: the prototype's trailing V7
+ * block genuinely overrides earlier rules, so `responsive` and `v7-overrides`
+ * stay last. Folding them into the section partials would silently change the
+ * design (`.brand` becomes an image lockup, `.dd-m a:hover` flips #1a1a1a to
+ * #dfe5ea, the arrow strokes get remapped).
+ */
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* 1. fonts (self-hosted, public/fonts) */
+@import './fonts.css';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-}
+/* 2. tokens, reset, type, layout helpers */
+@import './tokens.css';
+@import './base.css';
+@import './type.css';
+@import './layout.css';
+
+/* 3. shared components */
+@import './components.css';
+@import './cursor.css';
+
+/* 4. sections, in page order */
+@import './sections/header.css';
+@import './sections/hero.css';
+@import './sections/trust.css';
+@import './sections/services.css';
+@import './sections/statement.css';
+@import './sections/process.css';
+@import './sections/soc.css';
+@import './sections/industries.css';
+@import './sections/frameworks.css';
+@import './sections/cases.css';
+@import './sections/insights.css';
+@import './sections/strip.css';
+@import './sections/footer.css';
+@import './art.css';
+
+/* 5. motion */
+@import './motion.css';
+
+/* 6. overrides — always last, in this order */
+@import './responsive.css';
+@import './v7-overrides.css';
