@@ -39,8 +39,16 @@
 <link rel="icon" href="/images/brand/ub-monogram.png">
 <link rel="apple-touch-icon" href="/images/brand/ub-monogram.png">
 <meta name="theme-color" content="#061522">
-{{-- the hero headline only fits its column once the display face is loaded, so preload it --}}
+{{-- dark scrollbars and native control chrome, to match the page --}}
+<meta name="color-scheme" content="dark">
+{{--
+    Both faces are preloaded. The display face because the hero headline only
+    fits its column once it is loaded; the body face because every page is
+    mostly Instrument Sans, and on a text-heavy article discovering it from the
+    stylesheet leaves a long enough swap window to cost layout stability.
+--}}
 <link rel="preload" href="/fonts/sofia-sans-extra-condensed-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/instrument-sans-var.woff2" as="font" type="font/woff2" crossorigin>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @if ($schema)
 <script type="application/ld+json" nonce="{{ Vite::cspNonce() }}">{!! $schema !!}</script>

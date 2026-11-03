@@ -22,7 +22,7 @@
 <a href="{{ route('insights.index') }}">Resources</a>
 <a href="{{ route('about') }}">About</a>
 </nav>
-<a href="{{ route('contact') }}" class="act mag"><span class="lab-hide">Talk to an expert</span><i><svg class="a1" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg><svg class="a2" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg></i></a>
+<a href="{{ route('contact') }}" class="act mag"><span class="lab-hide">Talk to an expert</span><i aria-hidden="true"><svg class="a1" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg><svg class="a2" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg></i></a>
 <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu" data-menu-toggle><i></i><i></i></button>
 </div>
 <i class="prog" aria-hidden="true"></i>

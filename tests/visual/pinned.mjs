@@ -35,7 +35,16 @@ async function capture(browser, url, tag) {
         document.querySelectorAll('.rv,.rm,.rs,.rl,.rw,.brush,.art.rc,.stats').forEach((e) => e.classList.add('in'));
     });
     await p.waitForTimeout(1400);
-    await p.addStyleTag({ content: '*,*::before,*::after{animation:none !important}' });
+    // Freeze every animation. Done with inline style attributes rather than an
+    // injected stylesheet, because the site's own CSP blocks inline <style>
+    // elements (style-src-elem 'self') — that refusal is the policy working.
+    // The prototype animates real elements, never pseudo-elements, so setting
+    // the property per element covers all of it.
+    await p.evaluate(() => {
+        document.querySelectorAll('*').forEach((el) => {
+            el.style.animation = 'none';
+        });
+    });
     await p.waitForTimeout(400);
 
     const geom = await p.evaluate(() => {

@@ -9,7 +9,10 @@
         "visual:diff": "node tests/visual/diff.mjs",
         "visual:pinned": "node tests/visual/pinned.mjs",
         "visual:behaviour": "node tests/visual/behaviour.mjs",
-        "visual:side-by-side": "node tests/visual/side-by-side.mjs"
+        "visual:side-by-side": "node tests/visual/side-by-side.mjs",
+        "visual:qa": "node tests/visual/qa.mjs",
+        "visual:cross-browser": "node tests/visual/cross-browser.mjs",
+        "qa": "node tests/visual/qa.mjs chromium && node tests/visual/qa.mjs firefox && node tests/visual/qa.mjs webkit && node tests/visual/cross-browser.mjs && node tests/visual/diff.mjs && node tests/visual/pinned.mjs && node tests/visual/behaviour.mjs"
     },
     "devDependencies": {
         "concurrently": "^10.0.3",

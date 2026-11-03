@@ -233,7 +233,23 @@ password policy. Targets: securityheaders.com A+ and a clean Mozilla Observatory
 
 ---
 
-## Phase 5 — QA
+## Phase 5 — QA — **done**
+
+Full results: `docs/phase-5-qa.md`. Placeholders: `docs/placeholders.md`.
+
+| | |
+|---|---|
+| Lighthouse a11y / best practices / SEO | **100 / 100 / 100** on every page type |
+| QA suite, three engines | Chromium 108/108 · Firefox 108/108 · WebKit 107/107 |
+| Cross-browser layout + sticky/pinned | all three engines agree |
+| Visual diff | still **0 pixels** at all five widths |
+| PHP tests | 140 passing |
+
+Two findings left open for a decision: no in-page pause control for continuous motion
+(WCAG 2.2.2 — mitigated by prefers-reduced-motion), and the footer legal links sit ~20px apart at
+mobile widths. Both need a prototype change to close.
+
+### Original scope
 
 `/web-design-guidelines` across every Blade view, the AccessLint reviewer and contrast checks
 (`#1479D4` never body text on navy; text on cyan is navy), keyboard-only passes through the header,

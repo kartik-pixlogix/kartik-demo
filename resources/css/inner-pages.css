@@ -666,3 +666,92 @@ main:focus {
    prototype pixel for pixel at all five widths, and it risks layout shift
    against the CLS budget it was meant to help. Pausing offscreen animation
    above is the larger win on this page and costs nothing. */
+
+/* ---- Phase 5 QA fixes ------------------------------------------------------
+   Findings from the Web Interface Guidelines review. None of these change what
+   the page looks like at rest — env() resolves to 0 off a notched device, and
+   the rest govern scrolling, touch and native control chrome. */
+
+/* The header is sticky at 104px (76px compact), so an in-page anchor would
+   otherwise land under it. Every fragment target on the site clears it. */
+[id] {
+    scroll-margin-top: 120px;
+}
+
+@media (max-width: 760px) {
+    [id] {
+        scroll-margin-top: 100px;
+    }
+}
+
+/* Removes the 300ms double-tap delay without disabling pinch-zoom. */
+a,
+button,
+summary,
+label,
+input,
+select,
+.ind-row,
+.card,
+.case,
+.post {
+    touch-action: manipulation;
+}
+
+/* The default translucent grey flash fights the cyan fills. */
+.ds6 {
+    -webkit-tap-highlight-color: rgba(39, 184, 237, 0.25);
+}
+
+/* The mobile menu is a full-screen overlay: scrolling it must not chain
+   through to the page behind, and it has to clear a notch. */
+.mmenu {
+    overscroll-behavior: contain;
+    padding-top: max(120px, calc(env(safe-area-inset-top) + 120px));
+    padding-bottom: max(32px, calc(env(safe-area-inset-bottom) + 32px));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+}
+
+/* Side notches: NOT applied to .wrap.
+   .wrap is imported first but sections legitimately override its padding with
+   their own shorthand — .trust-in uses `padding:24px 0` to sit flush. A
+   longhand .wrap rule loaded last silently wins over those shorthands and
+   shifts the row (measured: 7,917 differing pixels in the trust strip).
+   Landscape notch handling for the full-bleed sections therefore needs to go
+   into the section partials themselves, which is a change to the prototype's
+   own values and is left for the designer. The fixed mobile overlay below is
+   safe because nothing overrides it. */
+
+/* The native <select> popup is drawn by the OS. Without explicit colours the
+   options render as dark-on-dark in Windows dark mode. This styles the popup
+   only — the closed control keeps the prototype's transparent background. */
+.f select option {
+    background-color: var(--ink);
+    color: var(--paper);
+}
+
+/* ---- tap target expansion (Phase 5) ---------------------------------------
+   The contact lines and footer link lists are 20px tall, set by the 16/20
+   label type. They clear WCAG 2.5.8 on the spacing exception — neighbours are
+   28px and 32px apart — but a 20px target is still a poor thumb target.
+   An absolutely positioned ::after grows the hit area to 28px WITHOUT
+   affecting layout, so the measured design is untouched. */
+
+/* NOT applied to .contact a. Making that link positioned repaints it into its
+   own box and shifts the text antialiasing — measured at 313 differing pixels
+   against the reference. The closing-strip contact lines already clear WCAG
+   2.5.8 on the spacing exception (neighbours are 28px apart), so the pixel
+   guarantee wins. The footer and breadcrumb links already carry a background
+   gradient, so they were painted this way already and are unaffected. */
+.foot ul a,
+.crumbs a {
+    position: relative;
+}
+
+.foot ul a::after,
+.crumbs a::after {
+    content: '';
+    position: absolute;
+    inset: -4px 0;
+}
