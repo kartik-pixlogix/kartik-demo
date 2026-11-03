@@ -62,13 +62,18 @@ class ServicePageTest extends TestCase
     {
         $html = $this->get("/services/{$slug}")->getContent();
 
-        $this->assertMatchesRegularExpression('/<script type="application\/ld\+json">(.+?)<\/script>/s', $html);
-        preg_match('/<script type="application\/ld\+json">(.+?)<\/script>/s', $html, $m);
+        // The script now carries a CSP nonce, so the tag is no longer bare.
+        preg_match('/<script type="application\/ld\+json"[^>]*>(.+?)<\/script>/s', $html, $m);
+        $this->assertNotEmpty($m[1] ?? '', 'no JSON-LD on the page');
 
-        $schema = json_decode(html_entity_decode($m[1]), true, flags: JSON_THROW_ON_ERROR);
+        $data = json_decode(html_entity_decode($m[1]), true, flags: JSON_THROW_ON_ERROR);
 
-        $this->assertSame('FAQPage', $schema['@type']);
-        $this->assertSame('https://schema.org', $schema['@context']);
+        // Phase 4 merged the per-page entities into one @graph alongside
+        // Organization and WebSite, so FAQPage is now a member of it.
+        $this->assertSame('https://schema.org', $data['@context']);
+
+        $schema = collect($data['@graph'])->firstWhere('@type', 'FAQPage');
+        $this->assertNotNull($schema, 'the page must carry FAQPage structured data');
         $this->assertNotEmpty($schema['mainEntity']);
 
         // Google's structured-data rules: every marked-up answer must be

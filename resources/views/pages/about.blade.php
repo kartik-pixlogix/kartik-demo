@@ -10,6 +10,7 @@
 <x-layout
     title="About — UB Shield"
     description="A cybersecurity and compliance company in Ahmedabad. Five practices, one team, and a method that ends in evidence rather than a report."
+    :schema="$schema"
 >
 
 <section class="phero" id="top">

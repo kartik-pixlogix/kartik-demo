@@ -619,3 +619,50 @@
         border-bottom: 1px solid var(--line);
     }
 }
+
+/* ---- skip link -------------------------------------------------------------
+   Off-screen until focused, then it lands in the top-left as a cyan block.
+   Not in the prototype, which has no skip link; added for Phase 4/5
+   accessibility. It must never occupy space in the normal flow, or the
+   homepage would no longer match the prototype. */
+
+.skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: 12px 20px;
+    background: var(--acid);
+    color: var(--paper);
+    font: 600 16px/20px var(--text);
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.skip:focus {
+    left: 0;
+}
+
+/* <main> is focused programmatically by the skip link; it must not then draw
+   a focus ring, because the visitor did not tab to it. */
+main:focus {
+    outline: none;
+}
+
+/* ---- performance: pause offscreen animation (Phase 4) ----------------------
+   App's IntersectionObserver adds .offscreen to animated blocks that have
+   scrolled out of view. Paused, not disabled: an animation resumes where it
+   left off, so scrolling past and back never visibly resets anything. */
+
+.offscreen,
+.offscreen * {
+    animation-play-state: paused !important;
+}
+
+/* content-visibility: auto was considered here and DELIBERATELY NOT USED.
+   It changes the document height while a section is offscreen, because the
+   browser substitutes contain-intrinsic-size for the real height. That is a
+   direct conflict with the hard requirement that the homepage match the
+   prototype pixel for pixel at all five widths, and it risks layout shift
+   against the CLS budget it was meant to help. Pausing offscreen animation
+   above is the larger win on this page and costs nothing. */

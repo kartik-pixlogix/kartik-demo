@@ -2,8 +2,8 @@
     Shared shell for the legal pages. Narrower measure than an article: legal
     text is read in order rather than skimmed.
 --}}
-@props(['pageTitle', 'lastUpdated'])
-<x-layout :title="$pageTitle.' — UB Shield'" :description="$pageTitle.' for UB Shield.'">
+@props(['pageTitle', 'lastUpdated', 'description', 'schema' => null])
+<x-layout :title="$pageTitle.' — UB Shield'" :description="$description" :schema="$schema">
 
 <section class="phero" id="top">
 <i class="hsl a" aria-hidden="true"></i>

@@ -22,11 +22,34 @@ export const WIDTHS = [1440, 1180, 900, 760, 390];
 /** Frozen so the live IST clock renders identically in every capture. */
 export const FIXED_TIME = new Date('2026-01-01T12:34:56Z');
 
-/** docs/prototype-fixes.md F1 — scope the feed row rule to .feed-in's children. */
+/**
+ * The approved deviations in docs/prototype-fixes.md, applied to the prototype
+ * before it is captured — otherwise the references would encode the old
+ * behaviour and the build would "fail" the diff for doing the agreed thing.
+ * Must stay in step with the FIXES list in scripts/split-prototype-css.mjs.
+ *
+ *   F1  scope the feed row rule to .feed-in's children
+ *   F2  --faint .38 -> .44, for 3:1 contrast on the de-emphasised counter total
+ *   F3  footer headings h4 -> h3, so the outline does not skip a level. BOTH
+ *       the selector and the markup move, or the reference would lose the
+ *       footer heading styling and stop matching the build.
+ *   F4  word-fade reveal rests at .38 instead of .12. No effect on the capture,
+ *       which is taken with motion off, but kept here so the two lists agree.
+ */
 const FIXES = [
+    ['--faint:rgba(199,208,216,.38)', '--faint:rgba(199,208,216,.44)'],
     ['.feed div{display:grid;', '.feed-in>div{display:grid;'],
     ['.feed div{grid-template-columns:72px minmax(0,1fr)}', '.feed-in>div{grid-template-columns:72px minmax(0,1fr)}'],
     ['.feed div b{display:none}', '.feed-in>div b{display:none}'],
+    ['.foot h4{', '.foot h3{'],
+    ['.foot h4 .dot{', '.foot h3 .dot{'],
+    ['.rvon .rw .w{opacity:.12;', '.rvon .rw .w{opacity:.38;'],
+];
+
+/** F3 also needs the markup moved, applied with a global replace. */
+const MARKUP_FIXES = [
+    [/<h4>/g, '<h3>'],
+    [/<\/h4>/g, '</h3>'],
 ];
 
 /** Writes the prototype variant and returns a file:// URL for it. */
@@ -38,8 +61,11 @@ export function prototypeUrl(variant) {
     }
     let html = readFileSync(join(DESIGN, 'index.html'), 'utf8');
     for (const [from, to] of FIXES) {
-        if (!html.includes(from)) throw new Error(`prototype fix F1 no longer applies: ${from}`);
+        if (!html.includes(from)) throw new Error(`approved deviation no longer applies: ${from}`);
         html = html.replace(from, to);
+    }
+    for (const [pattern, to] of MARKUP_FIXES) {
+        html = html.replace(pattern, to);
     }
     if (variant === 'resting') {
         const flag = 'var motion = !reduced;';

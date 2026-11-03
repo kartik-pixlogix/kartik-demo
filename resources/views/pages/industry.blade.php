@@ -5,6 +5,7 @@
 <x-layout
     :title="$industry['nav'].' security — UB Shield'"
     :description="$industry['lead']"
+    :schema="$schema"
 >
 
 <section class="phero" id="top">

@@ -1,4 +1,4 @@
-<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated">
+<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
 <h2>Our commitment</h2>
 <p>[legal review] We ask our clients to run a disclosure process, so we run one ourselves. If you have found a vulnerability in a UB Shield system, we want to hear about it, and we will not take legal action against anyone who reports one in good faith under this policy.</p>

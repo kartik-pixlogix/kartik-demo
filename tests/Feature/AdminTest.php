@@ -30,7 +30,15 @@ class AdminTest extends TestCase
         parent::setUp();
 
         $this->seed([SettingSeeder::class, CaseStudySeeder::class, InsightSeeder::class]);
-        $this->admin = User::factory()->create();
+
+        // Since Phase 4 the panel requires two-factor authentication, so a user
+        // without it is redirected to setup and cannot reach any page. Most of
+        // these tests are about the resources, not the login flow, so the
+        // fixture user has 2FA already configured. The enforcement itself is
+        // asserted separately below.
+        $this->admin = User::factory()->create([
+            'app_authentication_secret' => 'JBSWY3DPEHPK3PXP',
+        ]);
     }
 
     private function lead(array $overrides = []): Lead
@@ -61,6 +69,37 @@ class AdminTest extends TestCase
         foreach (['/admin/leads', '/admin/insights', '/admin/case-studies', '/admin/manage-settings'] as $url) {
             $this->get($url)->assertOk();
         }
+    }
+
+    public function test_two_factor_authentication_cannot_be_skipped(): void
+    {
+        // A user who has not set up an authenticator reaches no part of the
+        // panel — this admin holds every lead the site has captured.
+        $withoutTwoFactor = User::factory()->create(['app_authentication_secret' => null]);
+
+        $this->actingAs($withoutTwoFactor);
+
+        foreach (['/admin', '/admin/leads', '/admin/manage-settings'] as $url) {
+            $this->get($url)->assertRedirect();
+        }
+
+        $this->assertStringContainsString(
+            'multi-factor-authentication',
+            $this->get('/admin/leads')->headers->get('Location')
+        );
+    }
+
+    public function test_the_admin_does_not_send_staff_names_to_a_third_party(): void
+    {
+        // Filament's default avatar provider is ui-avatars.com, which puts the
+        // signed-in user's name in a query string to another origin.
+        $avatar = (new \App\Support\LocalAvatarProvider)->get($this->admin);
+
+        $this->assertStringStartsWith('data:image/svg+xml;base64,', $avatar);
+        $this->assertStringNotContainsString('ui-avatars', $avatar);
+
+        $html = $this->actingAs($this->admin)->get('/admin/leads')->getContent();
+        $this->assertStringNotContainsString('ui-avatars.com', $html);
     }
 
     // ---- leads are read-only ----------------------------------------------

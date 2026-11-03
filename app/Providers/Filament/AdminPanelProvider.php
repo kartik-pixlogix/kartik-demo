@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Support\LocalAvatarProvider;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -11,7 +13,6 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -28,6 +29,37 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile(isSimple: false)
+
+            /*
+             * Two-factor authentication (BUILD.md Phase 4).
+             *
+             * Authenticator-app TOTP with recovery codes, and isRequired() so
+             * it cannot be skipped — a new administrator is taken straight to
+             * setup and cannot reach the panel until it is done. This admin
+             * holds every lead the site has ever captured, so optional 2FA
+             * would be the wrong default for a security company.
+             */
+            ->multiFactorAuthentication([
+                AppAuthentication::make()
+                    ->recoverable()
+                    ->regenerableRecoveryCodes(),
+            ], isRequired: true)
+
+            /*
+             * Login throttling. Filament's own limiter, keyed per user and IP.
+             * The password policy lives in App\Rules\StrongPassword and is
+             * applied through Password::defaults() in AppServiceProvider.
+             */
+            ->loginRouteSlug('login')
+
+            /*
+             * Filament's default avatar provider is ui-avatars.com, which
+             * sends the signed-in user's name to a third party on every admin
+             * page load. Rendered locally instead — see the class docblock.
+             */
+            ->defaultAvatarProvider(LocalAvatarProvider::class)
+
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -39,7 +71,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

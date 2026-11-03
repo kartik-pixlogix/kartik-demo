@@ -2,6 +2,7 @@
 <x-layout
     title="Field notes — UB Shield"
     description="Advisories, guides and field notes on DPDPA, SEBI CSCRF, cloud security and the rest of what we run into."
+    :schema="$schema"
 >
 
 <section class="phero" id="top">

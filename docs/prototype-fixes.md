@@ -70,3 +70,33 @@ is still 0 pixels at all five widths. Recorded so the new vocabulary is reviewab
 
 All of the above live in `resources/css/inner-pages.css`, imported last alongside `form-states.css`
 and clearly marked as not coming from the prototype.
+
+---
+
+## Phase 4 deviations
+
+Two more changes to the prototype's own values, both driven by BUILD.md Phase 4's
+**Accessibility = 100** target. Both are one line and both are listed in the FIXES array of
+`scripts/split-prototype-css.mjs` and `tests/visual/_shared.mjs`, so regenerating the CSS or the
+reference captures keeps them. **Revert either line to restore the prototype exactly.**
+
+| # | Change | Why | What it costs |
+|---|---|---|---|
+| F2 | `--faint` `rgba(199,208,216,.38)` → `.44` | At .38 the token composites to `#4f5c67` on the navy page, which is **2.69:1** — below the 3:1 WCAG 1.4.3 requires for large text. `.44` gives **3.19:1**. | One thing on screen: the de-emphasised total in the `01 | 04` and `01 | 05` counters is very slightly lighter. The reference captures were regenerated. |
+| F3 | footer `<h4>` → `<h3>`, and `.foot h4` → `.foot h3` | The footer headings followed an `<h2>` with no `<h3>` between, so the document outline skipped a level. | Nothing visible — the declarations are untouched and the markup and selector moved together. |
+| F4 | `.rvon .rw .w` `opacity:.12` → `.38` | The statement's word-fade reveal rests at 1.37:1 before it animates, so the text is effectively invisible to a low-vision reader who has not scrolled it into view. `.38` gives 3.31:1. | The fade-in is less extreme. **Invisible to the visual diff**, which is captured with motion off and so never shows the resting state. |
+
+F3 is purely semantic. F2 and F4 are judgement calls where two parts of the brief pull against each
+other — "do not re-colour anything" versus "Accessibility = 100" — and they were resolved in favour
+of the explicit Phase 4 target, on the grounds that both are genuine WCAG failures on text a
+visitor is expected to read. **If the designer would rather keep the original values, say so and
+both revert in one line each**; the measured cost is Lighthouse Accessibility 100 → 96.
+
+### Deliberately NOT done
+
+`content-visibility: auto` on long sections is in BUILD.md's list of performance techniques and was
+**not applied**. It changes the document height while a section is offscreen, because the browser
+substitutes `contain-intrinsic-size` for the real height — which directly conflicts with the hard
+requirement that the homepage match the prototype pixel for pixel, and risks layout shift against
+the very CLS budget it is meant to protect. Pausing offscreen animation is the bigger win on this
+page and costs nothing; CLS measured **0**.

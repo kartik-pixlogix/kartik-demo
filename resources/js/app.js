@@ -23,6 +23,7 @@ import { stepMarquees } from './modules/marquee.js';
 import { startClock } from './modules/soc-clock.js';
 import { initMobileMenu } from './modules/mobile-menu.js';
 import { initReviewForm } from './modules/form.js';
+import { initOffscreenPausing } from './modules/offscreen.js';
 
 const root = document.getElementById('ubs');
 if (root) boot(root);
@@ -47,10 +48,15 @@ function boot(root) {
     let mx = -200, my = -200, cx = -200, cy = -200, px = -200, py = -200, hx = 0, hy = 0;
     let lastY = window.scrollY || 0, vel = 0, dir = 1;
     const mqx = mq.map(() => 0);
-    let dirty = true, io = null;
+    let dirty = true, io = null, offscreenIo = null;
 
     const setClass = (el, c, on) => { if (el) el.classList.toggle(c, !!on); };
-    const isPin = () => motion && st.scrollable && st.wide;
+
+    // The prototype only ever ran on the homepage, so it could assume the
+    // pinned services section existed. Every inner page reuses this script and
+    // has no .svc-sec, so the elements have to be part of the condition —
+    // otherwise onScroll() dereferences null on every frame.
+    const isPin = () => motion && st.scrollable && st.wide && !!(pin && stick && track);
 
     function layout() {
         st.scrollable = document.documentElement.scrollHeight > window.innerHeight + 300;
@@ -61,6 +67,9 @@ function boot(root) {
         setClass(root, 'pinon', isPin());
         measurePin({ pin, stick, track, st, pinned: isPin() });
         if (io) { io.disconnect(); io = null; }
+        // Offscreen pausing is independent of reveals: it applies even when the
+        // page is too short to scroll, and must survive a resize.
+        if (!offscreenIo) offscreenIo = initOffscreenPausing($$);
         if (motion && st.scrollable && 'IntersectionObserver' in window) {
             io = createRevealObserver($$);
         }

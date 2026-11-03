@@ -7,7 +7,7 @@
 <div class="wrap">
 <div class="sec-t"><h2 class="dl rm"><span>Frameworks we cover<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">We map each control once and reuse its evidence for every auditor who asks.</p></div>
 </div>
-<p class="mq" aria-label="DPDPA, ISO 27001, SOC 2, RBI, SEBI CSCRF, PCI DSS, GDPR, HIPAA"><span class="mq-in" data-mq="-1" aria-hidden="true"><span>DPDPA</span><i></i><span class="o">ISO 27001</span><i></i><span>SOC 2</span><i></i><span class="o">RBI</span><i></i><span>DPDPA</span><i></i><span class="o">ISO 27001</span><i></i><span>SOC 2</span><i></i><span class="o">RBI</span><i></i></span></p>
+<p class="mq" role="img" aria-label="DPDPA, ISO 27001, SOC 2, RBI, SEBI CSCRF, PCI DSS, GDPR, HIPAA"><span class="mq-in" data-mq="-1" aria-hidden="true"><span>DPDPA</span><i></i><span class="o">ISO 27001</span><i></i><span>SOC 2</span><i></i><span class="o">RBI</span><i></i><span>DPDPA</span><i></i><span class="o">ISO 27001</span><i></i><span>SOC 2</span><i></i><span class="o">RBI</span><i></i></span></p>
 <p class="mq" aria-hidden="true"><span class="mq-in" data-mq="1"><span class="o">SEBI CSCRF</span><i></i><span>PCI DSS</span><i></i><span class="o">GDPR</span><i></i><span>HIPAA</span><i></i><span class="o">SEBI CSCRF</span><i></i><span>PCI DSS</span><i></i><span class="o">GDPR</span><i></i><span>HIPAA</span><i></i></span></p>
 <div class="wrap">
 <div class="fw-notes rs">

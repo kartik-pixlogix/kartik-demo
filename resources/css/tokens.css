@@ -2,4 +2,4 @@
  * Ported verbatim from design/v7/index.html (line 14).
  * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
  */
-.ds6{--paper:#061522;--ink:#F4F6F8;--acid:#27B8ED;--faint:rgba(199,208,216,.38);--line:rgba(199,208,216,.22);--blue:#1479D4;--mid:#0C2944;--cool:#C7D0D8;--ease:cubic-bezier(.16,.84,.24,1);--disp:'Sofia Sans Extra Condensed','Arial Narrow',sans-serif;--stmt:'Big Shoulders Display','Arial Narrow',sans-serif;--text:'Instrument Sans','Helvetica Neue',Arial,sans-serif;font-family:var(--text);font-weight:500;font-size:19px;line-height:30px;color:var(--ink);background:var(--paper);overflow-x:clip;position:relative}
+.ds6{--paper:#061522;--ink:#F4F6F8;--acid:#27B8ED;--faint:rgba(199,208,216,.44);--line:rgba(199,208,216,.22);--blue:#1479D4;--mid:#0C2944;--cool:#C7D0D8;--ease:cubic-bezier(.16,.84,.24,1);--disp:'Sofia Sans Extra Condensed','Arial Narrow',sans-serif;--stmt:'Big Shoulders Display','Arial Narrow',sans-serif;--text:'Instrument Sans','Helvetica Neue',Arial,sans-serif;font-family:var(--text);font-weight:500;font-size:19px;line-height:30px;color:var(--ink);background:var(--paper);overflow-x:clip;position:relative}

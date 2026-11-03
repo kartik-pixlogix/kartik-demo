@@ -1,4 +1,4 @@
-<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated">
+<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
 <h2>Who we are</h2>
 <p>[legal review] UB Shield, of [Street address], Ahmedabad, Gujarat, India, is the Data Fiduciary responsible for the personal data described in this notice. Our contact point for privacy matters is [email address].</p>

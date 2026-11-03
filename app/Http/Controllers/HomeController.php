@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\Seo;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function __invoke(): View
     {
-        return view('pages.home');
+        return view('pages.home', ['schema' => Seo::graph()]);
     }
 }

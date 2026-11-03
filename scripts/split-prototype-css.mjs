@@ -22,17 +22,41 @@ const lines = readFileSync(SRC, 'utf8').split(/\r?\n/);
 const L = (n) => lines[n - 1]; // 1-indexed, as reported by grep
 const range = (a, b) => lines.slice(a - 1, b);
 
-// Approved deviations from the prototype (docs/prototype-fixes.md).
-// F1: `.feed div` also matched the .feed-in wrapper, so the feed rows overlapped.
+/*
+ * Approved deviations from the prototype. Both are documented in
+ * docs/prototype-fixes.md with their reasoning and their cost.
+ *
+ * F1  `.feed div` was a descendant selector that also matched the .feed-in
+ *     wrapper, turning it into a grid so the SOC feed rows overlapped.
+ *
+ * F2  --faint at .38 composites to #4f5c67 on the navy background, which is
+ *     2.69:1 — below the 3:1 WCAG 1.4.3 requires for large text. .44 gives
+ *     3.19:1. It affects one thing on screen: the de-emphasised total in the
+ *     "01 | 04" counters. Applied because BUILD.md Phase 4 sets Accessibility
+ *     = 100 as a target; revert this line to restore the prototype exactly.
+ *
+ * F3  The footer headings are <h4> directly after an <h2>, which skips a
+ *     level. The port uses <h3> and this moves the selector with it. Visually
+ *     identical — the declarations are untouched.
+ *
+ * F4  The word-fade reveal rests at opacity .12, which is 1.37:1 while the
+ *     statement is below the fold. Raised to .38 (3.31:1) so the text is
+ *     legible before it animates. Invisible to the visual diff, which is
+ *     captured with motion off and therefore never shows the resting state.
+ */
 const FIXES = [
+    { line: 14, from: '--faint:rgba(199,208,216,.38)', to: '--faint:rgba(199,208,216,.44)' },
     { line: 234, from: '.feed div{display:grid;', to: '.feed-in>div{display:grid;' },
+    { line: 300, from: '.foot h4{', to: '.foot h3{' },
+    { line: 301, from: '.foot h4 .dot{', to: '.foot h3 .dot{' },
+    { line: 340, from: '.rvon .rw .w{opacity:.12;', to: '.rvon .rw .w{opacity:.38;' },
     { line: 396, from: '.feed div{grid-template-columns:72px minmax(0,1fr)}', to: '.feed-in>div{grid-template-columns:72px minmax(0,1fr)}' },
     { line: 397, from: '.feed div b{display:none}', to: '.feed-in>div b{display:none}' },
 ];
 for (const f of FIXES) {
     const cur = L(f.line);
-    if (!cur.startsWith(f.from)) {
-        throw new Error(`fix F1 no longer applies at line ${f.line}\n  expected: ${f.from}\n  found:    ${cur}`);
+    if (! cur.includes(f.from)) {
+        throw new Error(`deviation no longer applies at line ${f.line}\n  expected: ${f.from}\n  found:    ${cur}`);
     }
     lines[f.line - 1] = cur.replace(f.from, f.to);
 }

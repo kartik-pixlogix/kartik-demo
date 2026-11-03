@@ -137,7 +137,22 @@ Checklist:
 - `.env` is never committed.
 - `storage/` and `bootstrap/cache/` writable by the web user.
 
-Security headers, HSTS, CSP and the Filament hardening land in Phase 4.
+### Security
+
+All headers are set by the application (`App\Http\Middleware\SecurityHeaders`), including a
+nonce-based CSP with no `unsafe-inline` or `unsafe-eval` for scripts. **Do not duplicate them in
+Nginx** — two sources for one header is how they drift apart. `deploy/nginx.conf` is responsible
+only for TLS, compression and cache lifetimes.
+
+HSTS is sent only over TLS, so it appears automatically once the site is served over https.
+Behind a proxy or Cloudflare, make sure `X-Forwarded-Proto` reaches Laravel or it will never
+send HSTS and will generate http:// canonicals.
+
+After deploying, re-run **securityheaders.com** and **Mozilla Observatory** — both need a public
+URL and cannot be graded locally.
+
+Admin accounts require two-factor authentication: a user without an authenticator is redirected to
+setup and reaches no part of the panel.
 
 ---
 

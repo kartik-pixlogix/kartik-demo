@@ -1,4 +1,4 @@
-<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated">
+<x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
 <h2>These terms</h2>
 <p>[legal review] These terms govern your use of this website. They do not govern any services UB Shield provides to you, which are covered by a separate written agreement.</p>

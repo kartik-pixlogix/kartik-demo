@@ -9,6 +9,7 @@
 <x-layout
     :title="$practice['nav'].' — UB Shield'"
     :description="$practice['lead']"
+    :schema="$schema"
 >
 
 <section class="phero" id="top">
@@ -122,7 +123,5 @@
 </section>
 
 <x-sections.strip />
-
-<script type="application/ld+json">{!! $faqSchema !!}</script>
 
 </x-layout>

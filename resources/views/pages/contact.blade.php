@@ -5,6 +5,7 @@
 <x-layout
     title="Talk to an expert — UB Shield"
     description="Forty-five minutes with a senior consultant. You leave with your five biggest risks and the order to fix them in."
+    :schema="$schema"
 >
 
 <section class="phero" id="top">

@@ -32,7 +32,7 @@
 .rvon .rl.in{transform:none}
 .rvon .brush svg{clip-path:inset(0 100% 0 0);transition:clip-path 1.2s .5s var(--ease)}
 .rvon .brush.in svg{clip-path:inset(0 0 0 0)}
-.rvon .rw .w{opacity:.12;transition:opacity .6s}
+.rvon .rw .w{opacity:.38;transition:opacity .6s}
 .rvon .rw.in .w{opacity:1}
 .rvon .rw.in .w:nth-child(2){transition-delay:.08s}.rvon .rw.in .w:nth-child(3){transition-delay:.16s}.rvon .rw.in .w:nth-child(4){transition-delay:.24s}.rvon .rw.in .w:nth-child(5){transition-delay:.32s}.rvon .rw.in .w:nth-child(6){transition-delay:.4s}
 .rvon .art.rc{clip-path:inset(18% 0 18% 0);transition:clip-path 1.3s var(--ease)}

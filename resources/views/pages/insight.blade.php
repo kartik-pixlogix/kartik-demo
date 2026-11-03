@@ -5,6 +5,8 @@
 <x-layout
     :title="($insight->seo_title ?: $insight->title).' — UB Shield'"
     :description="$insight->seo_description ?: $insight->excerpt"
+    :schema="$schema"
+    ogType="article"
 >
 
 <article>

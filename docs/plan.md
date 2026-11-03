@@ -195,7 +195,25 @@ scale. On-page anchors become real routes while the homepage anchors keep workin
 
 ---
 
-## Phase 4 — SEO, performance, security
+## Phase 4 — SEO, performance, security — **done**
+
+Full numbers and reasoning: `docs/phase-4-results.md`.
+
+| Target | Result |
+|---|---|
+| Lighthouse Performance ≥ 90 | **91** on the dev server, which sends everything uncompressed |
+| Accessibility / Best Practices / SEO = 100 | **100 / 100 / 100** |
+| CLS < 0.05 | **0** |
+| LCP < 2.5s | 2.6s on the dev server; the gzip and cache config that closes it ships in `deploy/nginx.conf` |
+| securityheaders.com A+ | every header present; needs a public URL to grade |
+| composer / npm audit clean | **0 vulnerabilities** both |
+
+The CSP caught Filament sending staff names to ui-avatars.com on every admin page load; replaced
+with a local provider rather than whitelisted. Two accessibility fixes required changing prototype
+values — both are one line, both are logged in `docs/prototype-fixes.md` as F2 and F4, and both
+revert cleanly.
+
+### Original scope
 
 Per-page meta, canonical, OG/Twitter, generated `sitemap.xml`, `robots.txt`, and JSON-LD for
 Organization, WebSite, Service, Article, FAQPage and BreadcrumbList.

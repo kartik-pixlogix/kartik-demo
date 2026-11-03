@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Insight;
+use App\Support\Seo;
 use Illuminate\View\View;
 
 class InsightController extends Controller
@@ -11,6 +12,10 @@ class InsightController extends Controller
     {
         return view('pages.insights-index', [
             'insights' => Insight::query()->published()->orderBy('position')->get(),
+            'schema' => Seo::graph(Seo::breadcrumbs([
+                ['UB Shield', route('home')],
+                ['Field notes', null],
+            ])),
         ]);
     }
 
@@ -26,6 +31,14 @@ class InsightController extends Controller
                 ->orderBy('position')
                 ->take(3)
                 ->get(),
+            'schema' => Seo::graph(
+                Seo::article($insight),
+                Seo::breadcrumbs([
+                    ['UB Shield', route('home')],
+                    ['Field notes', route('insights.index')],
+                    [$insight->title, null],
+                ]),
+            ),
         ]);
     }
 }

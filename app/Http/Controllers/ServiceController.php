@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CaseStudy;
 use App\Support\Practices;
+use App\Support\Seo;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -23,31 +24,18 @@ class ServiceController extends Controller
                 ->published()
                 ->where('slug', $practice['case'] ?? '')
                 ->first(),
-            'faqSchema' => $this->faqSchema($practice['faq'] ?? []),
+            'schema' => Seo::graph(
+                Seo::service($practice),
+                // Only the questions actually rendered on the page are marked
+                // up. Describing an answer the visitor cannot see is what earns
+                // a manual action.
+                Seo::faq($practice['faq'] ?? []),
+                Seo::breadcrumbs([
+                    ['UB Shield', route('home')],
+                    ['Services', route('home').'#services'],
+                    [$practice['nav'], null],
+                ]),
+            ),
         ]);
-    }
-
-    /**
-     * schema.org FAQPage for the accordion.
-     *
-     * Only the questions actually on the page are described — marking up an
-     * answer the visitor cannot see is exactly what the structured-data
-     * guidelines prohibit, and is the sort of thing that earns a manual action.
-     */
-    private function faqSchema(array $faq): string
-    {
-        if ($faq === []) {
-            return '{}';
-        }
-
-        return json_encode([
-            '@context' => 'https://schema.org',
-            '@type' => 'FAQPage',
-            'mainEntity' => array_map(fn (array $pair) => [
-                '@type' => 'Question',
-                'name' => $pair[0],
-                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $pair[1]],
-            ], $faq),
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 }
