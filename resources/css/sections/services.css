@@ -1,1 +1,31 @@
-/* services — ported from design/v7/index.html. Phase 1. */
+/* Services, including the pinned horizontal track.
+ * Ported verbatim from design/v7/index.html (lines 164-190).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- services (pinned horizontal) ---- */
+.svc-sec{position:relative}
+.svc-stick{position:relative}
+.pinon .svc-stick{position:sticky;top:0;height:min(100vh,860px);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.svc-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:32px}
+.counter{display:flex;align-items:center;gap:16px;font:700 56px/45px var(--disp)}
+.counter i{width:1px;height:44px;background:var(--ink)}
+.counter .tot{color:var(--faint)}
+.track-vp{overflow:visible}
+.track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 12px;will-change:transform}
+.pinon .track{display:flex;gap:12px;width:max-content}
+.pinon .card{width:500px}
+.card{display:block;text-decoration:none;color:var(--ink)}
+.card .meta{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-top:16px}
+.card .body{font:500 16px/24px var(--text);margin-top:12px;max-width:440px}
+.card ul{list-style:none;padding:0;margin:16px 0 0;display:flex;flex-wrap:wrap;gap:6px 0}
+.card li{font:500 14px/20px var(--text);text-transform:uppercase}
+.card li:not(:last-child):after{content:'/';margin:0 8px}
+.card .num{position:absolute;left:16px;top:12px;font:900 56px/45px var(--disp);color:var(--ink);z-index:2}
+.art.k .num{color:var(--paper)}
+.cta-b .rm{display:block}
+[data-hl]{display:inline-block;will-change:transform}
+.pbar{height:1px;background:var(--line);margin-top:40px;position:relative}
+.pbar i{position:absolute;left:0;top:-1px;height:3px;width:100%;background:var(--ink);transform:scaleX(0);transform-origin:left}
+.v-hide{display:none}
+.pinon .v-hide{display:block}
+

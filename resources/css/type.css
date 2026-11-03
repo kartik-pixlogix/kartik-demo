@@ -1,1 +1,10 @@
-/* type — ported from design/v7/index.html. Phase 1. */
+/* Type scale.
+ * Ported verbatim from design/v7/index.html (lines 21-26).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+.lab-l{font:600 18px/24px var(--text);text-transform:uppercase}
+.lab-m{font:500 16px/20px var(--text);text-transform:uppercase}
+.lab-s{font:500 14px/20px var(--text);text-transform:uppercase}
+.stat{font:700 38px/38px var(--text)}
+.dl{font:900 56px/45px var(--disp);text-transform:uppercase;letter-spacing:-.005em}
+.dl .alt{font-weight:700}

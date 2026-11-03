@@ -1,1 +1,19 @@
-/* cursor — ported from design/v7/index.html. Phase 1. */
+/* Custom cursor follower (fine pointers only).
+ * Ported verbatim from design/v7/index.html (lines 66-80).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- cursor ---- */
+.cur{position:fixed;left:0;top:0;z-index:200;pointer-events:none;display:none}
+.has-cur .cur{display:block}
+.cur .r{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:1px solid var(--ink);transition:transform .45s var(--ease),background .3s,border-color .3s,opacity .3s}
+.cur .r svg{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:square;opacity:0;transition:opacity .25s}
+.cur:after{content:attr(data-label);position:absolute;left:0;top:0;transform:translate(-50%,-50%);font:600 12px/1 var(--text);letter-spacing:.06em;color:var(--ink);opacity:0;transition:opacity .2s;white-space:nowrap}
+.cur[data-hidden="1"] .r{opacity:0}
+.cur[data-dark="1"] .r{border-color:var(--paper)}
+.cur[data-mode="go"] .r{transform:scale(1.75);background:var(--acid);border-color:var(--acid)}
+.cur[data-mode="go"] .r svg{opacity:1}
+.cur[data-mode="view"] .r{transform:scale(2.6);background:var(--acid);border-color:var(--acid)}
+.cur[data-mode="view"]:after{opacity:1}
+.cur[data-mode="text"] .r{transform:scale(.4)}
+.cur[data-down="1"] .r{transform:scale(.7)}
+

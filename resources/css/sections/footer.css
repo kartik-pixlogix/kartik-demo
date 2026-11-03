@@ -1,1 +1,17 @@
-/* footer — ported from design/v7/index.html. Phase 1. */
+/* Footer.
+ * Ported verbatim from design/v7/index.html (lines 297-309).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- footer ---- */
+.foot{padding:96px 0 32px;position:relative}
+.foot-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.foot h4{margin:0 0 20px;font:600 18px/24px var(--text);text-transform:uppercase;display:flex;align-items:center}
+.foot h4 .dot{width:12px;height:12px}
+.foot ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.foot ul a{font:500 16px/20px var(--text);text-transform:uppercase;text-decoration:none;color:var(--ink);background:linear-gradient(var(--acid),var(--acid)) no-repeat 0 100% / 0 8px;transition:background-size .45s var(--ease)}
+.foot ul a:hover{background-size:100% 8px}
+.giant{font:900 min(25vw,360px)/.8 var(--disp);text-transform:uppercase;letter-spacing:-.02em;margin-top:96px;white-space:nowrap;will-change:transform}
+.giant span{display:inline-block}
+.fb{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--ink)}
+.fb a{text-decoration:none;margin-left:24px}
+

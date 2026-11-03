@@ -1,1 +1,75 @@
-/* responsive — ported from design/v7/index.html. Phase 1. */
+/* Breakpoints 1180 / 900 / 760. Imported after every section.
+ * Ported verbatim from design/v7/index.html (lines 348-418).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ======================== RESPONSIVE ======================== */
+@media (max-width:1180px){
+.nav .lab-hide{display:none}
+.h-xl{font-size:160px;line-height:118px}
+.hero-g{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+.hero-art{height:560px}
+.track{grid-template-columns:repeat(2,minmax(0,1fr))}
+.proc{grid-template-columns:minmax(0,1fr)}
+.proc-l{position:relative;top:0}
+.soc-g{grid-template-columns:minmax(0,1fr)}
+.radar{margin:0 auto}
+.strip{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.strip .cta-b{grid-column:1 / -1}
+.mq{font-size:120px;line-height:110px}
+}
+@media (max-width:900px){
+.nav,.act{display:none}
+.menu-btn{display:flex}
+}
+@media (max-width:760px){
+.wrap{padding:0 16px}
+.ds6{font-size:17px;line-height:26px}
+.hdr-in{height:84px}
+.brand{font-size:30px}
+.hero{padding-top:24px}
+.hero-g{grid-template-columns:minmax(0,1fr)}
+.h-xl{font-size:96px;line-height:74px;margin-top:24px}
+.h-xl .ln{padding-top:6px;margin-top:-6px}
+.hero-art{height:360px;order:-1;margin:0 -16px}
+.lead{font-size:19px;line-height:24px;margin-top:32px}
+.cta-row{gap:20px}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:32px;padding-bottom:56px;margin-top:48px}
+.stats>div:nth-child(3){border-left:0;padding-left:0}
+.stats>div{padding:0 0 0 16px}
+.trust-in{grid-template-columns:minmax(0,1fr);gap:12px}
+.lg{width:150px;height:60px}
+.sec{padding-top:104px}
+.dl{font-size:44px;line-height:38px}
+.track{grid-template-columns:minmax(0,1fr);gap:40px}
+.counter{font-size:44px}
+.stm{padding-top:120px}
+.stm p{font-size:60px;line-height:62px}
+.proc-l .counter{font-size:72px;line-height:60px}
+.proc-l .counter i{height:60px}
+.step{grid-template-columns:minmax(0,1fr);gap:8px;min-height:0;padding:32px 0 40px}
+.step h3{font-size:64px;line-height:54px}
+.soc{margin-top:104px;padding:80px 0}
+.soc-list li{flex-direction:column;gap:4px}
+.feed-in>div{grid-template-columns:72px minmax(0,1fr)}
+.feed-in>div b{display:none}
+.ind-row{grid-template-columns:40px minmax(0,1fr) 42px;padding:20px 0}
+.ind-row p{grid-column:2 / 3}
+.ind-row h3{font-size:44px;line-height:38px}
+.ind-row:hover h3{transform:none}
+.ind-row .ac{grid-column:3;grid-row:1}
+.mq{font-size:72px;line-height:72px}
+.mq i{width:16px;height:16px;margin:0 16px}
+.fw-notes{grid-template-columns:minmax(0,1fr)}
+.grid4{grid-template-columns:minmax(0,1fr);gap:40px}
+.case{grid-column:auto}
+.all{min-height:200px}
+.strip{grid-template-columns:minmax(0,1fr);margin-top:104px}
+.cta-b{padding:40px 16px}
+.cta-b .dl{font-size:52px;line-height:44px}
+.form{grid-template-columns:minmax(0,1fr)}
+.strip .img{min-height:320px}
+.contact{padding:40px 16px}
+.foot-g{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}
+.giant{font-size:26vw;margin-top:64px}
+.fb a{margin:0 16px 0 0}
+}

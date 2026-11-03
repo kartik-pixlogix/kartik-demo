@@ -1,1 +1,45 @@
-/* header — ported from design/v7/index.html. Phase 1. */
+/* Header, dropdown, mobile menu and scroll progress.
+ * Ported verbatim from design/v7/index.html (lines 81-121).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- header ---- */
+.hdr{position:sticky;top:0;z-index:50;background:var(--paper);transition:transform .5s var(--ease)}
+.hdr.up{transform:translateY(-100%)}
+.hdr-in{display:flex;align-items:center;gap:40px;height:104px;transition:height .4s var(--ease)}
+.hdr.compact .hdr-in{height:76px}
+.brand{font:700 38px/38px var(--text);text-decoration:none;color:var(--ink);letter-spacing:-.01em;white-space:nowrap}
+.hdr.compact .brand{font-size:30px}
+.nav{display:flex;gap:4px;margin-left:auto;align-items:center}
+.nav>a,.dd>a{position:relative;display:inline-flex;align-items:center;gap:8px;padding:12px 14px;font:500 16px/20px var(--text);text-transform:uppercase;text-decoration:none;color:var(--ink)}
+.nav>a:after,.dd>a:after{content:'';position:absolute;left:14px;right:14px;bottom:8px;height:6px;background:var(--acid);transform:scaleX(0) rotate(-1.5deg);transform-origin:left;transition:transform .45s var(--ease);z-index:-1}
+.nav>a:hover:after,.dd:hover>a:after,.dd:focus-within>a:after{transform:scaleX(1) rotate(-1.5deg)}
+.dd{position:relative}
+.dd-m{position:absolute;left:0;top:100%;width:560px;background:var(--ink);color:var(--paper);padding:12px;display:grid;gap:2px;visibility:hidden;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .4s var(--ease),visibility 0s .3s}
+.dd:hover .dd-m,.dd:focus-within .dd-m{visibility:visible;opacity:1;transform:none;transition:opacity .3s,transform .4s var(--ease)}
+.dd-m a{display:grid;grid-template-columns:72px minmax(0,1fr) 42px;align-items:center;gap:16px;padding:14px 16px;text-decoration:none;color:var(--paper);transition:background .25s}
+.dd-m a:hover{background:#1a1a1a}
+.dd-m b{font:900 28px/28px var(--disp);text-transform:uppercase}
+.dd-m span.k{font:500 14px/20px var(--text);text-transform:uppercase;color:var(--acid)}
+.dd-m .ac{background:var(--acid)}
+.dd-m .ac svg{stroke:var(--ink)}
+.act{display:inline-flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);font:500 16px/20px var(--text);text-transform:uppercase;white-space:nowrap}
+.act i{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--acid);position:relative;overflow:hidden;transition:transform .5s var(--ease)}
+.act i svg{position:absolute;width:22px;height:22px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:square;transition:transform .55s var(--ease)}
+.act i svg.a2{transform:translate(-160%,160%)}
+.act:hover i{transform:scale(1.1) rotate(-8deg)}
+.act:hover i svg.a1{transform:translate(160%,-160%)}
+.act:hover i svg.a2{transform:none}
+.prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--ink);transform:scaleX(0);transform-origin:left}
+.menu-btn{display:none;margin-left:auto;width:60px;height:60px;border-radius:50%;border:0;background:var(--acid);cursor:pointer;align-items:center;justify-content:center;position:relative;z-index:70}
+.menu-btn i{position:absolute;width:22px;height:2px;background:var(--ink);transition:transform .45s var(--ease)}
+.menu-btn i:first-child{transform:translateY(-4px)}
+.menu-btn i:last-child{transform:translateY(4px)}
+.menu-open .menu-btn i:first-child{transform:rotate(45deg)}
+.menu-open .menu-btn i:last-child{transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:0;z-index:60;background:var(--acid);padding:120px 16px 32px;display:flex;flex-direction:column;gap:8px;clip-path:circle(0 at calc(100% - 46px) 46px);transition:clip-path .8s var(--ease);visibility:hidden}
+.menu-open .mmenu{clip-path:circle(150% at calc(100% - 46px) 46px);visibility:visible}
+.mmenu a{font:900 64px/56px var(--disp);text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0;transform:translateY(30px);transition:opacity .4s,transform .6s var(--ease)}
+.menu-open .mmenu a{opacity:1;transform:none}
+.menu-open .mmenu a:nth-child(2){transition-delay:.06s}.menu-open .mmenu a:nth-child(3){transition-delay:.12s}.menu-open .mmenu a:nth-child(4){transition-delay:.18s}.menu-open .mmenu a:nth-child(5){transition-delay:.24s}.menu-open .mmenu a:nth-child(6){transition-delay:.3s}
+.mmenu p{margin-top:auto;font:500 14px/20px var(--text);text-transform:uppercase}
+

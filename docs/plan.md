@@ -37,7 +37,23 @@ several scroll positions and diff that separately.
 
 ---
 
-## Phase 1 — homepage, pixel-faithful
+## Phase 1 — homepage, pixel-faithful — **done**
+
+| Step | Result |
+|---|---|
+| Tokens, base, type, layout ported | `scripts/split-prototype-css.mjs` — every line of the prototype's `<style>` accounted for |
+| Sections as Blade components, CSS section by section | 14 section components, 23 CSS partials in the prototype's cascade order |
+| Shared SVG defs and illustrations extracted | `<x-svg-defs>`, `<x-shield-emblem>`, `<x-ui.arrow-circle>` (21 uses), 21 `art/*` components |
+| JS behaviours ported to modules | 13 modules + the `app.js` orchestrator |
+| `prefers-reduced-motion` | verified: no `mo`/`rvon`/`pinon`/`has-cur`, cursor and preview `display:none`, animations off |
+| Visual diff at 5 widths | **0 pixels** at 1440 / 1180 / 900 / 760 / 390 |
+| Pinned services (not coverable by the motion-off refs) | **0 pixels** at 5 pin positions, travel exactly 1236px |
+| Behaviour suite | **35/35**, no page errors |
+| PHP tests | 8 passing, 61 assertions |
+
+Full numbers and how to reproduce: `docs/diff/README.md`.
+
+### How it was built
 
 ### 1. CSS, in cascade order
 
@@ -79,10 +95,11 @@ be ported literally:
 
 Playwright screenshots of the build at the same 5 widths with motion off, compared to
 `docs/reference/` with pixelmatch; diff images and a per-width mismatch count land in `docs/diff/`.
-Target: differences only at the sub-pixel / font-rasterisation level. Plus a manual pass on each
-motion behaviour and a reduced-motion pass.
+Target was "sub-pixel / font-rasterisation level only"; the result was **exactly zero** at every
+width. A second pass covers the pinned services track, which the motion-off references cannot
+reach, and a 35-check suite covers the interactions and reduced motion.
 
-**Gate: side-by-side at 1440 and 390, plus the diff numbers.**
+**Gate: side-by-side at 1440 and 390, plus the diff numbers.** — delivered in `docs/diff/`.
 
 ---
 

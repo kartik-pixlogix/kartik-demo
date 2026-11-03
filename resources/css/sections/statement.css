@@ -1,1 +1,11 @@
-/* statement — ported from design/v7/index.html. Phase 1. */
+/* Statement and brush stroke.
+ * Ported verbatim from design/v7/index.html (lines 191-197).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- statement ---- */
+.stm{position:relative;padding:200px 0 40px;text-align:left}
+.stm p{font:400 120px/120px var(--stmt);text-transform:uppercase;letter-spacing:-.005em}
+.stm .w{display:inline-block}
+.brush{position:relative;display:inline-block;z-index:0}
+.brush svg{position:absolute;left:-4%;top:14%;width:110%;height:78%;z-index:-1;fill:var(--acid);overflow:visible}
+

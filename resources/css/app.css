@@ -25,6 +25,7 @@
 @import './sections/header.css';
 @import './sections/hero.css';
 @import './sections/trust.css';
+@import './art.css';
 @import './sections/services.css';
 @import './sections/statement.css';
 @import './sections/process.css';
@@ -35,7 +36,6 @@
 @import './sections/insights.css';
 @import './sections/strip.css';
 @import './sections/footer.css';
-@import './art.css';
 
 /* 5. motion */
 @import './motion.css';

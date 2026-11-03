@@ -1,2 +1,26 @@
-// pinned-services — ported from the design/v7 prototype script. Phase 1.
-export default function init() {}
+/* Pinned horizontal services. Prototype: the pin block in layout() and the
+ * isPin() block in onScroll(). Section height = sticky height + overflow. */
+
+export function measurePin({ pin, stick, track, st, pinned }) {
+    if (!pin || !stick || !track) return;
+    if (pinned) {
+        st.pinDist = Math.max(0, track.scrollWidth - stick.querySelector('.wrap').clientWidth + 128);
+        pin.style.height = stick.offsetHeight + st.pinDist + 'px';
+    } else {
+        pin.style.height = '';
+        track.style.transform = '';
+    }
+}
+
+export function updatePin({ pin, stick, track, pbar, st, slideEl }) {
+    const r = pin.getBoundingClientRect();
+    const total = Math.max(1, pin.offsetHeight - stick.offsetHeight);
+    const p = Math.min(1, Math.max(0, -r.top / total));
+    track.style.transform = 'translate3d(' + (-p * st.pinDist).toFixed(1) + 'px,0,0)';
+    if (pbar) pbar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    const s = 1 + Math.min(4, Math.round(p * 4));
+    if (s !== st.slide) {
+        st.slide = s;
+        if (slideEl) slideEl.textContent = '0' + s;
+    }
+}

@@ -1,1 +1,11 @@
-/* base — ported from design/v7/index.html. Phase 1. */
+/* Reset, document defaults and focus rings.
+ * Ported verbatim from design/v7/index.html (lines 12-13, lines 15-19).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+body{margin:0;background:#061522}
+a{color:#F4F6F8}a:hover{color:#F4F6F8}
+.ds6 *{box-sizing:border-box}
+.ds6 p{margin:0}
+.ds6 h1,.ds6 h2,.ds6 h3{margin:0;font-weight:900}
+.ds6 :focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.ink-sec :focus-visible{outline-color:var(--acid)}

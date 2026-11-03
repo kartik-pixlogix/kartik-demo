@@ -31,3 +31,13 @@ Thumbs.db
 
 # machine-specific PHP 8.4 / Composer shims (absolute paths)
 /bin
+
+# visual-regression prototype copies, rebuilt on each run
+/storage/app/prototype
+
+# Regenerable visual-diff output (npm run visual:diff / visual:pinned).
+# docs/reference/ is the committed baseline; the review images and
+# docs/diff/README.md are the committed deliverable.
+/docs/diff/build
+/docs/diff/pinned
+/docs/diff/diff-*.png

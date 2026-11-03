@@ -1,1 +1,14 @@
-/* insights — ported from design/v7/index.html. Phase 1. */
+/* Field notes.
+ * Ported verbatim from design/v7/index.html (lines 269-278).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- insights ---- */
+.post{text-decoration:none;color:var(--ink);display:block}
+.post .meta{margin-top:16px}
+.post .lab-s{margin-top:8px;display:block}
+.all{background:var(--acid);display:flex;flex-direction:column;justify-content:space-between;padding:24px;text-decoration:none;color:var(--ink);min-height:100%;transition:background .3s}
+.all .dl{font-size:56px}
+.all:hover{background:var(--ink);color:var(--paper)}
+.all:hover .ac{background:var(--acid)}
+.all:hover .ac svg{stroke:var(--ink)}
+

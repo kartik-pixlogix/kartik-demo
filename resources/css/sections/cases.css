@@ -1,1 +1,11 @@
-/* cases — ported from design/v7/index.html. Phase 1. */
+/* Case files.
+ * Ported verbatim from design/v7/index.html (lines 262-268).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- proof ---- */
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.case{grid-column:span 2;text-decoration:none;color:var(--ink);display:block}
+.case .meta{display:flex;justify-content:space-between;gap:16px;margin-top:16px;align-items:flex-start}
+.case .body{font:500 16px/24px var(--text);margin-top:12px;max-width:560px}
+.stats.p{margin-top:80px;padding-bottom:0}
+

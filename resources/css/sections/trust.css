@@ -1,1 +1,15 @@
-/* trust — ported from design/v7/index.html. Phase 1. */
+/* Trust strip and client-logo marquee.
+ * Ported verbatim from design/v7/index.html (lines 142-152).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- trust ---- */
+.trust{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.trust-in{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:32px;padding:24px 0}
+.creds{font:500 16px/20px var(--text);text-transform:uppercase}
+.creds i{font-style:normal;margin:0 10px}
+.lmq{overflow:hidden;border-top:1px solid var(--ink)}
+.lmq-in{display:flex;gap:12px;width:max-content;padding:20px 0;animation:lmq 38s linear infinite}
+.lmq:hover .lmq-in{animation-play-state:paused}
+.lg{width:200px;height:72px;border:1px dashed var(--ink);display:flex;align-items:center;justify-content:center;font:500 14px/20px var(--text);text-transform:uppercase;flex:none}
+@keyframes lmq{to{transform:translateX(-50%)}}
+

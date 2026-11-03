@@ -1,1 +1,39 @@
-/* components — ported from design/v7/index.html. Phase 1. */
+/* Shared UI: title dot, chip, crosshair, arrow circle, text link, button.
+ * Ported verbatim from design/v7/index.html (lines 27-28, lines 32-36, lines 38-65).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+.dot{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--acid);margin-left:10px;vertical-align:baseline;flex:none}
+.chip{display:inline-flex;align-items:center;height:36px;padding:0 16px;background:var(--acid);color:var(--ink);font:600 18px/24px var(--text);text-transform:uppercase}
+.ch{position:absolute;width:32px;height:32px;pointer-events:none}
+.ch:before,.ch:after{content:'';position:absolute;background:var(--ink)}
+.ch:before{left:0;right:0;top:50%;height:1px}
+.ch:after{top:0;bottom:0;left:50%;width:1px}
+.ink-sec .ch:before,.ink-sec .ch:after{background:var(--paper)}
+/* ---- arrow circle (the only icon) ---- */
+.ac{position:relative;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--ink);overflow:hidden;flex:none;transition:transform .5s var(--ease)}
+.ac svg{position:absolute;width:18px;height:18px;fill:none;stroke:var(--acid);stroke-width:2;stroke-linecap:square;transition:transform .55s var(--ease)}
+.ac svg.a2{transform:translate(-160%,160%)}
+.ac.on-acid{background:var(--acid)}
+.ac.on-acid svg{stroke:var(--ink)}
+a:hover .ac svg.a1,button:hover .ac svg.a1,.hov:hover .ac svg.a1{transform:translate(160%,-160%)}
+a:hover .ac svg.a2,button:hover .ac svg.a2,.hov:hover .ac svg.a2{transform:none}
+a:hover .ac,.hov:hover .ac{transform:scale(1.08)}
+
+/* ---- text link with highlighter ---- */
+.tl{display:inline-flex;align-items:center;gap:24px;text-decoration:none;color:var(--ink);min-height:48px}
+.tl .t{position:relative;font:600 18px/24px var(--text);text-transform:uppercase;z-index:0}
+.tl .t:after{content:'';position:absolute;left:-4px;right:-14px;bottom:-1px;height:8px;background:var(--acid);transform:rotate(-1.5deg);z-index:-1;transform-origin:left bottom;transition:height .45s var(--ease)}
+.tl:hover .t:after{height:calc(100% + 4px)}
+.ink-sec .tl{color:var(--paper)}
+.ink-sec .tl .t:after{height:3px}
+.ink-sec .tl:hover .t{color:var(--ink)}
+.ink-sec .tl:hover .t:after{height:calc(100% + 4px)}
+
+/* ---- button ---- */
+.btn{position:relative;display:inline-flex;align-items:center;gap:24px;height:48px;padding:0 24px;background:var(--ink);color:var(--paper);font:500 16px/20px var(--text);text-transform:uppercase;text-decoration:none;border:0;cursor:pointer;overflow:hidden;isolation:isolate;transition:transform .45s var(--ease)}
+.btn:before{content:'';position:absolute;inset:0;background:var(--acid);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease);z-index:-1}
+.btn:hover{color:var(--ink)}
+.btn:hover:before{transform:scaleX(1)}
+.btn svg{width:18px;height:18px;fill:none;stroke:var(--acid);stroke-width:2;stroke-linecap:square;transition:stroke .3s,transform .45s var(--ease)}
+.btn:hover svg{stroke:var(--ink);transform:rotate(45deg)}
+

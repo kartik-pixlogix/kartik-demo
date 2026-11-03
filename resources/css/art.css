@@ -1,1 +1,15 @@
-/* art — ported from design/v7/index.html. Phase 1. */
+/* Artwork frames shared by cards, cases and posts.
+ * Ported verbatim from design/v7/index.html (lines 153-163).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- art ---- */
+.art{position:relative;aspect-ratio:5 / 4;overflow:hidden;background:var(--paper)}
+.art.k{background:var(--ink)}
+.art .zoom{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.art svg{position:absolute;left:0;top:-8%;width:100%;height:116%;will-change:transform}
+.card:hover .art .zoom,.case:hover .art .zoom,.post:hover .art .zoom{transform:scale(1.06)}
+.blob{transform-box:fill-box;transform-origin:center;animation:drift var(--dur,9s) ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(var(--dx,14px),var(--dy,-18px)) scale(var(--s,1.06))}100%{transform:translate(calc(var(--dx,14px) * -.6),calc(var(--dy,-18px) * -.4)) scale(.97)}}
+.spin{transform-box:fill-box;transform-origin:center;animation:rot 26s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+

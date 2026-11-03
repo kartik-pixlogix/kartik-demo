@@ -1,1 +1,20 @@
-/* process — ported from design/v7/index.html. Phase 1. */
+/* How we work.
+ * Ported verbatim from design/v7/index.html (lines 198-213).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- process ---- */
+.proc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}
+.proc-l{position:sticky;top:140px}
+.proc-l .counter{margin:48px 0 24px;font-size:120px;line-height:96px}
+.proc-l .counter i{height:96px}
+.steps{border-top:1px solid var(--ink)}
+.step{display:grid;grid-template-columns:80px minmax(0,1fr);gap:24px;padding:48px 0 64px;border-bottom:1px solid var(--ink);min-height:340px;position:relative}
+.step .n{font:900 56px/45px var(--disp)}
+.step h3{font:900 96px/80px var(--disp);text-transform:uppercase;display:flex;align-items:flex-end}
+.step .dot{transform:scale(0);transition:transform .6s var(--ease)}
+.step.on .dot{transform:scale(1)}
+.step p.b{margin-top:24px;max-width:520px}
+.step .out{margin-top:24px;display:flex;gap:16px;align-items:center}
+.step:before{content:'';position:absolute;left:0;top:-1px;height:3px;width:100%;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease)}
+.step.on:before{transform:scaleX(1)}
+

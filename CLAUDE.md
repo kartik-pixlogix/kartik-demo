@@ -61,8 +61,25 @@ docs/inventory.md          every section, token, keyframe, JS behaviour and SVG 
 docs/plan.md               phase-by-phase build plan
 docs/prototype-fixes.md    approved deviations from the prototype
 docs/reference/            prototype screenshots at 1440/1180/900/760/390 (motion off)
-docs/diff/                 Phase 1 visual diffs against docs/reference/
+docs/diff/                 visual diffs + how to reproduce them (docs/diff/README.md)
+scripts/                   one-time porting scripts, kept as provenance
+tests/visual/              Playwright visual + behaviour regression harness
 ```
+
+## Verifying a change
+
+```sh
+php artisan serve                 # the harness needs the app running
+npm run visual:diff               # must stay at 0 differing pixels, all five widths
+npm run visual:pinned             # the pinned services track, motion on
+npm run visual:behaviour          # 35 interaction checks
+php artisan test
+```
+
+The homepage is currently **pixel-identical** to the prototype at all five widths. Treat any
+non-zero `visual:diff` as a regression and find the cause before moving on. The CSS and markup
+were generated from the prototype by `scripts/split-prototype-*.mjs`, so prefer fixing the source
+of a difference over hand-editing the output.
 
 ## CSS cascade
 

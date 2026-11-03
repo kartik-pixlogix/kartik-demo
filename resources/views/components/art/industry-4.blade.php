@@ -1,0 +1,2 @@
+{{-- Industry preview 04 — Manufacturing. --}}
+<svg class="p4" viewBox="0 0 500 400" aria-hidden="true"><rect width="500" height="400" fill="#061522"></rect><rect width="500" height="400" fill="url(#dots)"></rect><path d="M80 320V200l70 40v-40l70 40v-40l70 40V120h40v200Z" fill="none" stroke="#C7D0D8" stroke-width="5"></path><path class="flow" d="M380 320V120" stroke="#27B8ED" stroke-width="6" fill="none"></path><circle class="spin" cx="420" cy="110" r="34" fill="none" stroke="#1479D4" stroke-width="10" stroke-dasharray="14 10"></circle></svg>

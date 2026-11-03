@@ -1,1 +1,42 @@
-/* motion — ported from design/v7/index.html. Phase 1. */
+/* Keyframes, the load sequence, scroll reveals and reduced-motion.
+ * Ported verbatim from design/v7/index.html (lines 310-347).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ======================== MOTION ======================== */
+@keyframes up{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes artIn{from{opacity:0;transform:scale(.85) rotate(-8deg)}to{opacity:1;transform:none}}
+@keyframes chipIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.mo .h-xl .ln>span{animation:up 1.1s var(--ease) both}
+.mo .h-xl .ln:nth-child(2)>span{animation-delay:.08s}
+.mo .h-xl .ln:nth-child(3)>span{animation-delay:.16s}
+.mo .h-xl .ln:nth-child(4)>span{animation-delay:.24s}
+.mo .hero .chip{animation:chipIn .9s .05s var(--ease) both}
+.mo .hero .lead{animation:fade 1s .55s both}
+.mo .hero .cta-row{animation:fade 1s .7s both}
+.mo .hero-art{animation:artIn 1.6s .2s var(--ease) both}
+.mo .stats.h>div{animation:fade 1s both}
+.mo .stats.h>div:nth-child(2){animation-delay:.9s}.mo .stats.h>div:nth-child(1){animation-delay:.8s}.mo .stats.h>div:nth-child(3){animation-delay:1s}.mo .stats.h>div:nth-child(4){animation-delay:1.1s}
+.ds6:not(.mo) .blob,.ds6:not(.mo) .spin,.ds6:not(.mo) .sweep,.ds6:not(.mo) .blip,.ds6:not(.mo) .feed-in,.ds6:not(.mo) .lmq-in{animation:none}
+
+/* scroll reveals (classes added by IntersectionObserver; only when the page actually scrolls) */
+.rvon .rv{opacity:0;transform:translateY(48px);transition:opacity 1s var(--ease),transform 1.1s var(--ease)}
+.rvon .rv.in{opacity:1;transform:none}
+.rvon .rm{display:block;overflow:hidden}
+.rvon .rm>span{display:inline-block;transform:translateY(105%);transition:transform 1.1s var(--ease)}
+.rvon .rm.in>span{transform:none}
+.rvon .rs>*{opacity:0;transform:translateY(56px);transition:opacity .9s var(--ease),transform 1.1s var(--ease)}
+.rvon .rs.in>*{opacity:1;transform:none}
+.rvon .rs.in>*:nth-child(2){transition-delay:.08s}.rvon .rs.in>*:nth-child(3){transition-delay:.16s}.rvon .rs.in>*:nth-child(4){transition-delay:.24s}.rvon .rs.in>*:nth-child(5){transition-delay:.32s}.rvon .rs.in>*:nth-child(6){transition-delay:.4s}
+.rvon .rl{transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease)}
+.rvon .rl.in{transform:none}
+.rvon .brush svg{clip-path:inset(0 100% 0 0);transition:clip-path 1.2s .5s var(--ease)}
+.rvon .brush.in svg{clip-path:inset(0 0 0 0)}
+.rvon .rw .w{opacity:.12;transition:opacity .6s}
+.rvon .rw.in .w{opacity:1}
+.rvon .rw.in .w:nth-child(2){transition-delay:.08s}.rvon .rw.in .w:nth-child(3){transition-delay:.16s}.rvon .rw.in .w:nth-child(4){transition-delay:.24s}.rvon .rw.in .w:nth-child(5){transition-delay:.32s}.rvon .rw.in .w:nth-child(6){transition-delay:.4s}
+.rvon .art.rc{clip-path:inset(18% 0 18% 0);transition:clip-path 1.3s var(--ease)}
+.rvon .art.rc.in{clip-path:inset(0 0 0 0)}
+
+@media (prefers-reduced-motion: reduce){.ds6 *,.ds6 *:before,.ds6 *:after{animation:none !important;transition:none !important}.cur,.prev{display:none !important}}
+

@@ -1,1 +1,81 @@
-/* v7-overrides — ported from design/v7/index.html. Phase 1. */
+/* V7 palette, logo lockup and cyber-artwork overrides.
+ *
+ * This block genuinely overrides earlier rules and MUST stay last:
+ * .brand becomes an image lockup, .dd-m a:hover flips #1a1a1a to #dfe5ea,
+ * and the arrow strokes are remapped. See docs/inventory.md §9.
+ * Ported verbatim from design/v7/index.html (lines 419-491).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ===== V7: brand palette from the logo (Deep Navy, Midnight, Bright Blue, Cyan, Silver White, Cool Silver) ===== */
+.brand{display:flex;align-items:center;gap:12px}
+.brand img.m{height:42px;width:auto;transition:height .4s var(--ease)}
+.brand img.w{height:17px;width:auto}
+.hdr.compact .brand img.m{height:32px}
+.hdr{background:rgba(6,21,34,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.chip,.mmenu a,.mmenu p,.feed b,.all,.cta-b,.ind-row:hover,.cur[data-mode="view"]:after{color:#061522}
+.ac svg,.oring svg,.btn svg{stroke:#1479D4}
+.act i svg,.cur .r svg,.dd-m .ac svg,.ac.on-acid svg{stroke:#061522}
+.menu-btn i{background:#061522}
+.btn:hover,.tl:hover .t{color:#061522}
+.btn:hover svg{stroke:#061522}
+.ink-sec{background:#F4F6F8;color:#061522}
+.ink-sec .tl:hover .t{color:#061522}
+.ink-sec :focus-visible,.cta-b :focus-visible{outline-color:#061522}
+.ink-sec .sweep,.ink-sec .blip{background:#1479D4}
+.dd-m a:hover{background:#dfe5ea}
+.dd-m span.k{color:#0E5CA8}
+.art.k .num{color:#F4F6F8}
+.brush svg{fill:#1479D4}
+.prog{background:linear-gradient(90deg,#1479D4,#27B8ED)}
+.cta-b .f input,.cta-b .f select{border-bottom-color:#061522;color:#061522}
+.cta-b .f input::placeholder{color:#061522}
+.cta-b .btn{background:#061522;color:#F4F6F8}
+.cta-b .btn:before{background:#F4F6F8}
+.cta-b .btn:hover{color:#061522}
+.cta-b .btn svg{stroke:#27B8ED}
+.cta-b .btn:hover svg{stroke:#061522}
+.all:hover{background:#F4F6F8;color:#061522}
+.all .ac{background:#061522}
+.all .ac svg{stroke:#27B8ED}
+.giant span{display:block}
+.giant img{display:block;width:100%;height:auto}
+.hero{background:radial-gradient(ellipse 55% 60% at 78% 38%,rgba(20,121,212,.20),transparent 70%)}
+.hm{position:absolute;left:59%;top:39%;width:280px;height:auto;transform:translate(-50%,-50%);filter:drop-shadow(0 30px 50px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(20,121,212,.35))}
+.mo .hm{animation:hmIn 1.6s .5s var(--ease) both}
+@keyframes hmIn{from{opacity:0;filter:blur(10px)}to{opacity:1}}
+.bsl,.hsl{position:absolute;height:2px;width:60%;transform:rotate(-34deg);background:linear-gradient(90deg,transparent,#1479D4 40%,#F4F6F8 62%,transparent);pointer-events:none}
+.hsl.a{left:-140px;top:120px;width:520px;transform-origin:left;opacity:.8}
+.hsl.b{right:-160px;top:760px;width:560px;opacity:.6}
+.mo .bsl,.mo .hsl{animation:chipIn 1.4s .4s var(--ease) both}
+@media (max-width:760px){.hm{width:170px}.hsl{display:none}.brand img.m{height:34px}.brand img.w{height:13px}}
+/* ===== cyber artwork + created emblem ===== */
+.emb{position:absolute;left:57.8%;top:46%;width:300px;height:auto;transform:translate(-50%,-50%);filter:drop-shadow(0 30px 50px rgba(0,0,0,.55)) drop-shadow(0 0 50px rgba(20,121,212,.4));overflow:visible}
+.mo .emb{animation:hmIn 1.6s .5s var(--ease) both}
+.flow{stroke-dasharray:6 10;animation:flow 2.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-64}}
+.pl2{animation:pl2 2.4s ease-in-out infinite}
+@keyframes pl2{0%,100%{opacity:.55}50%{opacity:1}}
+.scanE{animation:scanE 2.8s ease-in-out infinite alternate}
+@keyframes scanE{from{transform:translateY(-120px)}to{transform:translateY(124px)}}
+.scanY{animation:scanY 2.4s ease-in-out infinite alternate}
+@keyframes scanY{from{transform:translateY(-80px)}to{transform:translateY(80px)}}
+.scanX{animation:scanX 3.6s ease-in-out infinite alternate}
+@keyframes scanX{from{transform:translateX(0)}to{transform:translateX(290px)}}
+.redact{transform-box:fill-box;transform-origin:left;animation:redact 3s ease-in-out infinite alternate}
+@keyframes redact{from{transform:scaleX(.08)}to{transform:scaleX(1)}}
+.tick{stroke-dasharray:40;stroke-dashoffset:40;animation:tick 3.2s ease-out infinite}
+@keyframes tick{0%{stroke-dashoffset:40}30%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+.hunt{animation:hunt 6s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes hunt{0%,22%{transform:translate(329px,160px)}33%,55%{transform:translate(174px,220px)}66%,88%{transform:translate(359px,280px)}100%{transform:translate(329px,160px)}}
+.knob{animation:knob 2.6s ease-in-out infinite alternate}
+@keyframes knob{from{transform:translateX(0)}to{transform:translateX(16px)}}
+.ds6:not(.mo) .flow,.ds6:not(.mo) .pl2,.ds6:not(.mo) .scanE,.ds6:not(.mo) .scanY,.ds6:not(.mo) .scanX,.ds6:not(.mo) .redact,.ds6:not(.mo) .tick,.ds6:not(.mo) .knob{animation:none}
+.ds6:not(.mo) .tick{stroke-dashoffset:0}
+.ds6:not(.mo) .hunt{animation:none;transform:translate(329px,160px)}
+.flogo{margin-top:96px}
+.flogo>span{display:flex;align-items:center;gap:32px}
+.femb{width:120px;height:auto;flex:none}
+.fwm{font:400 min(8.4vw,122px)/1 'Michroma',sans-serif;letter-spacing:.02em;color:#F4F6F8;white-space:nowrap}
+.fwm b{font-weight:400;background:linear-gradient(180deg,#8fdcfa,#27B8ED 45%,#1479D4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-art svg.emb{inset:auto;left:57.8%;top:46%;width:300px;height:auto}
+@media (max-width:760px){.hero-art svg.emb{width:180px}.emb{width:180px}.flogo{margin-top:56px}.femb{width:52px}.flogo>span{gap:14px}.fwm{font-size:7.4vw}}

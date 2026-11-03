@@ -485,7 +485,12 @@ Present in the prototype:
 
 **Gaps to close in the port** (additions the brief asks for, beyond the prototype):
 1. No skip link.
-2. The mobile menu does **not** trap focus, and its links stay tabbable while closed — BUILD.md Phase 1.4 requires a focus trap, so the port must add `inert`/`visibility` handling plus the trap.
+2. The mobile menu does **not** trap focus. *(Correction: an earlier draft of this
+   note also said the links stay tabbable while closed — they do not. `.mmenu{visibility:hidden}`
+   already removes them from the tab order, so no `inert` handling is needed and only the trap had
+   to be added.)* Done in Phase 1 — `resources/js/modules/mobile-menu.js`. One subtlety: the toggle
+   button is earlier in the document than the menu, so the focusable list must be sorted into
+   document order or the wrap-around fires on the wrong element.
 3. The services dropdown is hover/`:focus-within` only — keyboard users can tab to the links, but there is no Escape-to-close and no `aria-expanded`.
 4. The `.lg` "Client logo" boxes are bare text, which is fine for now; real logos will need `alt`.
 5. `.dd-m span.k` is `#0E5CA8` on `#F4F6F8` — verify ≥4.5:1 in Phase 5.

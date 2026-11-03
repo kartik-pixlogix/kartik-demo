@@ -1,1 +1,8 @@
-/* layout — ported from design/v7/index.html. Phase 1. */
+/* Container, section rhythm and section headers.
+ * Ported verbatim from design/v7/index.html (line 20, lines 29-31).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+.wrap{max-width:1440px;margin:0 auto;padding:0 64px}
+.sec{padding:160px 0 0}
+.sec-t{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:32px;flex-wrap:wrap}
+.sec-t h2{display:flex;align-items:flex-end}

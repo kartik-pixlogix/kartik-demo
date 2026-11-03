@@ -1,0 +1,2 @@
+{{-- Industry preview 03 — SaaS & IT. --}}
+<svg class="p3" viewBox="0 0 500 400" aria-hidden="true"><rect width="500" height="400" fill="#0C2944"></rect><rect width="500" height="400" fill="url(#dots)"></rect><rect x="80" y="80" width="340" height="240" fill="none" stroke="#C7D0D8" stroke-width="4"></rect><path d="M80 115h340" stroke="#C7D0D8" stroke-width="4"></path><text x="190" y="240" fill="#27B8ED" font-size="88" font-family="Instrument Sans, sans-serif" font-weight="600">&lt;/&gt;</text></svg>

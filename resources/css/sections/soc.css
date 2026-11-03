@@ -1,1 +1,28 @@
-/* soc — ported from design/v7/index.html. Phase 1. */
+/* Managed SOC — the one inverted block.
+ * Ported verbatim from design/v7/index.html (lines 214-237).
+ * Do not retype values — regenerate with scripts/split-prototype-css.mjs.
+ */
+/* ---- SOC (ink block) ---- */
+.ink-sec{background:var(--ink);color:var(--paper)}
+.soc{margin-top:160px;padding:120px 0;position:relative}
+.soc-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+.soc h2{color:var(--paper)}
+.soc .body{margin:32px 0;max-width:520px}
+.soc-list{list-style:none;padding:0;margin:0 0 40px;border-top:1px solid var(--paper)}
+.soc-list li{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--paper);font:500 16px/20px var(--text);text-transform:uppercase}
+.radar{position:relative;aspect-ratio:1;max-width:560px;margin-left:auto;width:100%}
+.radar .ring{position:absolute;border:1px solid var(--paper);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.radar .x,.radar .y{position:absolute;background:var(--paper)}
+.radar .x{left:0;right:0;top:50%;height:1px}
+.radar .y{top:0;bottom:0;left:50%;width:1px}
+.sweep{position:absolute;left:50%;top:50%;width:50%;height:3px;margin-top:-1.5px;background:var(--acid);transform-origin:left center;animation:rot 4s linear infinite}
+.blip{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--acid);animation:blip 4s ease-out infinite}
+@keyframes blip{0%,100%{transform:scale(.4);opacity:.3}8%{transform:scale(1.4);opacity:1}40%{transform:scale(1);opacity:1}}
+.soc-hud{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;gap:6px}
+.soc-hud .clock{font:700 38px/38px var(--text);font-variant-numeric:tabular-nums}
+.feed{height:150px;overflow:hidden;margin-top:40px;border-top:1px solid var(--paper);border-bottom:1px solid var(--paper);position:relative}
+.feed-in{animation:feed 18s linear infinite}
+.feed-in>div{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:16px;padding:9px 0;font:500 14px/20px var(--text);text-transform:uppercase}
+.feed b{background:var(--acid);color:var(--ink);padding:0 8px;font-weight:600}
+@keyframes feed{to{transform:translateY(-50%)}}
+

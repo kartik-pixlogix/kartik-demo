@@ -1,0 +1,2 @@
+{{-- The blue brush stroke behind "fixed." --}}
+<svg viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true"><path d="M6 34C40 22 90 18 150 20C210 22 270 16 330 18C360 19 385 22 396 28L394 40C392 50 384 58 360 60C300 64 220 62 150 63C90 64 40 66 12 62C4 58 2 46 6 34ZM40 16 120 11 118 18ZM250 66 330 63 300 71Z"></path></svg>
