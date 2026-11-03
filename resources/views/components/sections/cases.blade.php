@@ -8,7 +8,7 @@
 <div class="sec-t"><h2 class="dl rm"><span>Case files<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
 <div class="grid4 rs">
 @foreach ($caseStudies as $case)
-<a href="#insights" class="case">
+<a href="{{ route('insights.index') }}" class="case">
 <div class="art{{ $case->art_inverted ? ' k' : '' }} rc"><div class="zoom"><x-dynamic-component :component="'art.'.$case->cover_art_key" /></div></div>
 <div class="meta"><div><p class="lab-l">{{ $case->title }}</p><p class="lab-s" style="margin-top: 4px">{{ $case->tags }}</p></div><x-ui.arrow-circle /></div>
 <p class="body">{{ $case->summary }}</p>

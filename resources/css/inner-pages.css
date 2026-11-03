@@ -336,3 +336,286 @@
         margin-top: 32px;
     }
 }
+
+/* ---- card grid for cross-links ---------------------------------------------
+   Deliberately NOT .track: that class is turned into a flex row by .pinon on
+   the root element, which is set on every page that scrolls, so reusing it
+   outside the homepage services section would collapse the grid. */
+
+.cards3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px 12px;
+}
+
+@media (max-width: 1180px) {
+    .cards3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .cards3 {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+    }
+}
+
+/* ---- long-form article -----------------------------------------------------
+   Instrument Sans at 19/30, as the handoff specifies. Measure is capped near
+   68 characters: the body sits in the wide column of a .split, which would
+   otherwise run to 110 characters and become hard to track back. */
+
+.prose {
+    max-width: 68ch;
+}
+
+.prose > * + * {
+    margin-top: 28px;
+}
+
+.prose p,
+.prose li {
+    font: 500 19px/30px var(--text);
+}
+
+.prose h2 {
+    font: 900 40px/36px var(--disp);
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    margin-top: 56px;
+}
+
+.prose h3 {
+    font: 600 18px/24px var(--text);
+    text-transform: uppercase;
+    margin-top: 40px;
+}
+
+.prose ul,
+.prose ol {
+    padding-left: 0;
+    list-style: none;
+}
+
+.prose li + li {
+    margin-top: 12px;
+}
+
+/* square markers, like the rest of the site — no disc bullets */
+.prose ul li {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr);
+    gap: 16px;
+}
+
+.prose ul li:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-top: 11px;
+    background: var(--acid);
+}
+
+.prose ol {
+    counter-reset: prose;
+}
+
+.prose ol li {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 16px;
+    counter-increment: prose;
+}
+
+.prose ol li:before {
+    content: counter(prose, decimal-leading-zero);
+    font: 900 20px/30px var(--disp);
+    color: var(--acid);
+}
+
+.prose a {
+    color: var(--ink);
+    background: linear-gradient(var(--acid), var(--acid)) no-repeat 0 100% / 100% 2px;
+    transition: background-size 0.45s var(--ease);
+    text-decoration: none;
+}
+
+.prose a:hover {
+    background-size: 100% 100%;
+    color: var(--paper);
+}
+
+.prose blockquote {
+    margin: 40px 0;
+    padding-left: 24px;
+    border-left: 3px solid var(--acid);
+}
+
+.prose blockquote p {
+    font: 400 28px/36px var(--stmt);
+    text-transform: uppercase;
+}
+
+.prose strong {
+    font-weight: 700;
+}
+
+.prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 48px 0;
+}
+
+/* ---- article header -------------------------------------------------------- */
+
+.ahead {
+    /* the grid column already constrains it; 20ch forced six lines */
+    max-width: 26ch;
+    font: 900 72px/62px var(--disp);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 24px 0 0;
+}
+
+.ameta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+/* ---- legal -----------------------------------------------------------------
+   Narrower than an article: legal text is read in order, not skimmed. */
+
+.legal {
+    max-width: 62ch;
+}
+
+.legal .flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 10px;
+    background: var(--acid);
+    color: var(--paper);
+    font: 600 14px/20px var(--text);
+    text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+    .prose p,
+    .prose li {
+        font-size: 17px;
+        line-height: 26px;
+    }
+
+    .prose h2 {
+        font-size: 32px;
+        line-height: 30px;
+        margin-top: 40px;
+    }
+
+    .prose blockquote p {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .ahead {
+        font-size: 44px;
+        line-height: 40px;
+        max-width: none;
+    }
+}
+
+/* ---- hero without artwork --------------------------------------------------
+   About, Contact, the index and the legal pages have no illustration, so the
+   two-column hero would leave half the row empty and squeeze the headline into
+   1.15fr for no reason. */
+
+.phero-g.solo {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.phero-g.solo > div {
+    max-width: 44ch;
+}
+
+.phero-g.solo h1 {
+    max-width: none;
+}
+
+/* ---- inline link -----------------------------------------------------------
+   The footer's underline-grow, for links that sit inside body copy and lists
+   where an arrow circle would be too loud. */
+
+.lnk {
+    color: var(--ink);
+    text-decoration: none;
+    /* A persistent 2px rule, not the footer pattern that is invisible until
+       hover: inline links inside prose have to be findable while reading. */
+    background: linear-gradient(var(--acid), var(--acid)) no-repeat 0 100% / 100% 2px;
+    transition: background-size 0.45s var(--ease), color 0.3s;
+}
+
+.lnk:hover,
+.lnk:focus-visible {
+    background-size: 100% 100%;
+    color: var(--paper);
+}
+
+/* a chip that is a link fills on hover rather than underlining */
+.chips li:has(> .lnk) {
+    padding: 0;
+    transition: background 0.3s;
+}
+
+.chips li > .lnk {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 16px;
+    background: none;
+}
+
+.chips li:has(> .lnk):hover,
+.chips li:has(> .lnk):focus-within {
+    background: var(--acid);
+}
+
+.chips li:has(> .lnk):hover .lnk,
+.chips li:has(> .lnk):focus-within .lnk {
+    color: var(--paper);
+}
+
+/* ---- article metadata column ----------------------------------------------
+   Sits in the sticky left column of the article split. A category label alone
+   was decoration; publication date, category and a way back to the index are
+   what a reader actually wants there. */
+
+.ameta {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.ameta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+@media (max-width: 1180px) {
+    .ameta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 32px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+    }
+}

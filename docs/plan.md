@@ -142,11 +142,10 @@ and the rest stay exactly as drawn.
 
 ---
 
-## Phase 3 — inner pages — **service template done, awaiting review**
+## Phase 3 — inner pages — **done**
 
-BUILD.md gates this phase: "Show me one service page before building the rest." The template and
-all five practices are built; industries, insights, contact, about and the legal pages are not
-started.
+The service template was reviewed and approved, then the remaining pages were built on the same
+vocabulary. 21 routes in total.
 
 | Built | |
 |---|---|
@@ -156,10 +155,17 @@ started.
 | Links | service links now point at real routes; homepage-only sections use `home_anchor()`, which stays a fragment on the homepage and becomes a full URL elsewhere |
 | Tests | 27 new (68 total); homepage still **0 differing pixels** |
 
-### Still to build
+### Also built
 
-Industry template ×6, Insights index and article, Contact, About, Privacy policy, Terms. Their nav
-links stay as homepage anchors until the pages exist, so nothing points at a 404.
+| | |
+|---|---|
+| Industry template ×6 | hero, what we see, which practices start here, what applies, related case file, strip |
+| Insights | index plus the article template — long-form at Instrument Sans 19/30, measure capped near 68 characters |
+| Contact | frames the closing strip rather than duplicating the details it already carries |
+| About | deliberately short on biography: no founding date, headcount or leadership names, because none were confirmed |
+| Legal ×3 | Privacy, Terms and Responsible disclosure, every section marked [legal review] |
+| Links | migration complete — a test crawls every internal link on every page and asserts it resolves |
+| Placeholders | , extracted from the rendered pages rather than written from memory |
 
 ### Open questions
 

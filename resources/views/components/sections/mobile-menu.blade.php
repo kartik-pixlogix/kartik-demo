@@ -7,8 +7,8 @@
 <a href="{{ home_anchor('services') }}">Services</a>
 <a href="{{ home_anchor('industries') }}">Industries</a>
 <a href="{{ home_anchor('compliance') }}">Compliance</a>
-<a href="{{ home_anchor('insights') }}">Resources</a>
-<a href="{{ home_anchor('about') }}">About</a>
-<a href="#contact">Talk to us</a>
+<a href="{{ route('insights.index') }}">Resources</a>
+<a href="{{ route('about') }}">About</a>
+<a href="{{ route('contact') }}">Talk to us</a>
 <p>Secure / Privacy / Compliance / Infrastructure / MSS</p>
 </nav>
