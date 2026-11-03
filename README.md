@@ -1,58 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# UB Shield
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Production website for UB Shield, a cybersecurity and compliance company in Ahmedabad, India.
 
-## About Laravel
+The approved design is `design/v7/index.html`, a self-contained prototype that is the **source of
+truth** for the homepage and is read-only. The build is checked against it with a pixel diff that
+currently reports **0 differing pixels at all five breakpoints**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| | |
+|---|---|
+| Framework | Laravel 13 (PHP 8.3+) |
+| Views | Blade components, server-rendered |
+| Assets | Vite, plain modern CSS in partials (no Tailwind), vanilla ES modules |
+| Admin | Filament 5 at `/admin` |
+| Database | MySQL 8 |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Further reading: [`BUILD.md`](BUILD.md) (the brief), [`CLAUDE.md`](CLAUDE.md) (working rules),
+[`docs/inventory.md`](docs/inventory.md) (what the prototype contains),
+[`docs/plan.md`](docs/plan.md) (phase plan and status),
+[`docs/prototype-fixes.md`](docs/prototype-fixes.md) (approved deviations),
+[`docs/diff/README.md`](docs/diff/README.md) (how fidelity is verified).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Requires PHP 8.3+, Composer, Node 20+, and MySQL 8.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```sh
+composer install
+npm install
+npx playwright install chromium     # only needed to run the visual tests
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Create the two databases and point `.env` at them:
 
-## Contributing
+```sql
+CREATE DATABASE ubshield       CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE ubshield_test  CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE USER 'ubshield'@'127.0.0.1' IDENTIFIED BY 'a-strong-password';
+GRANT ALL PRIVILEGES ON ubshield.*      TO 'ubshield'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON ubshield_test.* TO 'ubshield'@'127.0.0.1';
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Then:
 
-## Code of Conduct
+```sh
+php artisan migrate --seed
+npm run build
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The seeders load the prototype's placeholder content **verbatim** — `[XX]`, `[status]`,
+`Client logo` and the rest. Nothing in square brackets is real data; see
+[`docs/inventory.md`](docs/inventory.md) §15 for the full list.
 
-## Security Vulnerabilities
+### Creating an admin user
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+There is no public registration. Accounts are created deliberately:
 
-## License
+```sh
+php artisan make:filament-user
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Anyone with an account can reach `/admin`. Phase 4 adds 2FA, login throttling and a password policy.
+
+### Running the queue
+
+Lead notifications and auto-replies are **queued**, so a worker must be running or no mail is sent:
+
+```sh
+php artisan queue:work
+```
+
+In production run it under supervisor or systemd. `MAIL_MAILER=log` in local development writes
+messages to `storage/logs/laravel.log` instead of sending them.
+
+---
+
+## Environment variables
+
+Beyond Laravel's defaults:
+
+| Variable | Default | What it does |
+|---|---|---|
+| `MAIL_ADMIN_ADDRESS` | — | Where new leads are announced. The **Lead notification inbox** setting in the admin overrides it. |
+| `REVIEW_MIN_FILL_SECONDS` | `3` | Submissions completed faster than this are rejected as automated. |
+| `REVIEW_MAX_FORM_AGE_SECONDS` | `43200` | Rejects a replayed or scraped form older than this. |
+| `REVIEW_RATE_LIMIT` | `5` | Submissions allowed per IP per window. |
+| `REVIEW_RATE_DECAY_MINUTES` | `60` | The window. |
+| `REVIEW_VALIDATE_EMAIL_DNS` | `true` | Live DNS lookup on the submitted email domain. Turn off if your host blocks outbound DNS. |
+| `TURNSTILE_ENABLED` | `false` | Optional third spam layer. The honeypot and fill timer work without it. |
+| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | — | Cloudflare Turnstile credentials. |
+
+---
+
+## Tests
+
+```sh
+php artisan test                  # 41 tests — routing, form, spam defences, admin, placeholders
+
+# the visual suite needs the app running (php artisan serve)
+npm run visual:diff               # full page at 1440/1180/900/760/390 — must stay at 0 pixels
+npm run visual:pinned             # the pinned services track, motion on
+npm run visual:behaviour          # 45 interaction checks
+npm run visual:side-by-side       # review images into docs/diff/
+npm run visual:reference          # re-capture the baseline (only when the prototype changes)
+```
+
+`visual:diff` and `visual:pinned` exit non-zero on any difference. **Treat a non-zero diff as a
+regression** — the homepage is currently pixel-identical to the prototype and should stay that way.
+
+The PHP suite runs against `ubshield_test` on MySQL rather than SQLite, so migrations and queries
+are exercised on the same engine as production.
+
+---
+
+## Deployment
+
+Target is a standard Linux VPS with Nginx and PHP-FPM.
+
+```sh
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+php artisan migrate --force
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+```
+
+Checklist:
+
+- `APP_ENV=production`, `APP_DEBUG=false`, a real `APP_KEY`.
+- Point the web root at `public/`.
+- A queue worker under supervisor, or lead mail never goes out.
+- `.env` is never committed.
+- `storage/` and `bootstrap/cache/` writable by the web user.
+
+Security headers, HSTS, CSP and the Filament hardening land in Phase 4.
+
+---
+
+## Project layout
+
+```
+app/
+  Filament/              admin: Leads (read-only + CSV), Insights, Case studies, Site settings
+  Http/Controllers/      HomeController, ReviewController
+  Http/Requests/         ReviewRequest — validation and the spam checks
+  Mail/                  queued admin notification + visitor auto-reply
+  Models/                Lead, Insight, CaseStudy, Setting, User
+  Support/               LeadCsv, CoverArt, Turnstile
+design/v7/               the approved prototype — READ ONLY, never edit
+docs/                    inventory, plan, approved fixes, reference captures, diffs
+resources/css/           partials imported in the prototype's cascade order
+resources/js/modules/    the prototype's behaviours, one module each
+resources/views/         components/{sections,ui,art}, pages/
+scripts/                 one-time porting scripts, kept as provenance
+tests/visual/            Playwright visual + behaviour harness
+```
+
+### A note on the CSS
+
+`resources/css/app.css` imports partials in a fixed order with `responsive.css` and
+`v7-overrides.css` **last**, mirroring the prototype's single `<style>` block. The trailing V7
+block genuinely overrides earlier rules, so reordering the imports silently changes the design.
+The partials were generated from the prototype by `scripts/split-prototype-css.mjs` rather than
+retyped — prefer fixing the source of a difference over hand-editing the output.
+
+`form-states.css` is the one stylesheet not from the prototype: the prototype's form has no
+validation, so it has no error or success states to copy.

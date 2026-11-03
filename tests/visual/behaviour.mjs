@@ -130,6 +130,63 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     await p.context().close();
 }
 
+// ---------- posture-review form, scripted path ----------
+{
+    const p = await page();
+    await scrollTo(p, await topOf(p, '.strip'));
+
+    ok('form: posts to the Laravel route', ((await p.getAttribute('[data-review-form]', 'action')) || '').includes('/posture-review'));
+    ok('form: is a real POST so it still works without JS', ((await p.getAttribute('[data-review-form]', 'method')) || '').toLowerCase() === 'post');
+    ok('form: carries a CSRF token', (await p.locator('[data-review-form] input[name="_token"]').count()) === 1);
+    ok('form: carries the encrypted render timestamp', (await p.locator('[data-review-form] input[name="form_opened"]').count()) === 1);
+
+    const hp = await p.evaluate(() => {
+        const w = document.querySelector('.hp');
+        const i = w && w.querySelector('input');
+        const r = w ? w.getBoundingClientRect() : null;
+        return {
+            offscreen: r ? r.right < 0 : false,
+            tabindex: i ? i.getAttribute('tabindex') : null,
+            ariaHidden: w ? w.getAttribute('aria-hidden') : null,
+        };
+    });
+    ok('form: honeypot is off-screen, untabbable and aria-hidden',
+        hp.offscreen && hp.tabindex === '-1' && hp.ariaHidden === 'true', JSON.stringify(hp));
+
+    // Layer one: the browser's own constraint validation. `required` and
+    // type="email" stop an empty or malformed submit before any request.
+    await p.fill('#v6n', '');
+    await p.fill('#v6e', 'not-an-email');
+    await p.fill('#v6c', '');
+    const blocked = await p.evaluate(() => {
+        const f = document.querySelector('[data-review-form]');
+        return { valid: f.checkValidity(), nameValid: document.querySelector('#v6n').checkValidity(), emailValid: document.querySelector('#v6e').checkValidity() };
+    });
+    ok('form: the browser blocks an empty or malformed submit',
+        !blocked.valid && !blocked.nameValid && !blocked.emailValid, JSON.stringify(blocked));
+
+    // Layer two: values the browser accepts but the server rejects (min:2),
+    // which exercises fetch + 422 + inline error rendering. Validation fails
+    // before the rate limiter is touched, so this is repeatable.
+    await p.fill('#v6n', 'A');
+    await p.fill('#v6e', 'someone@example.com');
+    await p.fill('#v6c', 'B');
+    await p.click('[data-review-form] button[type="submit"]');
+    await p.waitForSelector('.f .err', { timeout: 15000 }).catch(() => {});
+    const errs = await p.evaluate(() => ({
+        count: document.querySelectorAll('.f .err').length,
+        invalid: document.querySelectorAll('[aria-invalid="true"]').length,
+        described: !!document.querySelector('#v6e[aria-describedby="v6e-err"]'),
+        label: (document.querySelector('[data-submit-label]') || {}).textContent || '',
+    }));
+    ok('form: renders inline errors without a page reload', errs.count >= 2, JSON.stringify(errs));
+    ok('form: marks invalid fields with aria-invalid', errs.invalid >= 2, String(errs.invalid));
+    ok('form: links each error to its field with aria-describedby', errs.described);
+    ok('form: restores the button label after a failure', errs.label === 'Request my review', errs.label);
+
+    await p.context().close();
+}
+
 // ---------- below the 1024px pin threshold ----------
 {
     const p = await page(900, 900);

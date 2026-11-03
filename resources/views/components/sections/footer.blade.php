@@ -8,7 +8,7 @@
 <div class="foot-g rs">
 <div><h4>Services<i class="dot"></i></h4><ul><li><a href="#services">Offensive Security / VAPT</a></li><li><a href="#services">Data Privacy</a></li><li><a href="#services">GRC</a></li><li><a href="#services">Infrastructure &amp; Cloud</a></li><li><a href="#soc">Managed SOC</a></li></ul></div>
 <div><h4>Company<i class="dot"></i></h4><ul><li><a href="#about">About</a></li><li><a href="#industries">Industries</a></li><li><a href="#insights">Resources</a></li><li><a href="#about">Careers</a></li></ul></div>
-<div><h4>Contact<i class="dot"></i></h4><ul><li><a href="#contact">[email address]</a></li><li><a href="#contact">[phone number]</a></li><li><a href="#contact">Ahmedabad, India</a></li></ul></div>
+<div><h4>Contact<i class="dot"></i></h4><ul><li><a href="{{ contact_href(setting('contact_email'), 'mailto') }}">{{ setting('contact_email') }}</a></li><li><a href="{{ contact_href(setting('contact_phone'), 'tel') }}">{{ setting('contact_phone') }}</a></li><li><a href="#contact">Ahmedabad, India</a></li></ul></div>
 <div><h4>Follow<i class="dot"></i></h4><ul><li><a href="#top">LinkedIn</a></li><li><a href="#top">X</a></li></ul></div>
 </div>
 <div class="flogo" role="img" aria-label="UB Shield"><span data-px="0.06"><x-shield-emblem class="femb" /><span class="fwm"><b>UB</b> SHIELD</span></span></div>

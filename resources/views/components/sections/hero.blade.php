@@ -26,9 +26,9 @@
 </div></div>
 </div>
 <div class="stats h">
-<div><span class="stat">[XX]+</span><span class="lab-s">Assessments<br>delivered</span></div>
+<div><span class="stat">{{ setting('stat_assessments') }}</span><span class="lab-s">Assessments<br>delivered</span></div>
 <div><span class="stat"><span data-count="24">24</span>/7</span><span class="lab-s">SOC coverage<br>from Ahmedabad</span></div>
-<div><span class="stat">[XX]%</span><span class="lab-s">Critical findings<br>closed in 30 days</span></div>
+<div><span class="stat">{{ setting('stat_critical_closed') }}</span><span class="lab-s">Critical findings<br>closed in 30 days</span></div>
 <div><span class="stat"><span data-count="8">8</span></span><span class="lab-s">Frameworks<br>covered</span></div>
 </div>
 </div>

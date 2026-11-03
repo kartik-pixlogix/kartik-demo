@@ -103,7 +103,29 @@ reach, and a 35-check suite covers the interactions and reduced motion.
 
 ---
 
-## Phase 2 — backend and content
+## Phase 2 — backend and content — **done**
+
+| Step | Result |
+|---|---|
+| Posture-review form | FormRequest validation server-side, native constraint validation client-side; honeypot + encrypted-timestamp fill timer + `RateLimiter` 5/hour/IP; Turnstile behind `TURNSTILE_ENABLED` |
+| Lead storage | name, work email, company, service, source page, 5 UTM fields, **hashed** IP, user agent |
+| Mail | queued admin notification (reply-to the visitor) + queued visitor auto-reply |
+| Works without JS | the form is a plain POST; success replaces the form, errors render inline |
+| Filament | Leads (read-only + CSV), Insights, Case studies, Site settings at `/admin` |
+| Content from the database | hero + case stats, credentials, SOC facts, contact details, 2 case files, 3 field notes |
+| Seeders | reproduce every placeholder verbatim — proven by the diff still being **0 px** |
+| Tests | 41 PHP (189 assertions) + 45 behaviour checks, all passing |
+
+Two decisions worth flagging:
+
+- **The test suite runs on MySQL**, not the skeleton's in-memory SQLite. You chose MySQL 8 so dev
+  matches production; testing migrations on a different engine would have undercut that. Create
+  the database once: `CREATE DATABASE ubshield_test CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
+- **`User` now implements `FilamentUser`.** Without it Filament grants panel access only in the
+  `local` environment, which would lock staff out of production. Access is "has an account" —
+  there is no public registration. Phase 4 adds 2FA, throttling and a password policy.
+
+### What was built
 
 Posture-review form: FormRequest validation server-side and matching client-side; honeypot +
 minimum fill time + `RateLimiter` (5/hour/IP), with Turnstile behind an env flag; `Lead` records

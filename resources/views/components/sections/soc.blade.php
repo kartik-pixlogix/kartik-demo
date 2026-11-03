@@ -15,8 +15,8 @@
 <ul class="soc-list rs">
 <li><span>SIEM monitoring</span><span>Cloud / endpoint / identity / firewall</span></li>
 <li><span>Detection &amp; response</span><span>Containment agreed in advance</span></li>
-<li><span>CERT-In reporting</span><span>Inside the six-hour window</span></li>
-<li><span>Mean time to respond</span><span>[XX] min</span></li>
+<li><span>CERT-In reporting</span><span>{{ setting('soc_cert_in_window') }}</span></li>
+<li><span>Mean time to respond</span><span>{{ setting('stat_mean_time_to_respond') }}</span></li>
 </ul>
 <a href="#contact" class="tl mag"><span class="t">Scope a managed SOC</span><x-ui.arrow-circle on-acid /></a>
 </div>

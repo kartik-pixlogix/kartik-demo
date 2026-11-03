@@ -2,6 +2,10 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\CaseStudySeeder;
+use Database\Seeders\InsightSeeder;
+use Database\Seeders\SettingSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,9 +15,22 @@ use Tests\TestCase;
  * assertions catch the things that would silently break the port server-side —
  * a section component failing to render, the shared SVG defs going missing, or
  * a placeholder being "helpfully" filled in.
+ *
+ * Since Phase 2 the statistics, credentials, case files and field notes come
+ * from the database, so these run against the seeded content — which is itself
+ * asserted to reproduce the prototype's placeholders exactly.
  */
 class HomepageTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed([SettingSeeder::class, CaseStudySeeder::class, InsightSeeder::class]);
+    }
+
     private function html(): string
     {
         $response = $this->get('/');

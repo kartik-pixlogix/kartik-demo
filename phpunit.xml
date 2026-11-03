@@ -23,10 +23,15 @@
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
+        <!-- MySQL, not the in-memory SQLite default: production is MySQL 8, and
+             testing migrations and queries on a different engine is how dev/prod
+             gaps get missed. Create the database once with:
+               CREATE DATABASE ubshield_test CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci; -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="ubshield_test"/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
+        <env name="REVIEW_VALIDATE_EMAIL_DNS" value="false"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="PULSE_ENABLED" value="false"/>

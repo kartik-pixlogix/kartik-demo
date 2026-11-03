@@ -6,7 +6,7 @@
 <section class="trust" aria-label="Credentials and clients">
 <div class="wrap trust-in">
 <span class="chip">Credentials</span>
-<p class="creds">ISO/IEC 27001 [status]<i>/</i>SOC 2 [status]<i>/</i>CERT-In empanelment [if applicable]</p>
+<p class="creds">ISO/IEC 27001 {{ setting('cred_iso_27001') }}<i>/</i>SOC 2 {{ setting('cred_soc_2') }}<i>/</i>CERT-In empanelment {{ setting('cred_cert_in') }}</p>
 </div>
 <div class="lmq">
 <div class="lmq-in">

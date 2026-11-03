@@ -1,0 +1,80 @@
+/* Posture-review form states — Phase 2.
+ *
+ * The ONLY stylesheet in this project not ported from the prototype: the
+ * prototype's form has no validation, so it has no error or success states to
+ * copy. Everything here stays inside the V7 language — square corners, tokens
+ * only, Instrument Sans, navy on cyan — and nothing in this file renders unless
+ * the form is in an error or success state, so the resting page is untouched
+ * and the visual diff stays at 0.
+ */
+
+/* Honeypot. Absolutely positioned so it leaves the .form grid flow entirely
+   rather than occupying a cell. Off-screen rather than display:none, because
+   bots commonly skip fields that are explicitly hidden. */
+.hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Field-level error. A navy square marker distinguishes it from the navy label
+   above it — colour alone could not, since text on cyan is always navy. */
+.f .err,
+.form-note.is-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font: 600 14px/20px var(--text);
+    text-transform: uppercase;
+    color: var(--paper);
+}
+
+.f .err:before,
+.form-note.is-error:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-top: 6px;
+    background: var(--paper);
+    flex: none;
+}
+
+.cta-b .f input[aria-invalid='true'],
+.cta-b .f select[aria-invalid='true'] {
+    border-bottom-width: 4px;
+}
+
+/* Form-level note: rate limiting, or anything not tied to one field. */
+.form-note {
+    grid-column: 1 / -1;
+    margin-bottom: 4px;
+}
+
+/* Success, shown in place of the form after a no-JS submit. Matches the .body
+   type the block already uses, with the same square marker. */
+.form-done {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 480px;
+    font: 500 19px/30px var(--text);
+    color: var(--paper);
+}
+
+.form-done:before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    margin-top: 9px;
+    background: var(--paper);
+    flex: none;
+}
+
+@media (max-width: 760px) {
+    .form-done {
+        font-size: 17px;
+        line-height: 26px;
+    }
+}

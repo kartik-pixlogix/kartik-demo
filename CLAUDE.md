@@ -23,7 +23,9 @@ every approved deviation is logged in `docs/prototype-fixes.md`.
   or visible system-ui fallback on the public site. (Filament ships its own Inter for `/admin`;
   that is fine and does not apply to the site.)
 - **No content invention.** Every `[placeholder]` stays exactly as drawn — no invented client
-  names, statistics, certifications, awards, testimonials, addresses or phone numbers.
+  names, statistics, certifications, awards, testimonials, addresses or phone numbers. Since
+  Phase 2 these live in the database; the seeders reproduce them verbatim and
+  `HomepageTest` counts them, so an "improvement" here fails the suite.
 - No stock imagery, no emoji, no new icon libraries — reuse the prototype's SVG arrows and glyphs.
 - Never commit `.env`.
 
@@ -72,9 +74,12 @@ tests/visual/              Playwright visual + behaviour regression harness
 php artisan serve                 # the harness needs the app running
 npm run visual:diff               # must stay at 0 differing pixels, all five widths
 npm run visual:pinned             # the pinned services track, motion on
-npm run visual:behaviour          # 35 interaction checks
-php artisan test
+npm run visual:behaviour          # 45 interaction checks
+php artisan test                  # runs against ubshield_test on MySQL, not SQLite
 ```
+
+Lead mail is queued, so `php artisan queue:work` must be running to see it.
+`MAIL_MAILER=log` writes messages to `storage/logs/laravel.log` in development.
 
 The homepage is currently **pixel-identical** to the prototype at all five widths. Treat any
 non-zero `visual:diff` as a regression and find the cause before moving on. The CSS and markup
