@@ -1,6 +1,9 @@
 @props([
     'title' => 'UB Shield — Cybersecurity & Compliance, Ahmedabad',
     'description' => 'UB Shield tests, fixes, monitors and certifies Indian enterprises: VAPT, DPDPA privacy, ISO 27001 / SOC 2 / RBI / SEBI compliance, cloud security and a 24/7 managed SOC.',
+    // The floating industry artwork belongs to the homepage industries list;
+    // every other page would ship six unused SVGs.
+    'preview' => false,
 ])
 <!doctype html>
 <html lang="en">
@@ -20,10 +23,18 @@
 <x-svg-defs />
 
 <x-ui.cursor />
+@if ($preview)
 
 <x-ui.industry-preview />
+@endif
+
+<x-sections.header />
+
+<x-sections.mobile-menu />
 
 {{ $slot }}
+
+<x-sections.footer />
 
 </div>
 </body>

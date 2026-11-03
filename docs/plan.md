@@ -142,7 +142,43 @@ and the rest stay exactly as drawn.
 
 ---
 
-## Phase 3 — inner pages
+## Phase 3 — inner pages — **service template done, awaiting review**
+
+BUILD.md gates this phase: "Show me one service page before building the rest." The template and
+all five practices are built; industries, insights, contact, about and the legal pages are not
+started.
+
+| Built | |
+|---|---|
+| Service template | `/services/{slug}` ×5 — hero, what's included, how we work, what you get, frameworks, related case file, FAQ, closing strip |
+| New CSS | two patterns only (`.phero`, `.faq`); everything else reuses `.sec`, `.sec-t`, `.dl`, `.fw-notes`, `.chips`, `.case`, `.strip` |
+| FAQ | native `<details>`, so it opens and is keyboard operable with no JavaScript; FAQPage JSON-LD alongside |
+| Links | service links now point at real routes; homepage-only sections use `home_anchor()`, which stays a fragment on the homepage and becomes a full URL elsewhere |
+| Tests | 27 new (68 total); homepage still **0 differing pixels** |
+
+### Still to build
+
+Industry template ×6, Insights index and article, Contact, About, Privacy policy, Terms. Their nav
+links stay as homepage anchors until the pages exist, so nothing points at a 404.
+
+### Open questions
+
+1. **Case study pages.** `CaseStudy` has a slug and a body but no route, so the "related case file"
+   card links back to the homepage section. Do you want `/case-studies/{slug}`? It is not in
+   BUILD.md's page list.
+2. **Careers.** The footer has a Careers link with no page behind it. Point it at About, build a
+   page, or drop the link?
+3. **Responsible disclosure.** Linked in the footer, not in BUILD.md's list — but a security
+   company is usually expected to publish one. Build it with the legal pages?
+4. **Social URLs.** LinkedIn and X are placeholder links. Real URLs needed.
+5. **Services in the admin?** Service content is code-managed in `config/practices.php` rather than
+   Filament, since BUILD.md scoped the admin to Leads, Insights, Case studies and Settings. Easy to
+   move if the client wants to edit it.
+6. **Mobile hero order.** The homepage puts its artwork above the headline on mobile; the service
+   page puts the headline first, because the title and lead are the content and the illustration
+   only supports them. Deliberate — say if you want them consistent.
+
+### Original scope
 
 Service template ×5, industry template ×6, Insights index and article, Contact, About, Privacy and
 Terms. Built from existing components and tokens only; the `frontend-design` skill is used for

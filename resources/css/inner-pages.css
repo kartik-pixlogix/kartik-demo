@@ -1,0 +1,338 @@
+/* Inner pages — Phase 3.
+ *
+ * The prototype only covers the homepage, so these patterns are new. They are
+ * deliberately few: almost everything on a service page reuses what V7 already
+ * established (.sec, .sec-t, .dl, .chip, .soc-list, .fw-notes, .step, .case,
+ * .stats, .strip). Only two things genuinely did not exist — a page hero that
+ * is clearly subordinate to the homepage hero, and a disclosure for the FAQ.
+ *
+ * Same rules as everywhere else: tokens only, square corners, circles reserved
+ * for arrow buttons and the title dot, no shadows or gradients outside artwork.
+ */
+
+/* ---- page hero -------------------------------------------------------------
+   Half the homepage hero's weight: the headline steps down from 224px to the
+   96/80 the SOC block uses, there is no stats row, and the artwork sits in a
+   fixed frame rather than a 760px stage. The page is a chapter, not a cover. */
+
+.phero {
+    position: relative;
+    padding: 56px 0 0;
+    background: radial-gradient(ellipse 55% 60% at 78% 38%, rgba(20, 121, 212, 0.2), transparent 70%);
+}
+
+.phero-g {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 64px;
+    align-items: center;
+    padding: 48px 0 64px;
+}
+
+/* The artwork is taller than the text beside it, so centring the row leaves
+   dead space under the CTAs. Combined with .sec's 160px that read as a hole
+   between the hero and the first section, so the first one after a page hero
+   opens tighter. */
+.phero + .sec {
+    padding-top: 112px;
+}
+
+.phero h1 {
+    font: 900 96px/80px var(--disp);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 24px 0 0;
+    max-width: 12ch;
+}
+
+.phero .lead {
+    margin-top: 32px;
+}
+
+.phero .art {
+    aspect-ratio: 5 / 4;
+}
+
+/* Breadcrumb. A hairline row above the hero, so the page says where it sits
+   without a second navigation bar. */
+.crumbs {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    font: 500 14px/20px var(--text);
+    text-transform: uppercase;
+}
+
+.crumbs a {
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(var(--acid), var(--acid)) no-repeat 0 100% / 0 6px;
+    transition: background-size 0.45s var(--ease);
+}
+
+.crumbs a:hover {
+    background-size: 100% 6px;
+}
+
+.crumbs span[aria-current] {
+    color: var(--faint);
+}
+
+.crumbs i {
+    font-style: normal;
+    color: var(--faint);
+}
+
+/* ---- two-column body section ----------------------------------------------
+   A standing head on the left, content on the right. Reuses the .proc ratio so
+   inner pages share the homepage's column rhythm rather than inventing one. */
+
+.split {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 64px;
+    align-items: start;
+}
+
+.split > h2 {
+    position: sticky;
+    top: 140px;
+}
+
+.split .intro {
+    max-width: 62ch;
+}
+
+/* ---- itemised rows ---------------------------------------------------------
+   Hairline rows, like .soc-list but with room for a description.
+   Marked with the brand's cyan square rather than 01 / 02 / 03: what a
+   practice includes, and what you get at the end of it, are lists — not
+   sequences — and numbering them would imply an order that is not there.
+   Numbers are kept for the one thing that genuinely is a sequence: the four
+   phases of an engagement. */
+
+.rows {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--ink);
+}
+
+.rows li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--ink);
+}
+
+.rows .n {
+    width: 12px;
+    height: 12px;
+    margin-top: 6px;
+    background: var(--acid);
+}
+
+.rows h3 {
+    font: 600 18px/24px var(--text);
+    text-transform: uppercase;
+    margin: 0 0 8px;
+}
+
+.rows p {
+    font: 500 16px/24px var(--text);
+    max-width: 62ch;
+}
+
+/* ---- framework chips ------------------------------------------------------- */
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chips li {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid var(--ink);
+    font: 500 16px/20px var(--text);
+    text-transform: uppercase;
+}
+
+/* ---- FAQ -------------------------------------------------------------------
+   Built on <details>, so it opens with no JavaScript and is keyboard operable
+   for free. The marker is a square that becomes a minus when open — circles are
+   reserved for arrow buttons and the title dot. */
+
+.faq {
+    border-top: 1px solid var(--ink);
+}
+
+.faq details {
+    border-bottom: 1px solid var(--ink);
+}
+
+.faq summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24px;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 0;
+    cursor: pointer;
+    list-style: none;
+    font: 600 18px/24px var(--text);
+    text-transform: uppercase;
+}
+
+.faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq summary:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+}
+
+/* the marker: a cyan square holding a plus that loses its upright on open */
+.faq .mk {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background: var(--acid);
+    flex: none;
+}
+
+.faq .mk:before,
+.faq .mk:after {
+    content: '';
+    position: absolute;
+    background: var(--paper);
+    transition: transform 0.45s var(--ease);
+}
+
+.faq .mk:before {
+    left: 6px;
+    right: 6px;
+    top: 11px;
+    height: 2px;
+}
+
+.faq .mk:after {
+    top: 6px;
+    bottom: 6px;
+    left: 11px;
+    width: 2px;
+}
+
+.faq details[open] .mk:after {
+    transform: scaleY(0);
+}
+
+.faq summary:hover .mk {
+    transform: scale(1.12);
+}
+
+.faq .answer {
+    padding: 0 0 32px;
+    max-width: 68ch;
+}
+
+.faq .answer p {
+    font: 500 19px/30px var(--text);
+}
+
+/* ---- closing question ------------------------------------------------------ */
+
+/* No top rule: the last FAQ row already closes with one, and a second rule
+   48px below it reads as a mistake rather than a division. */
+.ask {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.ask p {
+    font: 500 19px/30px var(--text);
+    max-width: 48ch;
+}
+
+/* ---- responsive ------------------------------------------------------------
+   Same breakpoints as the rest of the site (docs/inventory.md §12). */
+
+@media (max-width: 1180px) {
+    .phero-g {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 48px;
+        padding-bottom: 56px;
+    }
+
+    .phero h1 {
+        max-width: none;
+    }
+
+    .split {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+
+    .split > h2 {
+        position: relative;
+        top: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .phero {
+        padding-top: 24px;
+    }
+
+    .phero-g {
+        padding: 24px 0 40px;
+        gap: 32px;
+    }
+
+    .phero + .sec {
+        padding-top: 72px;
+    }
+
+    .phero h1 {
+        font-size: 56px;
+        line-height: 48px;
+        margin-top: 16px;
+    }
+
+    .crumbs {
+        padding: 14px 0;
+    }
+
+    .rows li {
+        gap: 16px;
+        padding: 20px 0;
+    }
+
+    .faq summary {
+        padding: 20px 0;
+        gap: 16px;
+    }
+
+    .faq .answer p {
+        font-size: 17px;
+        line-height: 26px;
+    }
+
+    .ask {
+        margin-top: 32px;
+    }
+}

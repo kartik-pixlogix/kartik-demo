@@ -44,5 +44,6 @@
 @import './responsive.css';
 @import './v7-overrides.css';
 
-/* 7. additive, not from the prototype — see the file header */
+/* 7. additive, not from the prototype — see each file's header */
 @import './form-states.css';
+@import './inner-pages.css';

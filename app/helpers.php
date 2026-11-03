@@ -26,6 +26,24 @@ if (! function_exists('is_placeholder')) {
     }
 }
 
+if (! function_exists('home_anchor')) {
+    /**
+     * A link to a section that only exists on the homepage.
+     *
+     * On the homepage it stays a plain fragment, so the browser scrolls rather
+     * than reloading. Anywhere else it becomes a full URL, so the link still
+     * works. Fragments for sections that appear on every page — `#contact`,
+     * which the closing strip carries — must NOT use this: they should stay
+     * local to whatever page the visitor is on.
+     */
+    function home_anchor(string $fragment): string
+    {
+        return request()->routeIs('home')
+            ? '#'.$fragment
+            : route('home').'#'.$fragment;
+    }
+}
+
 if (! function_exists('contact_href')) {
     /**
      * A real mailto:/tel: link once the client has filled the value in, and the

@@ -6,8 +6,8 @@
 <footer class="foot">
 <div class="wrap">
 <div class="foot-g rs">
-<div><h4>Services<i class="dot"></i></h4><ul><li><a href="#services">Offensive Security / VAPT</a></li><li><a href="#services">Data Privacy</a></li><li><a href="#services">GRC</a></li><li><a href="#services">Infrastructure &amp; Cloud</a></li><li><a href="#soc">Managed SOC</a></li></ul></div>
-<div><h4>Company<i class="dot"></i></h4><ul><li><a href="#about">About</a></li><li><a href="#industries">Industries</a></li><li><a href="#insights">Resources</a></li><li><a href="#about">Careers</a></li></ul></div>
+<div><h4>Services<i class="dot"></i></h4><ul><li><a href="{{ route('services.show', 'offensive-security') }}">Offensive Security / VAPT</a></li><li><a href="{{ route('services.show', 'data-privacy') }}">Data Privacy</a></li><li><a href="{{ route('services.show', 'governance-risk-compliance') }}">GRC</a></li><li><a href="{{ route('services.show', 'infrastructure-cloud') }}">Infrastructure &amp; Cloud</a></li><li><a href="{{ route('services.show', 'managed-security-services') }}">Managed SOC</a></li></ul></div>
+<div><h4>Company<i class="dot"></i></h4><ul><li><a href="{{ home_anchor('about') }}">About</a></li><li><a href="{{ home_anchor('industries') }}">Industries</a></li><li><a href="{{ home_anchor('insights') }}">Resources</a></li><li><a href="#about">Careers</a></li></ul></div>
 <div><h4>Contact<i class="dot"></i></h4><ul><li><a href="{{ contact_href(setting('contact_email'), 'mailto') }}">{{ setting('contact_email') }}</a></li><li><a href="{{ contact_href(setting('contact_phone'), 'tel') }}">{{ setting('contact_phone') }}</a></li><li><a href="#contact">Ahmedabad, India</a></li></ul></div>
 <div><h4>Follow<i class="dot"></i></h4><ul><li><a href="#top">LinkedIn</a></li><li><a href="#top">X</a></li></ul></div>
 </div>
