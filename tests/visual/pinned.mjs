@@ -17,7 +17,7 @@ import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { DIFF, BASE_URL, FIXED_TIME, prototypeUrl } from './_shared.mjs';
+import { DIFF, BASE_URL, designUrl, FIXED_TIME, prototypeUrl } from './_shared.mjs';
 
 const OUT = path.join(DIFF, 'pinned');
 mkdirSync(OUT, { recursive: true });
@@ -79,7 +79,7 @@ async function capture(browser, url, tag) {
 
 const browser = await chromium.launch();
 const a = await capture(browser, prototypeUrl('motion'), 'proto');
-const b = await capture(browser, BASE_URL, 'build');
+const b = await capture(browser, designUrl(), 'build');
 await browser.close();
 
 console.log('pin geometry');

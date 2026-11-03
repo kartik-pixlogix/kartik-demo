@@ -21,9 +21,39 @@ const range = (a, b) => lines.slice(a - 1, b).join('\n');
 
 /** Differences from the prototype that every section is subject to. */
 const REWRITES = [
-    // brand PNGs move from design/v7/assets/ to public/images/brand/
-    [/src="assets\/ub-monogram\.png"/g, 'src="/images/brand/ub-monogram.png"'],
-    [/src="assets\/ub-wordmark\.png"/g, 'src="/images/brand/ub-wordmark.png"'],
+    /*
+     * The header brand lockup.
+     *
+     * Three changes from the prototype's two bare <img> tags, all of them
+     * deliberate and all of them logged in docs/prototype-fixes.md:
+     *
+     *  1. The mark is the client's shield (A7). The prototype draws the
+     *     hexagonal UB monogram; the client's own lockup uses the shield
+     *     silhouette, and that is the mark they asked for. It is a taller,
+     *     narrower shape, so at the unchanged 42px height the lockup is
+     *     about 7px narrower than the prototype's and the nav sits 7px to
+     *     the left. That is the one intended geometry change.
+     *
+     *  2. The wordmark stays as the prototype ships it. The client's new
+     *     stacked lockup is drawn for white backgrounds — its "UB" is a flat
+     *     #06538C, off-palette and 2.31:1 on Deep Navy against the
+     *     prototype's 4.97:1. That artwork is kept as ub-wordmark-light.*
+     *     for light surfaces. See docs/prototype-fixes.md A8.
+     *
+     *  3. WebP sources and intrinsic dimensions (Phase 4). These were
+     *     hand-applied to the generated file and so were silently reverted
+     *     by any re-run of this script; they live here now.
+     */
+    [
+        /<img class="m" src="assets\/ub-monogram\.png" alt="">/g,
+        '<img class="m" src="/images/brand/ub-shield.webp" alt=""'
+            + ' width="752" height="775" fetchpriority="high" decoding="async">',
+    ],
+    [
+        /<img class="w" src="assets\/ub-wordmark\.png" alt="UB Shield">/g,
+        '<img class="w" src="/images/brand/ub-wordmark.webp" alt="UB Shield"'
+            + ' width="639" height="59" fetchpriority="high" decoding="async">',
+    ],
 ];
 
 /** file -> [description, from, to] */

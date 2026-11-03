@@ -12,7 +12,7 @@ class Insight extends Model
 
     protected $fillable = [
         'title', 'slug', 'category', 'excerpt', 'body',
-        'cover_art_key', 'art_inverted', 'date_label', 'published_at',
+        'cover_art_key', 'cover_image', 'art_inverted', 'date_label', 'published_at',
         'seo_title', 'seo_description', 'position',
     ];
 

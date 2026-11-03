@@ -5,7 +5,7 @@
 --}}
 <header class="hdr">
 <div class="wrap hdr-in">
-<a href="{{ route('home') }}" class="brand" aria-label="UB Shield home"><img class="m" src="/images/brand/ub-monogram.webp" alt="" width="266" height="238" fetchpriority="high" decoding="async"><img class="w" src="/images/brand/ub-wordmark.webp" alt="UB Shield" width="639" height="59" fetchpriority="high" decoding="async"></a>
+<a href="{{ route('home') }}" class="brand" aria-label="UB Shield home"><img class="m" src="/images/brand/ub-shield.webp" alt="" width="752" height="775" fetchpriority="high" decoding="async"><img class="w" src="/images/brand/ub-wordmark.webp" alt="UB Shield" width="639" height="59" fetchpriority="high" decoding="async"></a>
 <nav class="nav" aria-label="Main">
 <div class="dd">
 <a href="{{ home_anchor('services') }}" aria-haspopup="true">Services <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 9 7 7 7-7"></path></svg></a>

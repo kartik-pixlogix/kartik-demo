@@ -11,6 +11,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -88,7 +89,20 @@ class InsightResource extends Resource
                         ->label('Cover artwork')
                         ->options(CoverArt::forInsights())
                         ->searchable()
-                        ->helperText('The hand-drawn SVG that illustrates the card. There is no image upload: the artwork is part of the design system.'),
+                        ->helperText('The hand-drawn SVG that illustrates the card. Used unless a cover image is uploaded below.'),
+
+                    FileUpload::make('cover_image')
+                        ->label('Cover image')
+                        ->image()
+                        ->disk('public')
+                        ->directory('covers')
+                        ->visibility('public')
+                        ->imageEditor()
+                        ->imageEditorAspectRatios(['5:4'])
+                        ->maxSize(3072)
+                        ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
+                        ->columnSpanFull()
+                        ->helperText('Optional. Overrides the artwork above for this field note. The frame is 5:4 and the image is cropped to fill it, so upload it at 1000x800 or larger. Clear this field to go back to the hand-drawn artwork.'),
 
                     Toggle::make('art_inverted')
                         ->label('Light card frame')

@@ -755,3 +755,63 @@ select,
     position: absolute;
     inset: -4px 0;
 }
+
+/* ---- shield emblem mask (client logo) -------------------------------------
+   The emblem is the client's own shield artwork rather than the prototype's
+   hand-drawn facets (docs/prototype-fixes.md A7), so the scan beam is masked
+   by the artwork's alpha channel instead of clipped to a path.
+
+   mask-type lives here rather than as an attribute on the <mask> element
+   because it is a CSS property, and the site's CSP allows inline style
+   attributes but not inline <style> blocks. Without it the mask falls back to
+   luminance: the beam would then show only over the bright parts of the mark
+   instead of the whole silhouette — dimmer, but still inside the shield, so
+   the failure mode is cosmetic rather than broken. */
+#embm {
+    mask-type: alpha;
+}
+
+/* <x-brand-defs /> holds no visible content, but an <svg> is display:inline,
+   so without this it still generates a line box and makes every page 30px
+   taller. <x-svg-defs /> avoids it with the prototype's inline
+   style="position: absolute"; this is the same thing as a rule. */
+.brand-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+/* ---- client logos in the trust marquee -----------------------------------
+   The prototype's .lg is a 200x72 dashed box with the words "Client logo" in
+   it — the dashes ARE the placeholder treatment, so a box carrying real
+   artwork drops them. A modifier class rather than :has(), because the
+   marquee component already controls this markup and a class needs no
+   fallback reasoning.
+
+   Logos are constrained to the box rather than filling it: client marks come
+   in every aspect ratio and stretching someone's logo is not an option. */
+.lg.has-logo {
+    border-color: transparent;
+    padding: 8px 14px;
+}
+
+.lg.has-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* ---- uploaded cover images ------------------------------------------------
+   A field note or case study may override its hand-drawn SVG with an uploaded
+   image (see <x-cover-art />). The frame is the prototype's 5:4 .art box and
+   does not change; the image fills it the way the SVG does — cover, not
+   contain, because a letterboxed photo inside a flush card would read as a
+   mistake. The .zoom hover scale applies to both. */
+.art .cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

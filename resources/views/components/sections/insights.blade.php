@@ -8,7 +8,7 @@
 <div class="sec-t"><h2 class="dl rm"><span>Field notes<i class="dot"></i></span></h2></div>
 <div class="grid4 rs">
 @foreach ($insights as $insight)
-<a href="{{ route('insights.show', $insight->slug) }}" class="post"><div class="art{{ $insight->art_inverted ? ' k' : '' }} rc"><div class="zoom"><x-dynamic-component :component="'art.'.$insight->cover_art_key" /></div></div><div class="meta"><p class="lab-l">{{ $insight->title }}</p><span class="lab-s">{{ $insight->meta_line }}</span></div></a>
+<a href="{{ route('insights.show', $insight->slug) }}" class="post"><x-cover-art :record="$insight" /><div class="meta"><p class="lab-l">{{ $insight->title }}</p><span class="lab-s">{{ $insight->meta_line }}</span></div></a>
 @endforeach
 <a href="{{ route('insights.index') }}" class="all"><span class="dl">All<br><span class="alt">resources</span></span><x-ui.arrow-circle /></a>
 </div>

@@ -10,7 +10,7 @@ import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { REF, DIFF, WIDTHS, BASE_URL, FIXED_TIME, forceMotionOff } from './_shared.mjs';
+import { REF, DIFF, WIDTHS, BASE_URL, designUrl, FIXED_TIME, forceMotionOff } from './_shared.mjs';
 
 const BUILD = path.join(DIFF, 'build');
 mkdirSync(BUILD, { recursive: true });
@@ -31,7 +31,7 @@ for (const w of WIDTHS) {
     await page.addInitScript(forceMotionOff);
 
     await page.clock.setFixedTime(FIXED_TIME);
-    await page.goto(BASE_URL, { waitUntil: 'load' });
+    await page.goto(designUrl(), { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1200);
     const shot = path.join(BUILD, `build-${w}.png`);

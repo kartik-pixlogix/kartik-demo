@@ -14,7 +14,7 @@ class CaseStudy extends Model
 
     protected $fillable = [
         'title', 'slug', 'tags', 'summary', 'body',
-        'cover_art_key', 'art_inverted', 'is_published', 'position',
+        'cover_art_key', 'cover_image', 'art_inverted', 'is_published', 'position',
     ];
 
     protected function casts(): array

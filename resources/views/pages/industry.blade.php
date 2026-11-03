@@ -82,7 +82,7 @@
 <div class="sec-t"><h2 class="dl rm"><span>Related case file<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
 <div class="grid4 rs">
 <a href="{{ route('home') }}#about" class="case">
-<div class="art{{ $caseStudy->art_inverted ? ' k' : '' }} rc"><div class="zoom"><x-dynamic-component :component="'art.'.$caseStudy->cover_art_key" /></div></div>
+<x-cover-art :record="$caseStudy" />
 <div class="meta"><div><p class="lab-l">{{ $caseStudy->title }}</p><p class="lab-s" style="margin-top: 4px">{{ $caseStudy->tags }}</p></div><x-ui.arrow-circle /></div>
 <p class="body">{{ $caseStudy->summary }}</p>
 </a>

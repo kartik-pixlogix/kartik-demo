@@ -51,7 +51,17 @@ const browser = await engine.launch();
             }).length;
 
             out.imgsNoAlt = [...document.querySelectorAll('img')].filter((i) => !i.hasAttribute('alt')).length;
-            out.imgsNoDims = [...document.querySelectorAll('img')].filter((i) => !i.width || !i.height).length;
+            /*
+             * The point of this check is that an image RESERVES its space, so
+             * it cannot shift the layout when it loads — which means the
+             * width and height ATTRIBUTES, not the rendered size. `i.width`
+             * is 0 for a loading="lazy" image that has not scrolled into view
+             * yet, so reading it reported the client-logo marquee as
+             * undimensioned purely because it is below the fold.
+             */
+            out.imgsNoDims = [...document.querySelectorAll('img')]
+                .filter((i) => !(i.hasAttribute('width') && i.hasAttribute('height')))
+                .length;
 
             const btns = [...document.querySelectorAll('button')];
             out.btnsNoName = btns.filter((b) => !b.textContent.trim() && !b.getAttribute('aria-label')).length;
@@ -282,14 +292,27 @@ const browser = await engine.launch();
     ok('keyboard', 'every focusable has a visible focus indicator',
         walk.noIndicator === 0, `${walk.noIndicator} of ${walk.total} without`);
 
-    // the services dropdown opens to keyboard users
+    /*
+     * The services dropdown opens to keyboard users.
+     *
+     * Waits for the fade to finish rather than sleeping past it: the opacity
+     * transition is 300ms and the fixed 400ms wait this used to do sat right
+     * on that boundary, so the check read a mid-transition value and failed
+     * whenever the machine was loaded enough to delay the first frame.
+     */
     await p.evaluate(() => document.querySelector('.dd > a').focus());
-    await p.waitForTimeout(400);
+    const opened = await p
+        .waitForFunction(() => {
+            const s = getComputedStyle(document.querySelector('.dd-m'));
+            return s.visibility === 'visible' && Number(s.opacity) > 0.9;
+        }, null, { timeout: 3000 })
+        .then(() => true)
+        .catch(() => false);
     const dd = await p.evaluate(() => {
         const menu = document.querySelector('.dd-m');
         return { visible: getComputedStyle(menu).visibility, opacity: +getComputedStyle(menu).opacity };
     });
-    ok('keyboard', 'services dropdown opens on focus', dd.visible === 'visible' && dd.opacity > 0.9, JSON.stringify(dd));
+    ok('keyboard', 'services dropdown opens on focus', opened, JSON.stringify(dd));
 
     // industry rows show their hover treatment on focus too
     await p.evaluate(() => document.querySelector('.ind-row').focus());
@@ -390,6 +413,62 @@ const browser = await engine.launch();
             return out;
         });
         ok('responsive', `${w}px: tap targets are at least 24x24`, small.length === 0, small.slice(0, 4).join(' | '));
+        await ctx.close();
+    }
+
+    /*
+     * Short viewports: the pinned services section must stand down.
+     *
+     * `.pinon .svc-stick` is `height: min(100vh, 860px)` with
+     * `overflow: hidden` and its content centred, and that content is a fixed
+     * 772px tall. Below that the section heading is sliced off — and because
+     * an ancestor has clipped it away, IntersectionObserver reports an empty
+     * rect, the reveal never fires, and the text stays parked inside its mask
+     * permanently rather than just during the animation.
+     *
+     * 640px is a real laptop viewport (1366x768 with browser chrome), so this
+     * checks both halves: the pin is off, and every reveal has fired.
+     * See docs/prototype-fixes.md A12.
+     */
+    for (const [w, h] of [[1366, 640], [1920, 560]]) {
+        const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+        const p = await ctx.newPage();
+        await p.goto(BASE_URL, { waitUntil: 'load' });
+        await p.evaluate(() => document.fonts.ready);
+        await p.waitForTimeout(500);
+
+        // Walk the page so every reveal gets its chance, then let them settle.
+        await p.evaluate(async () => {
+            for (let y = 0; y < document.body.scrollHeight; y += 300) {
+                window.scrollTo(0, y);
+                await new Promise((r) => setTimeout(r, 40));
+            }
+        });
+        await p.waitForTimeout(1200);
+
+        const s = await p.evaluate(() => {
+            const heading = [...document.querySelectorAll('h2')]
+                .find((e) => /^\s*services/i.test(e.textContent || ''));
+            const mask = heading?.closest('.rm') ?? heading?.querySelector('.rm');
+            const inner = mask?.querySelector('span');
+            const mr = mask?.getBoundingClientRect();
+            const ir = inner?.getBoundingClientRect();
+            return {
+                pinned: document.getElementById('ubs').classList.contains('pinon'),
+                stuck: [...document.querySelectorAll('.rv,.rm,.rs,.rl,.rw,.brush,.art.rc,.stats')]
+                    .filter((e) => !e.classList.contains('in')).length,
+                // positive = the text is sitting above its mask, i.e. cut off
+                cutTop: mr && ir ? +(mr.top - ir.top).toFixed(1) : null,
+            };
+        });
+
+        ok('responsive', `${w}x${h}: services section is not pinned`, s.pinned === false,
+            'the pinned layout needs a 780px viewport or it clips its own heading');
+        ok('responsive', `${w}x${h}: every reveal fired`, s.stuck === 0,
+            `${s.stuck} element(s) never got .in`);
+        ok('responsive', `${w}x${h}: services heading is not clipped`, (s.cutTop ?? 0) <= 1,
+            `heading sits ${s.cutTop}px above its mask`);
+
         await ctx.close();
     }
 }

@@ -39,6 +39,20 @@ class SettingSeeder extends Seeder
             ['key' => 'contact_response', 'value' => 'Within one business day', 'group' => 'contact', 'label' => 'Response time', 'hint' => null],
             ['key' => 'admin_notification_email', 'value' => null, 'group' => 'contact', 'label' => 'Lead notification inbox', 'hint' => 'Where new posture-review requests are sent. Falls back to MAIL_ADMIN_ADDRESS.'],
 
+            /*
+             * ---- social ---------------------------------------------------
+             *
+             * Read off unboundsolutions.in, the sister site the client pointed
+             * at, rather than invented. Only the two profiles that site
+             * actually links are seeded; the rest are blank so the footer
+             * simply omits them until there is somewhere real to point.
+             */
+            ['key' => 'social_linkedin', 'value' => 'https://in.linkedin.com/company/unboundsolutions4', 'group' => 'social', 'label' => 'LinkedIn', 'hint' => 'Full URL. Leave empty to drop the link from the footer.'],
+            ['key' => 'social_instagram', 'value' => 'https://www.instagram.com/unboundsolutions.in/', 'group' => 'social', 'label' => 'Instagram', 'hint' => 'Full URL. Leave empty to drop the link from the footer.'],
+            ['key' => 'social_x', 'value' => null, 'group' => 'social', 'label' => 'X / Twitter', 'hint' => 'Not published on unboundsolutions.in — add one if it exists.'],
+            ['key' => 'social_facebook', 'value' => null, 'group' => 'social', 'label' => 'Facebook', 'hint' => 'Not published on unboundsolutions.in — add one if it exists.'],
+            ['key' => 'social_youtube', 'value' => null, 'group' => 'social', 'label' => 'YouTube', 'hint' => 'Not published on unboundsolutions.in — add one if it exists.'],
+
             // ---- credentials ---------------------------------------------
             ['key' => 'cred_iso_27001', 'value' => '[status]', 'group' => 'credentials', 'label' => 'ISO/IEC 27001 status', 'hint' => 'Client must confirm the actual status.'],
             ['key' => 'cred_soc_2', 'value' => '[status]', 'group' => 'credentials', 'label' => 'SOC 2 status', 'hint' => 'Client must confirm the actual status.'],

@@ -16,8 +16,8 @@ Last extracted against all 21 pages.
 
 | Placeholder | Where | What is needed |
 |---|---|---|
-| `[email address]` | every page (footer, closing strip) | The public contact address. Until it is set, the footer and strip render it as plain text rather than a `mailto:` link. |
-| `[phone number]` | every page | The public phone number. Same — no `tel:` link until it is real. |
+| ~~`[email address]`~~ | every page (footer, closing strip) | **Filled in.** Set to `info@unboundsolutions.in`, read off unboundsolutions.in. Change it in Site settings if UB Shield gets its own inbox. |
+| ~~`[phone number]`~~ | every page | **Filled in.** Set to `+91 9700030333`, read off unboundsolutions.in. |
 | `[Street address]` | every page | The Ahmedabad street address. The city line "Ahmedabad, Gujarat, India" is already fixed below it. |
 | `[status]` ×2 | homepage trust strip, About | **ISO/IEC 27001** and **SOC 2** status. These are claims about certification — see §4. |
 | `[if applicable]` | homepage trust strip, About | **CERT-In empanelment** status. See §4. |
@@ -115,3 +115,41 @@ php artisan test --filter="placeholder|legal|credential"
 ```
 
 To re-extract the list from the running site, request every route and match `\[[^\]\[<>]{2,60}\]`.
+
+---
+
+## 7. Review scaffolding seeded after the Phase 5 review
+
+Three things were seeded so the client could see the design carrying real artwork rather than
+dashed boxes. **None of it is real**, all of it is flagged in the admin, and all of it is removed
+by dropping two lines from `DatabaseSeeder`.
+
+| What | Where | How it is flagged | To remove |
+|---|---|---|---|
+| **6 client logos** | trust strip marquee | `is_sample` on every row. The admin's **Client logos** list carries a warning subheading and a count badge in the sidebar. | Delete the rows, or replace each with a real logo and switch **Placeholder** off. With the table empty the strip falls back to the prototype's dashed "Client logo" boxes. |
+| **5 cover images** | 3 field notes, 2 case studies | Listed here. The record keeps its hand-drawn SVG underneath. | Clear the **Cover image** field on the record and the SVG renders again. |
+| **2 social profiles** | footer "Follow" column | Listed here. | Edit or empty them in **Site settings → Social profiles**. An empty platform is left out of the footer rather than linked to nothing. |
+
+### Where the values came from
+
+The client asked for unboundsolutions.in to be used as the reference, so everything below was read
+off that site rather than invented:
+
+| Value | Source |
+|---|---|
+| `info@unboundsolutions.in` | the site's contact section |
+| `+91 9700030333` | the site's contact section |
+| `https://in.linkedin.com/company/unboundsolutions4` | footer social links |
+| `https://www.instagram.com/unboundsolutions.in/` | footer social links |
+| The six client names | that site's own customers section — they are **its** placeholders, reused here rather than new inventions |
+
+**Still outstanding:** that site publishes no street address (only "Ahmedabad, Gujarat"), no
+Facebook / X / YouTube / WhatsApp, and no CIN or GST number. `[Street address]` therefore stays a
+placeholder, and the three empty social settings stay empty.
+
+### The sample artwork is drawn, not stock
+
+`scripts/build-sample-client-logos.mjs` and `scripts/build-sample-covers.mjs` render these from the
+site's own palette, type and geometry — BUILD.md rules out stock imagery, and a security
+consultancy illustrated with stock photographs would be the cliché the design exists to avoid.
+Re-run either script to regenerate.

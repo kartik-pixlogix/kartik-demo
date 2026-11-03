@@ -9,7 +9,7 @@
 <div class="grid4 rs">
 @foreach ($caseStudies as $case)
 <a href="{{ route('insights.index') }}" class="case">
-<div class="art{{ $case->art_inverted ? ' k' : '' }} rc"><div class="zoom"><x-dynamic-component :component="'art.'.$case->cover_art_key" /></div></div>
+<x-cover-art :record="$case" />
 <div class="meta"><div><p class="lab-l">{{ $case->title }}</p><p class="lab-s" style="margin-top: 4px">{{ $case->tags }}</p></div><x-ui.arrow-circle /></div>
 <p class="body">{{ $case->summary }}</p>
 </a>

@@ -21,18 +21,12 @@ const b64 = (p, mime) => `data:${mime};base64,` + readFileSync(join(ROOT, p)).to
 const DISP = b64('public/fonts/sofia-sans-extra-condensed-var.woff2', 'font/woff2');
 const TEXT = b64('public/fonts/instrument-sans-var.woff2', 'font/woff2');
 
-// The shield emblem, identical to resources/views/components/shield-emblem.blade.php
+// The shield emblem, identical to resources/views/components/shield-emblem.blade.php:
+// the client's own mark, at the same placement inside the same 240x280 box.
+const MARK = b64('public/images/brand/ub-shield.png', 'image/png');
 const EMBLEM = `
 <svg viewBox="0 0 240 280" width="300" height="350" aria-hidden="true">
-  <defs>
-    <linearGradient id="gSl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#C7D0D8"/><stop offset="1" stop-color="#7f8d9b"/></linearGradient>
-    <linearGradient id="gBl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fdcfa"/><stop offset=".35" stop-color="#27B8ED"/><stop offset=".75" stop-color="#1479D4"/><stop offset="1" stop-color="#0b4f99"/></linearGradient>
-  </defs>
-  <path d="M112 10 24 40v106c0 50 38 88 88 120Z" fill="url(#gSl)"/>
-  <path d="M128 10l88 30v106c0 50-38 88-88 120Z" fill="url(#gBl)"/>
-  <path d="M62 72v76c0 28 18 48 38 56" fill="none" stroke="#061522" stroke-width="15"/>
-  <path d="M128 82l52 18-52 24Zm0 58 56 20-56 28Z" fill="#061522"/>
-  <path d="M112 10 24 40v34l88-32Z" fill="#ffffff" opacity=".35"/>
+  <image href="${MARK}" x="8.7" y="25.3" width="222.6" height="229.4"/>
 </svg>`;
 
 const html = `<!doctype html><meta charset="utf-8"><style>

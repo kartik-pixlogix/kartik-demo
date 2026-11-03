@@ -90,12 +90,34 @@ class HomepageTest extends TestCase
     {
         $html = $this->html();
 
-        // 4 = the three emblems (hero, closing strip, footer) plus the copy of the
-        // same outline inside the #embc clipPath def. Matches the prototype.
-        $this->assertSame(4, substr_count($html, 'M112 10 24 40v106c0 50 38 88 88 120Z'));
+        /*
+         * The emblem is the client's own mark, not the prototype's drawing of
+         * it — docs/prototype-fixes.md A7. The placement is asserted rather
+         * than just the filename because the four numbers are duplicated in
+         * shield-emblem.blade.php and brand-defs.blade.php and have to agree,
+         * or the scan beam slides off the artwork.
+         *
+         * 4 = the three emblems (hero, closing strip, footer) plus the copy
+         * inside the #embm mask that holds the beam to the silhouette.
+         */
+        $this->assertSame(4, substr_count($html, 'x="8.7" y="25.3" width="222.6" height="229.4"'));
 
         // only the hero and closing-strip emblems carry the scan beam
-        $this->assertSame(2, substr_count($html, 'clip-path="url(#embc)"'));
+        $this->assertSame(2, substr_count($html, 'mask="url(#embm)"'));
+
+        /*
+         * The hand-drawn facets are gone from the rendered page. The one
+         * remaining copy is the #embc clipPath in <x-svg-defs />, which is now
+         * unused but stays because that file is generated from the prototype.
+         */
+        $this->assertSame(
+            1,
+            substr_count($html, 'M112 10 24 40v106c0 50 38 88 88 120Z'),
+            'only the unused #embc def should still carry the prototype outline',
+        );
+
+        // and the header lockup uses the same mark
+        $this->assertStringContainsString('<img class="m" src="/images/brand/ub-shield.webp"', $html);
     }
 
     public function test_it_keeps_every_placeholder_exactly_as_drawn(): void

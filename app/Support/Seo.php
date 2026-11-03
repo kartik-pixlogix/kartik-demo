@@ -27,9 +27,18 @@ class Seo
             '@id' => url('/').'#organization',
             'name' => 'UB Shield',
             'url' => url('/'),
+            /*
+             * The icon rather than the bare mark: search results and knowledge
+             * panels put this on white, and the mark's left facet is silver —
+             * it disappears on a light background. icon-512 is the same mark
+             * on its Deep Navy plate, so it reads anywhere, and 512px clears
+             * Google's 112px minimum with room to spare.
+             */
             'logo' => [
                 '@type' => 'ImageObject',
-                'url' => url('/images/brand/ub-monogram.png'),
+                'url' => url('/images/brand/icon-512.png'),
+                'width' => 512,
+                'height' => 512,
             ],
             'description' => 'Cybersecurity and compliance services: VAPT, data privacy, GRC, infrastructure and cloud security, and a 24/7 managed SOC.',
             'address' => [

@@ -100,3 +100,181 @@ substitutes `contain-intrinsic-size` for the real height — which directly conf
 requirement that the homepage match the prototype pixel for pixel, and risks layout shift against
 the very CLS budget it is meant to protect. Pausing offscreen animation is the bigger win on this
 page and costs nothing; CLS measured **0**.
+
+---
+
+## Client brand deviations (post-review)
+
+The client reviewed the Phase 5 build and supplied their logo files: a shield mark, a stacked
+lockup and a circular badge. Two notes on the site and one on the admin panel followed.
+
+The instruction was *"the shield you have made is not as per logo, use same"* — the prototype
+draws its own approximation of the mark, and the real artwork should be used instead. That is a
+change to the approved design, so it is logged here with everything else.
+
+| # | Change | Why | What it costs |
+|---|---|---|---|
+| **A7** | The hand-drawn shield replaced by the client's artwork, in all four places it appears — header lockup, hero, closing strip, footer | The prototype's five `<path>`s are a sketch of the logo, not the logo. The client asked for their own mark. | The visual diff was **89,751 px (0.56%) at 1440** before the reference was updated, and a diff map confirmed those pixels fell **only** in the four brand bands — `y 0–100`, `y 300–700`, `y 9,800–10,200`, `y 10,800–11,000` — on an 11,078px page. Nothing else moved. |
+| **A8** | The header **wordmark** stays as the prototype ships it | **Not** a change — a decision not to make one, recorded because it looks like an omission. See below. |
+
+### A7 — how it is kept honest
+
+The mark is raster artwork, so three things had to change around it:
+
+1. **Placement.** The prototype's shield filled 192 × 266 of the emblem's 240 × 280 viewBox. The
+   real mark is 692 × 726 — far squarer — so matching its height makes it 253 wide and it spills
+   out of the box (which clipped the footer emblem). It is fitted to the same **area** instead:
+   220.6 × 231.5, centred. That keeps the emblem's visual weight, stays inside the viewBox at
+   every size, and still clears the `r=190` circle it sits inside on the closing strip.
+2. **The scan beam.** It was clipped to the two hand-drawn facet paths (`clipPath #embc`). There
+   are no paths now, so it is masked by the artwork's own alpha instead (`mask #embm`, in
+   `<x-brand-defs />`, with `mask-type: alpha` set from `resources/css/inner-pages.css`). If a
+   browser does not support `mask-type`, the mask falls back to luminance and the beam shows only
+   over the bright parts of the mark — dimmer, still inside the shield. Cosmetic, not broken.
+3. **The reference.** `design/v7/index.html` is read-only, so the swap is applied to the copy the
+   harness materialises, through `MARKUP_FIXES` in `tests/visual/_shared.mjs` — the same mechanism
+   F1–F4 use. **The diff is back to 0 px at all five widths**, so the guarantee still has teeth:
+   any future change outside the brand marks still shows up.
+
+Four numbers (`x="9.7" y="24.3" width="220.6" height="231.5"`) are repeated in
+`shield-emblem.blade.php`, `brand-defs.blade.php`, `_shared.mjs` and `build-og-image.mjs`.
+`HomepageTest` asserts all four occurrences on the rendered page, so if they drift apart the suite
+says so rather than the beam quietly sliding off the mark.
+
+### A8 — why the wordmark did not change
+
+The client's stacked lockup is drawn for **white** backgrounds. Measured against Deep Navy:
+
+| | "UB" | contrast on `#061522` |
+|---|---|---|
+| Prototype wordmark | gradient, mean `#3AA4E1` | **4.97 : 1** |
+| Client's new lockup | flat `#06538C` | **2.31 : 1** |
+
+`#06538C` is also not in the brand palette — the client's own guidelines give Bright Blue as
+`#1479D4` — so adopting it would break the "no new colours" rule in `CLAUDE.md` *and* halve the
+logotype's contrast on every page. It is the same logotype in the same typeface either way.
+
+The client's artwork is **not discarded**: it ships as `ub-wordmark-light.*` and
+`ub-lockup-light.*` for light surfaces (documents, print, anything on white). **If the client
+wants their flat wordmark on the dark site regardless, it is a one-line change** in
+`scripts/split-prototype-html.mjs` and `tests/visual/_shared.mjs` — worth asking them for a
+dark-background version of the lockup first, since they evidently have one (it is inside the
+circular badge they supplied).
+
+### A9 — semantic colour in the admin panel
+
+The admin's chrome is entirely on-palette: `primary` and `info` are generated from `#1479D4` and
+`#27B8ED`, and Filament's default Zinc grey is replaced by a navy ramp anchored on `#061522`,
+`#0C2944` and `#C7D0D8` (see `App\Support\BrandPalette`).
+
+`danger` and `success` are **left as Filament ships them**. They are not brand colour — they are
+the difference between "saved" and "this will delete three records" — and a destructive
+confirmation rendered in Bright Blue would be a worse admin. They appear only in notifications and
+confirmation modals, never in the panel's chrome. Amber was removed entirely: the two places that
+used it for "needs attention" now use cyan.
+
+---
+
+## A10 — the pixel diff no longer depends on the database
+
+Until now `npm run visual:diff` worked because the database held exactly the prototype's
+placeholders: `[email address]`, `[XX]%`, sixteen dashed "Client logo" boxes. The moment any real
+content went in, the homepage legitimately stopped matching `design/v7/index.html` — a real phone
+number is a different width from `[phone number]`, and six client logos are not eight dashed boxes.
+
+Left alone, the guarantee would have decayed into "the homepage differs for reasons nobody
+checked", which is worse than no guarantee: the next real regression would hide inside the noise.
+
+So the harness now captures the build with `?design-preview=1`. In that mode settings resolve to
+the seeder's values — which are the prototype's, by construction — and the client marquee, the
+footer's social column and the card covers fall back to what the design draws. `visual:diff` is
+back to measuring only CSS and markup, which is the one thing it was ever able to catch.
+
+- `App\Support\DesignPreview` — the mode, and where the placeholder values come from
+- `App\Http\Middleware\DesignPreviewMode` — turns it on, **local and testing only**
+- `designUrl()` in `tests/visual/_shared.mjs` — used by `diff.mjs` and `pinned.mjs`
+
+It is not a feature flag. In any other environment the query parameter is ignored outright.
+
+**Measured:** homepage carrying real contact details, six client logos and five cover images —
+`visual:diff` **0 px at all five widths**, `visual:pinned` **0 px**, behaviour **45/45**, QA
+**108 / 108 / 107**.
+
+## A11 — the trust strip, cover art and footer socials became editable
+
+| Was | Is | Falls back to |
+|---|---|---|
+| 16 hard-coded `Client logo` boxes | `clients` table, CRUD at **Client logos**, logo upload | the dashed boxes, when no client has a logo |
+| cover artwork fixed to a hand-drawn SVG | optional **Cover image** upload per field note / case study | the SVG, when the field is empty |
+| footer "Follow" column, two links to `#top` | **Site settings → Social profiles** | the prototype's two placeholder links, when none is set |
+
+The fallbacks are the point: every one of these renders the approved design until somebody
+deliberately replaces it, so an empty database still produces the page that was signed off.
+
+The cover-image upload is a deliberate relaxation of "there is no image upload in this admin"
+(`App\Support\CoverArt`). That rule existed to stop stock photography landing in a design that has
+none, and it still holds by default — the SVG is what a record gets unless someone chooses
+otherwise. Client logos had to be uploadable regardless: a client's mark is theirs, not ours.
+
+---
+
+## A12 — the pinned services section clipped its own heading on short viewports
+
+Reported from a screenshot: the word **SERVICES** sliced in half horizontally.
+
+**It is the prototype's bug, reproduced exactly** — the same measurements come out of
+`design/v7/index.html`. It survived five phases of QA because every harness viewport is 900px or
+844px tall and the bug needs under 780.
+
+### What was happening
+
+`.pinon .svc-stick` is `height: min(100vh, 860px)` with `overflow: hidden` and its content
+centred. That content is a fixed **772px** tall — measured constant at 1024, 1100, 1280, 1440,
+1600, 1920 and 2560px wide. Below a 772px viewport it overflows top and bottom, and the first
+thing off the top is the section heading.
+
+The second half is worse than cosmetic. Once an ancestor has clipped the heading away,
+IntersectionObserver computes an empty intersection rect, so the reveal observer never fires. The
+heading keeps its `.rm` mask but never gets `.in`, so the inner span stays parked at
+`translateY(47.25px)` — **permanently** cut, not just for the 900ms of the animation.
+
+Measured at 1920x640 before the fix: `dl rm` with no `in`, `transform: matrix(1, 0, 0, 1, 0,
+47.25)`, 1 of 41 reveals never fired, heading 66px above its clipping ancestor.
+
+### The fix
+
+`isPin()` gains a height condition, alongside the width one it already had:
+
+```js
+const PIN_MIN_HEIGHT = 780;          // the 772px the content measures, plus slack
+st.tall = window.innerHeight >= PIN_MIN_HEIGHT;
+const isPin = () => motion && st.scrollable && st.wide && st.tall && !!(pin && stick && track);
+```
+
+Below the threshold the section falls back to the unpinned layout — **the same path every
+viewport under 1024px already takes**, so nothing new had to be designed. All the pinned CSS is
+gated behind `.pinon`, so dropping the class is enough: `overflow` goes back to `visible`, the
+heading is whole, and all 41 reveals fire.
+
+The threshold is a constant rather than a measurement, deliberately. Measuring the content at
+runtime would read the *unpinned* height once unpinned, flip the decision back, and oscillate.
+The pinned content height does not depend on the viewport, so a constant is both correct and
+stable.
+
+### Guarded against recurrence
+
+`tests/visual/qa.mjs` now checks, at **1366x640** (a real laptop: 1366x768 less browser chrome)
+and **1920x560**:
+
+- the services section is not pinned
+- every reveal fired
+- the services heading is not sitting above its mask
+
+That is +6 checks per engine. **Chromium 114/114 · Firefox 114/114 · WebKit 113/113.**
+
+### One check was also wrong
+
+`images have dimensions` read `img.width`, the *rendered* width, which is 0 for a
+`loading="lazy"` image that has not scrolled into view. It reported the client-logo marquee as
+undimensioned purely for being below the fold. It now tests the `width`/`height` **attributes**,
+which is what "reserves its space so it cannot shift the layout" actually means.

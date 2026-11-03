@@ -28,7 +28,7 @@
 <span class="chip">{{ $insight->category }}</span>
 <h1 class="ahead">{{ $insight->title }}</h1>
 </div>
-<div class="art{{ $insight->art_inverted ? ' k' : '' }} rc" aria-hidden="true"><div class="zoom"><x-dynamic-component :component="'art.'.$insight->cover_art_key" /></div></div>
+<x-cover-art :record="$insight" decorative />
 </div>
 
 </div>
@@ -60,7 +60,7 @@
 <div class="sec-t"><h2 class="dl rm"><span>More field notes<i class="dot"></i></span></h2></div>
 <div class="grid4 rs">
 @foreach ($more as $other)
-<a href="{{ route('insights.show', $other->slug) }}" class="post"><div class="art{{ $other->art_inverted ? ' k' : '' }} rc"><div class="zoom"><x-dynamic-component :component="'art.'.$other->cover_art_key" /></div></div><div class="meta"><p class="lab-l">{{ $other->title }}</p><span class="lab-s">{{ $other->meta_line }}</span></div></a>
+<a href="{{ route('insights.show', $other->slug) }}" class="post"><x-cover-art :record="$other" /><div class="meta"><p class="lab-l">{{ $other->title }}</p><span class="lab-s">{{ $other->meta_line }}</span></div></a>
 @endforeach
 </div>
 </div>

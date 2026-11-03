@@ -44,7 +44,7 @@ function boot(root) {
     const mq = $$('[data-mq]'), clock = $('[data-clock]'), heroArt = $('.hero-art');
     const steps = $$('[data-step]'), slideEl = $('[data-slide]'), stepEl = $('[data-stepno]');
 
-    const st = { compact: false, up: false, slide: 1, step: 0, menu: false, scrollable: false, wide: false, pinDist: 0 };
+    const st = { compact: false, up: false, slide: 1, step: 0, menu: false, scrollable: false, wide: false, tall: false, pinDist: 0 };
     let mx = -200, my = -200, cx = -200, cy = -200, px = -200, py = -200, hx = 0, hy = 0;
     let lastY = window.scrollY || 0, vel = 0, dir = 1;
     const mqx = mq.map(() => 0);
@@ -52,15 +52,37 @@ function boot(root) {
 
     const setClass = (el, c, on) => { if (el) el.classList.toggle(c, !!on); };
 
+    /*
+     * The pinned layout needs a viewport tall enough to hold it.
+     *
+     * .pinon .svc-stick is `height: min(100vh, 860px)` with `overflow: hidden`
+     * and its content centred. The content is a fixed 772px tall — measured
+     * constant at every width from 1024 to 2560 — so below a 772px viewport
+     * it overflows top and bottom and the section heading is sliced off.
+     *
+     * Worse than cosmetic: the heading is then clipped out of existence by an
+     * ancestor, IntersectionObserver computes an empty intersection rect, the
+     * reveal never fires, and the text stays parked at translateY(47px)
+     * inside its mask — permanently cut, not just during the animation.
+     *
+     * Below the threshold the section falls back to the unpinned layout, which
+     * is the same path every viewport under 1024px already takes. 780 is the
+     * 772 the content measures plus a few px of slack for font-metric
+     * variance before the display face loads. Logged as A12.
+     */
+    const PIN_MIN_HEIGHT = 780;
+
     // The prototype only ever ran on the homepage, so it could assume the
     // pinned services section existed. Every inner page reuses this script and
     // has no .svc-sec, so the elements have to be part of the condition —
     // otherwise onScroll() dereferences null on every frame.
-    const isPin = () => motion && st.scrollable && st.wide && !!(pin && stick && track);
+    const isPin = () => motion && st.scrollable && st.wide && st.tall
+        && !!(pin && stick && track);
 
     function layout() {
         st.scrollable = document.documentElement.scrollHeight > window.innerHeight + 300;
         st.wide = window.innerWidth >= 1024;
+        st.tall = window.innerHeight >= PIN_MIN_HEIGHT;
         setClass(root, 'mo', motion);
         setClass(root, 'has-cur', motion && fine && customCursor);
         setClass(root, 'rvon', motion && st.scrollable);

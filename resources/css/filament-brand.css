@@ -1,0 +1,432 @@
+/* UB Shield brand layer for the Filament admin panel.
+ *
+ * WHY THIS IS NOT A FILAMENT CUSTOM THEME
+ *
+ * `php artisan make:filament-theme` produces a Tailwind 4 entrypoint that
+ * recompiles Filament's whole stylesheet. Tailwind was removed from this
+ * project in Phase 0 (BUILD.md forbids it, and its source scanning hung the
+ * build on this machine), and bringing it back for the admin alone would mean
+ * a second build pipeline for one stylesheet.
+ *
+ * Filament 5 drives everything from custom properties, so the same result is
+ * reachable with plain CSS: this file is registered through
+ * PanelsRenderHook::STYLES_AFTER, which renders after Filament's own
+ * stylesheet and after the `:root` block that sets the --primary and --gray
+ * shade variables, so redefining those tokens here recolours the entire panel
+ * without touching a single component rule.
+ *
+ * The colour ramps themselves are generated in PHP from the brand hexes —
+ * see App\Support\BrandPalette. Only structure, type and the handful of
+ * hard-coded whites Filament ships are dealt with here.
+ *
+ * CONTENTS
+ *   1. Fonts
+ *   2. Shape — square corners
+ *   3. Hairlines
+ *   4. Typography
+ *   5. Brand bar and logo
+ *   6. Sidebar
+ *   7. Topbar
+ *   8. Tables
+ *   9. Forms
+ *  10. Login and multi-factor pages
+ *  11. Dashboard widgets
+ *  12. Motion
+ */
+
+/* ------------------------------------------------------------------ 1. Fonts
+ * The same self-hosted files the public site uses (resources/css/fonts.css).
+ * Declared again rather than imported because this stylesheet is a separate
+ * Vite entrypoint and must stand alone.
+ *
+ * Filament's bundled Inter is still published under public/fonts/filament and
+ * still loads — Filament's own components ask for it by name in a few places.
+ * It is no longer the panel's body font.
+ */
+
+@font-face {
+    font-family: 'Instrument Sans';
+    src: url('/fonts/instrument-sans-var.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sofia Sans Extra Condensed';
+    src: url('/fonts/sofia-sans-extra-condensed-var.woff2') format('woff2');
+    font-weight: 700 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Michroma';
+    src: url('/fonts/michroma-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --ub-disp: 'Sofia Sans Extra Condensed', 'Arial Narrow', sans-serif;
+    --ub-mono-disp: 'Michroma', ui-monospace, monospace;
+
+    /* The brand hexes, for the few rules below that need a literal. Every
+     * other colour in the panel resolves through Filament's own tokens. */
+    --ub-paper: #061522;
+    --ub-mid: #0C2944;
+    --ub-blue: #1479D4;
+    --ub-acid: #27B8ED;
+    --ub-ink: #F4F6F8;
+    --ub-cool: #C7D0D8;
+    --ub-line: rgba(199, 208, 216, .22);
+    --ub-ease: cubic-bezier(.16, .84, .24, 1);
+}
+
+/* --------------------------------------------------- 2. Shape: square corners
+ * The V7 rule is square everywhere, circles only for avatars and status dots.
+ * Filament's pills use a literal `border-radius: 3.4e38px`, not a token, so
+ * zeroing the four radius tokens squares panels, inputs, buttons and badges
+ * while leaving avatars round.
+ */
+
+:root {
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+}
+
+/* Filament hard-codes a few radii outside the token system. */
+.fi-btn,
+.fi-badge,
+.fi-input-wrp,
+.fi-ta-ctn,
+.fi-section,
+.fi-modal-window,
+.fi-dropdown-panel,
+.fi-wi-stats-overview-stat,
+.fi-fo-field-wrp-hint-icon,
+.fi-sidebar-item-btn {
+    border-radius: 0;
+}
+
+/* ------------------------------------------------------------- 3. Hairlines
+ * Filament draws dark-mode borders as `color-mix(white 10%)`, which reads grey
+ * against navy. Swap in the site's own --line so the admin and the site share
+ * one hairline.
+ */
+
+.dark .fi-section,
+.dark .fi-ta-ctn,
+.dark .fi-wi-stats-overview-stat,
+.dark .fi-dropdown-panel,
+.dark .fi-modal-window {
+    --tw-ring-color: var(--ub-line);
+}
+
+.dark .fi-ta-header,
+.dark .fi-ta-footer,
+.dark .fi-ta-row:not(:last-child),
+.dark .fi-section-header,
+.dark .fi-section-footer,
+.dark .fi-topbar-ctn,
+.dark .fi-sidebar {
+    border-color: var(--ub-line);
+}
+
+/* --------------------------------------------------------- 4. Typography
+ * Body text is Instrument Sans, set by the panel's font() call. Headings take
+ * the display face the site uses for every heading, so the two surfaces read
+ * as one product.
+ */
+
+.fi-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-ta-header-heading,
+.fi-wi-stats-overview-stat-value,
+.fi-ta-empty-state-heading,
+.fi-empty-state-heading,
+.fi-simple-header-heading {
+    font-family: var(--ub-disp);
+    font-weight: 800;
+    letter-spacing: .005em;
+    text-transform: uppercase;
+}
+
+.fi-header-heading {
+    font-size: 2.5rem;
+    line-height: 1.04;
+}
+
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-ta-header-heading {
+    font-size: 1.375rem;
+    line-height: 1.1;
+}
+
+/* Column headers and field labels: the site sets these in the body face at a
+ * wide track rather than in the display face. */
+.fi-ta-header-cell,
+.fi-wi-stats-overview-stat-label,
+.fi-fo-field-label,
+.fi-in-entry-label {
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+/* …except on the login and multi-factor pages, where Filament uses the label
+ * to ask the whole question — "Enter the 6-digit code from the authenticator
+ * app" — and a sentence that long in tracked uppercase is barely readable. */
+.fi-simple-layout .fi-fo-field-label {
+    font-size: .8125rem;
+    letter-spacing: .01em;
+    text-transform: none;
+}
+
+/* Figures read as instrument output, as they do on the site. */
+.fi-wi-stats-overview-stat-value,
+.fi-ta-pagination-records-label strong {
+    font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------- 5. Brand bar and logo */
+
+.fi-logo {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+}
+
+.fi-logo img {
+    display: block;
+    width: auto;
+}
+
+.fi-logo .ub-mark {
+    height: 1.75rem;
+}
+
+.fi-logo .ub-word {
+    height: .6875rem;
+}
+
+/* ----------------------------------------------------------- 6. Sidebar
+ * The active item gets the cyan edge marker the site uses on its industry
+ * rows, instead of Filament's tinted pill.
+ */
+
+.fi-sidebar-nav {
+    padding-block: .75rem;
+}
+
+.fi-sidebar-item-btn {
+    position: relative;
+    font-weight: 600;
+    transition: background-color .18s var(--ub-ease), color .18s var(--ub-ease);
+}
+
+.fi-sidebar-item-btn::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 3px;
+    background: var(--ub-acid);
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition: transform .22s var(--ub-ease);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn::before {
+    transform: scaleY(1);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background-color: color-mix(in oklab, var(--ub-acid) 12%, transparent);
+    color: var(--ub-ink);
+}
+
+.dark .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: var(--ub-acid);
+}
+
+.dark .fi-sidebar-item-btn:hover {
+    background-color: color-mix(in oklab, var(--ub-acid) 7%, transparent);
+}
+
+/* The lead counter should read as a live instrument, not a notification. */
+.fi-sidebar-item-badge {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+}
+
+/* ------------------------------------------------------------- 7. Topbar */
+
+.dark .fi-topbar-ctn {
+    background-color: var(--ub-paper);
+}
+
+.dark .fi-sidebar {
+    background-color: var(--ub-paper);
+}
+
+/* A hairline of brand colour along the top of the panel — the one piece of
+ * chrome that is purely decorative, and the cheapest way to make the panel
+ * unmistakably this company's. */
+.fi-topbar-ctn::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--ub-blue), var(--ub-acid) 42%, transparent 82%);
+    pointer-events: none;
+}
+
+/* -------------------------------------------------------------- 8. Tables */
+
+.dark .fi-ta-header-cell {
+    background-color: color-mix(in oklab, var(--ub-acid) 4%, transparent);
+}
+
+.dark .fi-ta-row:hover {
+    background-color: color-mix(in oklab, var(--ub-acid) 6%, transparent);
+}
+
+.fi-ta-record-checkbox,
+.fi-checkbox-input {
+    border-radius: 0;
+}
+
+/* --------------------------------------------------------------- 9. Forms */
+
+.fi-input-wrp {
+    transition: box-shadow .14s var(--ub-ease);
+}
+
+.dark .fi-input-wrp {
+    background-color: color-mix(in oklab, var(--ub-cool) 6%, transparent);
+}
+
+.dark .fi-input-wrp:focus-within {
+    --tw-ring-color: var(--ub-acid);
+}
+
+/* The site's own focus treatment: a square cyan ring, never a rounded glow. */
+.fi-btn:focus-visible,
+.fi-sidebar-item-btn:focus-visible,
+.fi-link:focus-visible,
+.fi-dropdown-list-item:focus-visible {
+    outline: 2px solid var(--ub-acid);
+    outline-offset: 2px;
+}
+
+/* --------------------------------------------- 10. Login and MFA pages
+ * The one page an outsider might see. It gets the site's surface rather than
+ * Filament's grey card on white.
+ */
+
+.fi-simple-layout {
+    background-color: var(--ub-paper);
+    background-image:
+        linear-gradient(var(--ub-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--ub-line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    background-position: center;
+}
+
+/* Fade the grid out towards the edges so it reads as texture, not as a table. */
+.fi-simple-layout::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, var(--ub-paper) 78%);
+    pointer-events: none;
+}
+
+.fi-simple-main {
+    position: relative;
+    background-color: var(--ub-mid);
+    border: 1px solid var(--ub-line);
+    box-shadow: none;
+}
+
+.dark .fi-simple-main {
+    background-color: var(--ub-mid);
+}
+
+/* The cyan rule across the top of the card, matching the topbar. */
+.fi-simple-main::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ub-blue), var(--ub-acid));
+}
+
+.fi-simple-header-heading {
+    font-size: 1.75rem;
+}
+
+.fi-simple-layout .fi-logo {
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.fi-simple-layout .fi-logo .ub-mark {
+    height: 3rem;
+}
+
+.fi-simple-layout .fi-logo .ub-word {
+    height: 1rem;
+}
+
+/* ------------------------------------------------- 11. Dashboard widgets */
+
+.fi-wi-stats-overview-stat {
+    position: relative;
+    overflow: hidden;
+}
+
+.fi-wi-stats-overview-stat::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 2px;
+    background: var(--ub-acid);
+}
+
+.fi-wi-stats-overview-stat-value {
+    font-size: 2.25rem;
+    line-height: 1.05;
+}
+
+.dark .fi-wi-stats-overview-stat {
+    background-color: var(--ub-mid);
+}
+
+.fi-wi-stats-overview-stat-description {
+    font-size: .75rem;
+    letter-spacing: .02em;
+}
+
+/* --------------------------------------------------------------- 12. Motion
+ * The site stops every animation under prefers-reduced-motion; the admin does
+ * the same for the few transitions added above.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-sidebar-item-btn,
+    .fi-sidebar-item-btn::before,
+    .fi-input-wrp {
+        transition: none;
+    }
+}

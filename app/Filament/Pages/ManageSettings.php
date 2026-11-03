@@ -45,6 +45,7 @@ class ManageSettings extends Page implements HasForms
 
     private const GROUPS = [
         'contact' => ['Contact details', 'Shown in the closing strip and the footer. An email or phone number still in square brackets renders as plain text rather than a mailto: or tel: link.'],
+        'social' => ['Social profiles', 'The "Follow" column in the footer. Paste the full URL. Leave a platform empty and it is left out of the footer entirely rather than linked to nothing.'],
         'credentials' => ['Credentials', 'The trust strip under the hero. These are claims about certification, so leave them in square brackets until each one is confirmed.'],
         'stats' => ['Statistics', 'The figures in the hero and case-file rows. Type them exactly as they should appear, including any + or % sign.'],
         'soc' => ['Managed SOC', 'The facts list in the inverted SOC block.'],

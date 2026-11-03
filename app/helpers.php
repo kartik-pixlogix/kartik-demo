@@ -9,6 +9,13 @@ if (! function_exists('setting')) {
      */
     function setting(string $key, ?string $default = null): ?string
     {
+        // The visual harness renders with the design's own placeholder values
+        // so the pixel diff measures CSS and markup, not content. Local and
+        // testing only — see App\Support\DesignPreview.
+        if (App\Support\DesignPreview::active() && App\Support\DesignPreview::knows($key)) {
+            return App\Support\DesignPreview::setting($key) ?? $default;
+        }
+
         return Setting::get($key, $default);
     }
 }

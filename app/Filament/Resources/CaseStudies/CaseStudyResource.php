@@ -11,6 +11,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -85,6 +86,19 @@ class CaseStudyResource extends Resource
                     Toggle::make('art_inverted')
                         ->label('Light card frame')
                         ->helperText('The alternating light frame (.art.k).'),
+
+                    FileUpload::make('cover_image')
+                        ->label('Cover image')
+                        ->image()
+                        ->disk('public')
+                        ->directory('covers')
+                        ->visibility('public')
+                        ->imageEditor()
+                        ->imageEditorAspectRatios(['5:4'])
+                        ->maxSize(3072)
+                        ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
+                        ->columnSpanFull()
+                        ->helperText('Optional. Overrides the artwork above for this case study. The frame is 5:4 and the image is cropped to fill it, so upload it at 1000x800 or larger. Clear this field to go back to the hand-drawn artwork.'),
 
                     TextInput::make('position')
                         ->numeric()
