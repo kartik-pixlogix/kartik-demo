@@ -5,7 +5,7 @@
 --}}
 <section class="sec" id="about">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Case files<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Case <span class="tnw">files<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
 <div class="grid4 rs">
 @foreach ($caseStudies as $case)
 <a href="{{ route('insights.index') }}" class="case">

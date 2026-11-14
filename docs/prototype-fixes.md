@@ -278,3 +278,42 @@ That is +6 checks per engine. **Chromium 114/114 · Firefox 114/114 · WebKit 11
 `loading="lazy"` image that has not scrolled into view. It reported the client-logo marquee as
 undimensioned purely for being below the fold. It now tests the `width`/`height` **attributes**,
 which is what "reserves its space so it cannot shift the layout" actually means.
+
+---
+
+## Mobile fixes (post-launch, 2026-11-14)
+
+Reported on a phone after go-live: the hero artwork was not centred. The client asked for every
+page to be checked at phone widths and every alignment problem fixed. All 21 pages in the
+sitemap were checked at 320, 360, 375, 390, 414 and 430px. No page scrolls horizontally. The
+four defects below are **in the prototype itself**, so the build had faithfully reproduced them.
+
+All four rules live in `resources/css/mobile-fixes.css`, imported last. Every rule is scoped to
+`max-width:760px`, or (`.tnw`) only stops a line break. **1440, 1180 and 900 render exactly as
+before:** the diff against the unchanged build was identical to the pixel at those widths.
+
+| # | Change | Why | What it costs |
+|---|---|---|---|
+| **F5** | Hero artwork centred at ≤760px: the stage gets `translate:-23.68px 0`, the emblem is pinned to the ring centre, and the dot field is moved back by the same 50 viewBox units | The composition is drawn around x=370 of a 640-wide viewBox (57.8%), to sit in the right-hand column on desktop. In the single-column layout the focal point landed **23.68px** right of centre. Worse, the emblem was placed at 57.8% of the *width* while the rings scale with the *height*, so the two separated: the emblem was 30px off centre at 390 and **59px** off at 760, where it no longer sat in its own rings. Using `translate` moves the streaks and crosshairs with the art, so their layout relative to it is unchanged. | The hero band at 760 and 390. |
+| **F6** | Industry row headings (and the industry page `h1`) scale down only when the word cannot fit: `min(44px, (100vw − 162px) / 5.8)` | "MANUFACTURING" ran into its arrow button at every phone width, and "HEALTHCARE" did at 320. On the industry page the same word was clipped at 320–360. | Rows below ~417px are a few pixels shorter, so everything under the industries list moves up slightly at 390. At 760 the rule resolves to the original 44/38. |
+| **F7** | Footer legal row laid out as wrapping flex items with a 16px gap | `responsive.css` zeroes the links' left margin, so the copyright ran into the first link: "© 2026 UB SHIELDPRIVACY POLICY". | The footer's last line at 760 and 390. |
+| **F8** | A heading's last word and its title dot are wrapped in `<span class="tnw">` (`white-space:nowrap`). Static headings in the markup; variable titles through the `title_dot()` helper | The dot follows the text with no space, so the browser could break before it and leave it alone on a line: "TALK TO AN EXPERT" / "●", "FRAMEWORKS COVERED", "COMMON QUESTIONS", "AT NIGHT." and others, 49 cases across the site. | Nothing at desktop. Not applied to the flex `<h3>`s (process steps, footer columns): there the dot is a flex item, the headings are single words, and wrapping them moved the dot 6px. Two feature tests now match the page title as text rather than HTML, since the `h1` markup changed. |
+
+### How it is kept honest
+
+`tests/visual/_shared.mjs` applies F5–F8 to the prototype before capturing references, as it does
+for F1–F4 and A7. The CSS is read straight from `resources/css/mobile-fixes.css`, so the two
+cannot drift. Captured that way in the Linux deploy environment, the build matches the patched
+prototype at all five widths. The one exception is about 400px of native `<select>` text, which
+that Chromium build renders differently on both sides and at every width.
+
+**`docs/reference/` was not regenerated** in that environment: the committed references come from
+the development machine, and recapturing elsewhere would bake font-rendering noise into them.
+Run `npm run visual:reference` on the development machine, then `npm run visual:diff`, to bring
+the baseline up to date.
+
+### Also noticed, left alone
+
+- At wider phone/tablet widths (seen at 760px) the hero's lower-left crosshair sits on the
+  "TLS 1.3 ONLY" badge. The crosshairs are positioned in percentages of the width, while the
+  artwork scales with the stage height. F5 moves both together, so this is exactly as before.

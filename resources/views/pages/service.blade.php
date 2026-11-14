@@ -27,7 +27,7 @@
 <div class="phero-g">
 <div>
 <span class="chip">{{ $practice['kicker'] }}</span>
-<h1>{{ $practice['title'] }}<i class="dot"></i></h1>
+<h1>{{ title_dot($practice['title']) }}</h1>
 <p class="lead">{{ $practice['lead'] }}</p>
 <div class="cta-row">
 <a href="#contact" class="btn mag">Book a security assessment <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"></path></svg></a>
@@ -42,7 +42,7 @@
 
 <section class="sec">
 <div class="wrap split">
-<h2 class="dl rm"><span>What&rsquo;s included<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>What&rsquo;s <span class="tnw">included<i class="dot"></i></span></span></h2>
 <div>
 <p class="rv intro">{{ $practice['intro'] }}</p>
 <ul class="rows rs" style="margin-top: 48px">
@@ -56,7 +56,7 @@
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>How we work<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Every engagement runs the same four phases. You always know what happens next and who owns it.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>How we <span class="tnw">work<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Every engagement runs the same four phases. You always know what happens next and who owns it.</p></div>
 <div class="fw-notes rs">
 @foreach ($practice['process'] as $i => [$phase, $detail])
 <div><b>{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }} / {{ $phase }}</b>{{ $detail }}</div>
@@ -67,7 +67,7 @@
 
 <section class="sec">
 <div class="wrap split">
-<h2 class="dl rm"><span>What you get<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>What you <span class="tnw">get<i class="dot"></i></span></span></h2>
 <ul class="rows rs">
 @foreach ($practice['deliverables'] as [$heading, $detail])
 <li><span class="n" aria-hidden="true"></span><div><h3>{{ $heading }}</h3><p>{{ $detail }}</p></div></li>
@@ -78,7 +78,7 @@
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Frameworks covered<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">We map each control once and reuse its evidence for every auditor who asks.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Frameworks <span class="tnw">covered<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">We map each control once and reuse its evidence for every auditor who asks.</p></div>
 <ul class="chips rv">
 @foreach ($practice['frameworks'] as $framework)
 <li>{{ $framework }}</li>
@@ -90,7 +90,7 @@
 @if ($caseStudy)
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Related case file<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Related case <span class="tnw">file<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
 <div class="grid4 rs">
 <a href="{{ route('home') }}#about" class="case">
 <x-cover-art :record="$caseStudy" />
@@ -104,7 +104,7 @@
 
 <section class="sec" id="faq">
 <div class="wrap split">
-<h2 class="dl rm"><span>Common questions<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>Common <span class="tnw">questions<i class="dot"></i></span></span></h2>
 <div>
 <div class="faq">
 @foreach ($practice['faq'] as $i => [$question, $answer])

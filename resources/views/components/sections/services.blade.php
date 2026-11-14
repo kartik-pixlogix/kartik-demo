@@ -8,7 +8,7 @@
 <div class="wrap">
 <div class="svc-head">
 <div>
-<h2 class="dl rm"><span>Services<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span><span class="tnw">Services<i class="dot"></i></span></span></h2>
 <p class="lab-m rv" style="margin-top: 24px">Secure / Privacy / Compliance / Infrastructure / MSS</p>
 </div>
 <div class="counter v-hide" aria-hidden="true"><span data-slide>01</span><i></i><span class="tot">05</span></div>

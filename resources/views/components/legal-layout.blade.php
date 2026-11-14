@@ -18,7 +18,7 @@
 <div class="phero-g solo">
 <div>
 <span class="chip">Legal</span>
-<h1>{{ $pageTitle }}<i class="dot"></i></h1>
+<h1>{{ title_dot($pageTitle) }}</h1>
 <p class="lead">Last updated {{ $lastUpdated }}.</p>
 </div>
 </div>

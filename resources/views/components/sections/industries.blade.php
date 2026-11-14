@@ -5,7 +5,7 @@
 --}}
 <section class="sec" id="industries">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Industries<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">The same five practices, shaped to the rules your sector is inspected against.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span><span class="tnw">Industries<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">The same five practices, shaped to the rules your sector is inspected against.</p></div>
 <div class="inds rs">
 
 <a href="{{ route('industries.show', 'banking-finance') }}" class="ind-row" data-v="1"><span class="lab-s">01</span><h3>Banking &amp; finance</h3><p>RBI and SEBI frameworks, payment data and vendor risk.</p><x-ui.arrow-circle /></a>

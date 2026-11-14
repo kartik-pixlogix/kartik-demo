@@ -1,0 +1,50 @@
+/* Mobile fixes — approved deviations F5–F8, see docs/prototype-fixes.md.
+ *
+ * Each rule corrects a layout defect the prototype itself has at phone
+ * widths. Every rule is either scoped to max-width:760px or (.tnw) only
+ * stops a line break, so desktop and tablet renders are unchanged. Imported
+ * last so it wins over responsive.css and v7-overrides.css without
+ * touching the generated partials.
+ */
+
+/* F8: keep a heading's last word and its title dot on one line. Without it
+ * the dot can wrap onto a line of its own ("TALK TO AN EXPERT" / "●"). */
+.tnw{white-space:nowrap}
+
+@media (max-width:760px){
+  /* F5: centre the hero artwork in the single-column layout.
+   * The composition is drawn around x=370 of a 640-wide viewBox (57.8%), to
+   * sit in the right-hand column on desktop. At <=760px it is 360px tall, so
+   * the viewBox scales by 360/760 and the focal point lands
+   * (370-320) * 360/760 = 23.68px right of centre. `translate` moves the
+   * whole stage (layers, streaks, crosshairs) back, leaving the parallax
+   * `transform` on the same element untouched. The emblem is re-pinned to
+   * the ring centre instead of 57.8% of the width. The dot field is pushed
+   * back by the same 50 viewBox units so it stays centred. */
+  .hero-art>div{translate:-23.68px 0}
+  .hero-art svg.emb{left:calc(50% + 23.68px)}
+  .hero-art rect[fill="url(#dots)"]{transform:translateX(50px)}
+
+  /* F6: industry row headings ran into the arrow button ("MANUFACTURING"
+   * at every phone width, "HEALTHCARE" at 320). The text column is
+   * 100vw - 162px wide; "Manufacturing", the longest name, is 5.8x its font
+   * size. Above ~417px this resolves to the prototype's 44/38 unchanged. */
+  .ind-row h3{
+    font-size:min(44px,calc((100vw - 162px) / 5.8));
+    line-height:min(38px,calc((100vw - 162px) / 6.7));
+  }
+
+  /* F6 (inner pages): the same word in the industry page hero. At 56px,
+   * "Manufacturing" plus its dot (30px) is wider than the 100vw - 32px
+   * column below ~390px and was clipped. Resolves to 56/48 at 390px and up. */
+  .phero h1{
+    font-size:min(56px,calc((100vw - 62px) / 5.8));
+    line-height:min(48px,calc((100vw - 62px) / 6.77));
+  }
+
+  /* F7: footer legal row. responsive.css zeroes the links' left margin,
+   * which glued the copyright to the first link ("© 2026 UB SHIELDPRIVACY
+   * POLICY"). Lay the four items out as whole, wrapping units instead. */
+  .fb>span:last-child{display:flex;flex-wrap:wrap;column-gap:16px;row-gap:8px}
+  .fb>span:last-child a{margin:0}
+}

@@ -49,7 +49,7 @@ class InnerPagesTest extends TestCase
 
         $this->get("/industries/{$slug}")
             ->assertOk()
-            ->assertSee($industry[$slug]['title'], escape: false)
+            ->assertSeeText($industry[$slug]['title']) // text, not HTML: the h1 holds the last word in a no-wrap span (F8)
             ->assertSee($industry[$slug]['lead'], escape: false);
     }
 

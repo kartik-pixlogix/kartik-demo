@@ -47,3 +47,6 @@
 /* 7. additive, not from the prototype — see each file's header */
 @import './form-states.css';
 @import './inner-pages.css';
+
+/* 8. approved mobile fixes (F5–F8) — last, so they win */
+@import './mobile-fixes.css';

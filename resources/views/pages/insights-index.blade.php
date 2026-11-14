@@ -18,7 +18,7 @@
 <div class="phero-g solo">
 <div>
 <span class="chip">Resources</span>
-<h1>Field notes<i class="dot"></i></h1>
+<h1>Field <span class="tnw">notes<i class="dot"></i></span></h1>
 <p class="lead">What we run into on engagements, written up while it is still fresh. Advisories when the law moves, guides when a framework needs unpicking.</p>
 </div>
 </div>

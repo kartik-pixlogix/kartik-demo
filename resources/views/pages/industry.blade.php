@@ -23,7 +23,7 @@
 <div class="phero-g">
 <div>
 <span class="chip">Industry {{ $industry['number'] }}</span>
-<h1>{{ $industry['title'] }}<i class="dot"></i></h1>
+<h1>{{ title_dot($industry['title']) }}</h1>
 <p class="lead">{{ $industry['lead'] }}</p>
 <div class="cta-row">
 <a href="#contact" class="btn mag">Book a security assessment <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"></path></svg></a>
@@ -38,7 +38,7 @@
 
 <section class="sec">
 <div class="wrap split">
-<h2 class="dl rm"><span>What we see<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>What we <span class="tnw">see<i class="dot"></i></span></span></h2>
 <div>
 <p class="rv intro">{{ $industry['intro'] }}</p>
 <ul class="rows rs" style="margin-top: 48px">
@@ -52,7 +52,7 @@
 
 <section class="sec" id="practices">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Where we start<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">The same five practices, shaped to the rules this sector is inspected against.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Where we <span class="tnw">start<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">The same five practices, shaped to the rules this sector is inspected against.</p></div>
 <div class="cards3 rs">
 @foreach ($practices as $practice)
 <a href="{{ route('services.show', $practice['slug']) }}" class="card">
@@ -67,7 +67,7 @@
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>What applies here<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">We map each control once and reuse its evidence for every auditor who asks.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>What applies <span class="tnw">here<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">We map each control once and reuse its evidence for every auditor who asks.</p></div>
 <ul class="chips rv">
 @foreach ($industry['regulations'] as $regulation)
 <li>{{ $regulation }}</li>
@@ -79,7 +79,7 @@
 @if ($caseStudy)
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Related case file<i class="dot"></i></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Related case <span class="tnw">file<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Names, figures and outcomes are placeholders until confirmed.</p></div>
 <div class="grid4 rs">
 <a href="{{ route('home') }}#about" class="case">
 <x-cover-art :record="$caseStudy" />

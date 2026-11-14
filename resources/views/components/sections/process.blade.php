@@ -6,7 +6,7 @@
 <section class="sec">
 <div class="wrap proc">
 <div class="proc-l">
-<h2 class="dl rm"><span>How we work<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>How we <span class="tnw">work<i class="dot"></i></span></span></h2>
 <div class="counter" aria-hidden="true"><span data-stepno>01</span><i></i><span class="tot">04</span></div>
 <p class="rv" style="max-width: 420px">Every engagement runs the same four phases. You always know what happens next and who owns it.</p>
 </div>

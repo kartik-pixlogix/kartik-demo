@@ -57,7 +57,7 @@
 @if ($more->isNotEmpty())
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>More field notes<i class="dot"></i></span></h2></div>
+<div class="sec-t"><h2 class="dl rm"><span>More field <span class="tnw">notes<i class="dot"></i></span></span></h2></div>
 <div class="grid4 rs">
 @foreach ($more as $other)
 <a href="{{ route('insights.show', $other->slug) }}" class="post"><x-cover-art :record="$other" /><div class="meta"><p class="lab-l">{{ $other->title }}</p><span class="lab-s">{{ $other->meta_line }}</span></div></a>

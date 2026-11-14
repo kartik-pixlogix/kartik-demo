@@ -40,7 +40,7 @@ class ServicePageTest extends TestCase
 
         $this->get("/services/{$slug}")
             ->assertOk()
-            ->assertSee($practice['title'], escape: false)
+            ->assertSeeText($practice['title']) // text, not HTML: the h1 holds the last word in a no-wrap span (F8)
             ->assertSee($practice['lead'], escape: false);
     }
 

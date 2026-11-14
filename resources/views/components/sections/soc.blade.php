@@ -10,7 +10,7 @@
 <span class="chip">Managed SOC / MSS</span>
 <h2 class="dl rm" style="font-size: 96px; line-height: 80px; margin-top: 32px"><span>We never</span></h2>
 <h2 class="dl rm" style="font-size: 96px; line-height: 80px"><span class="alt" style="font-weight: 700">clock off</span></h2>
-<h2 class="dl rm" style="font-size: 96px; line-height: 80px"><span>at night.<i class="dot"></i></span></h2>
+<h2 class="dl rm" style="font-size: 96px; line-height: 80px"><span>at <span class="tnw">night.<i class="dot"></i></span></span></h2>
 <p class="body rv">Our analysts work your alerts in shifts from Ahmedabad, every hour of the year. You get a named lead and a monthly review in plain language.</p>
 <ul class="soc-list rs">
 <li><span>SIEM monitoring</span><span>Cloud / endpoint / identity / firewall</span></li>

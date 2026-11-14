@@ -21,7 +21,7 @@
 <div class="phero-g solo">
 <div>
 <span class="chip">Contact</span>
-<h1>Talk to an expert<i class="dot"></i></h1>
+<h1>Talk to an <span class="tnw">expert<i class="dot"></i></span></h1>
 <p class="lead">No gatekeeping and no discovery call about a discovery call. You speak to someone who does the work.</p>
 </div>
 </div>
@@ -31,7 +31,7 @@
 
 <section class="sec" style="padding-top: 0">
 <div class="wrap split">
-<h2 class="dl rm"><span>What happens next<i class="dot"></i></span></h2>
+<h2 class="dl rm"><span>What happens <span class="tnw">next<i class="dot"></i></span></span></h2>
 <div>
 <ul class="rows rs">
 <li><span class="n" aria-hidden="true"></span><div><h3>You send the form</h3><p>Four fields. We only ask for what we need to route it to the right person.</p></div></li>

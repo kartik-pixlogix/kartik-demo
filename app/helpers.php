@@ -67,3 +67,22 @@ if (! function_exists('contact_href')) {
             : 'mailto:'.$value;
     }
 }
+
+if (! function_exists('title_dot')) {
+    /**
+     * A heading's text followed by the cyan title dot, with the last word and
+     * the dot held together so the dot never wraps onto a line of its own.
+     * Escapes the text. See docs/prototype-fixes.md F8.
+     */
+    function title_dot(string $text): Illuminate\Support\HtmlString
+    {
+        $text = trim($text);
+        $cut = mb_strrpos($text, ' ');
+        $head = $cut === false ? '' : mb_substr($text, 0, $cut + 1);
+        $last = $cut === false ? $text : mb_substr($text, $cut + 1);
+
+        return new Illuminate\Support\HtmlString(
+            e($head).'<span class="tnw">'.e($last).'<i class="dot"></i></span>'
+        );
+    }
+}

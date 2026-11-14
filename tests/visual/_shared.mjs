@@ -53,6 +53,10 @@ export const FIXED_TIME = new Date('2026-01-01T12:34:56Z');
  *       footer heading styling and stop matching the build.
  *   F4  word-fade reveal rests at .38 instead of .12. No effect on the capture,
  *       which is taken with motion off, but kept here so the two lists agree.
+ *   F5-F8  mobile fixes. Additive, so they are not in the CSS splitter's list:
+ *       resources/css/mobile-fixes.css is appended to the prototype verbatim
+ *       (see MOBILE_FIXES below) and the F8 title-dot markup is applied in
+ *       MARKUP_FIXES.
  */
 const FIXES = [
     ['--faint:rgba(199,208,216,.38)', '--faint:rgba(199,208,216,.44)'],
@@ -119,7 +123,16 @@ const MARKUP_FIXES = [
             + MARK_IMAGE + '</mask><clipPath id="embc">',
     ],
     [/<\/style>/, '#embm{mask-type:alpha}</style>'],
+
+    // F8 — hold a heading's last word and its title dot together. Not inside
+    // a flex <h3> (process steps, footer columns): there the dot is a flex
+    // item, the heading is one word that cannot wrap, and the build leaves
+    // those as they were. Runs after the h4 -> h3 rewrite above.
+    [/(?<!<h3>)(?<=[>\s])([^\s<>]+)<i class="dot"><\/i>/g, '<span class="tnw">$1<i class="dot"></i></span>'],
 ];
+
+/** F5-F8 — the build's additive mobile stylesheet, read so the two never drift. */
+const MOBILE_FIXES = readFileSync(join(ROOT, 'resources', 'css', 'mobile-fixes.css'), 'utf8');
 
 /** Writes the prototype variant and returns a file:// URL for it. */
 export function prototypeUrl(variant) {
@@ -142,6 +155,8 @@ export function prototypeUrl(variant) {
     for (const [pattern, to] of MARKUP_FIXES) {
         html = html.replace(pattern, to);
     }
+    // Last in the cascade, as in resources/css/app.css.
+    html = html.replace(/<\/style>/, () => MOBILE_FIXES + '</style>');
     if (variant === 'resting') {
         const flag = 'var motion = !reduced;';
         if (!html.includes(flag)) throw new Error('motion flag not found in the prototype');
