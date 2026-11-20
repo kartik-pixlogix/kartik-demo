@@ -1,0 +1,78 @@
+/* Launch content (UB Shield launch brief, 23 November).
+ *
+ * The brief's copy is longer than the prototype's in a few places the design
+ * sized to its own words. These rules fit the new copy into the same type
+ * system — same families, same weights, same colours — by scaling only where
+ * the measured text would otherwise overflow. Imported last.
+ */
+
+/* Hero headline. "TOMORROW." is 4.03 font-sizes wide (measured), one letter
+ * wider than the prototype's "WATCHED.", and overflowed its column at every
+ * width. Each breakpoint scales to the column it sits in:
+ *   >1180   column = (min(100vw,1440) - 128) / 2
+ *   761-1180 column = 0.6 * (100vw - 128)       (1.2fr / 0.8fr grid)
+ *   <=760   column = 100vw - 32
+ * capped at the prototype's own size, so it only ever gets smaller. */
+.hero-h { font-size: min(224px, calc((min(100vw, 1440px) - 128px) / 8.2)); line-height: 0.72em; }
+@media (max-width: 1180px) {
+    .hero-h { font-size: min(160px, calc((100vw - 128px) / 6.85)); line-height: 0.74em; }
+}
+@media (max-width: 760px) {
+    .hero-h { font-size: min(96px, calc((100vw - 32px) / 4.15)); line-height: 0.78em; }
+}
+
+/* About UB Shield: body copy inside the statement block, which sets every
+ * <p> in display type. */
+.stm .about-copy p { font: 500 19px/30px var(--text); text-transform: none; letter-spacing: 0; }
+.stm .about-copy p + p { margin-top: 20px; }
+
+/* Our approach: the brief's step names are two or three words, so the flex
+ * heading (built for one word with the dot pinned to its baseline) pushed the
+ * dot to the far edge. Block layout keeps the dot after the last word. */
+.step .step-h { display: block; font-size: 72px; line-height: 62px; }
+.step .step-h .dot { vertical-align: baseline; }
+@media (max-width: 760px) {
+    .step .step-h { font-size: 48px; line-height: 42px; }
+}
+
+/* Service pages: the full service names are long ("Vulnerability Assessment
+ * & Penetration Testing (VAPT)"), so the page hero steps down from 96/80. */
+.phero h1.svc-h1 { font-size: 72px; line-height: 62px; max-width: 16ch; }
+@media (max-width: 760px) {
+    .phero h1.svc-h1 { font-size: min(44px, calc((100vw - 62px) / 6.6)); line-height: 0.9em; }
+}
+.split .svc-note, .svc-note { margin-top: 32px; max-width: 62ch; font: 500 16px/24px var(--text); color: var(--cool); }
+
+/* "Why work with UB Shield?" points read as statements, not labels. */
+.rows .why-p { font: 500 18px/28px var(--text); }
+
+/* Services dropdown: the brief's categories ("Security Assessment",
+ * "Implementation") are longer than the prototype's one-word kickers. */
+.dd-m { width: 620px; }
+.dd-m a { grid-template-columns: 104px minmax(0, 1fr) 42px; }
+.dd-m b { font-size: 24px; line-height: 26px; }
+
+/* The hero eyebrow is three phrases and wraps on phones; the chip's fixed
+ * 36px height let the second line spill out over the headline. */
+.hero-l .chip { height: auto; min-height: 36px; padding-top: 6px; padding-bottom: 6px; }
+
+/* Industry rows are no longer links, so there is no arrow column to keep
+ * clear: on phones the name and description take its width too. */
+@media (max-width: 760px) {
+    .ind-row h3, .ind-row p { grid-column: 2 / -1; }
+}
+
+/* Links inside the cyan contact block: navy and underlined, not the default
+ * cyan-on-cyan. */
+.cta-b .lnk { color: #061522; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Chips hold the brief's longer names ("Manufacturing & Industrial
+ * Businesses"), which wrap on phones; let the chip grow with them. */
+.chips li { height: auto; min-height: 36px; padding-top: 7px; padding-bottom: 7px; }
+
+/* .prose paragraph spacing. base.css's `.ds6 p{margin:0}` (0,1,1) out-ranked
+ * inner-pages.css's `.prose > * + *` (0,1,0), so prose paragraphs — About and
+ * the legal pages — ran together. Same rule, matching specificity. */
+.ds6 .prose > * + * { margin-top: 28px; }
+.ds6 .prose > h2 { margin-top: 56px; }
+.ds6 .prose > h3 { margin-top: 40px; }

@@ -5,6 +5,10 @@ import { chromium } from 'playwright';
 import { BASE_URL as BASE } from './_shared.mjs';
 const results = [];
 const ok = (name, pass, detail = '') => results.push({ name, pass, detail });
+// Sections hidden for launch (docs/prototype-fixes.md, "Launch content") are
+// skipped rather than failed, so the check list still reads true when they return.
+const has = (p, sel) => p.evaluate((s) => !!document.querySelector(s), sel);
+const skip = (name, why) => console.log(`SKIP  ${name}   (${why})`);
 
 const browser = await chromium.launch();
 
@@ -37,7 +41,8 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     await scrollTo(p, 0);
     await p.waitForTimeout(1800);
     const counts = await p.evaluate(() => Array.from(document.querySelectorAll('[data-count]')).map((e) => [e.getAttribute('data-count'), e.textContent]));
-    ok('count-up: animates to the target value', counts.every(([a, b]) => a === b), JSON.stringify(counts));
+    if (counts.length) ok('count-up: animates to the target value', counts.every(([a, b]) => a === b), JSON.stringify(counts));
+    else skip('count-up', 'stats hidden for launch');
 
     // header compact / hide / progress
     await scrollTo(p, 200);
@@ -85,15 +90,19 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     ok('process: live counter follows the active step', step.no !== '01' && step.on > 0, JSON.stringify(step));
 
     // SOC clock
-    const clock = await p.evaluate(() => document.querySelector('[data-clock]').textContent);
-    ok('soc: IST clock is running', /^\d{2}:\d{2}:\d{2}$/.test(clock), clock);
+    if (await has(p, '[data-clock]')) {
+        const clock = await p.evaluate(() => document.querySelector('[data-clock]').textContent);
+        ok('soc: IST clock is running', /^\d{2}:\d{2}:\d{2}$/.test(clock), clock);
+    } else skip('soc clock', 'SOC section hidden for launch');
 
     // marquee moves and reverses with scroll direction
-    await scrollTo(p, await topOf(p, '.mq'));
-    const m1 = await p.evaluate(() => document.querySelector('[data-mq]').style.transform);
-    await p.waitForTimeout(400);
-    const m2 = await p.evaluate(() => document.querySelector('[data-mq]').style.transform);
-    ok('frameworks: marquee is moving', m1 !== m2, `${m1} -> ${m2}`);
+    if (await has(p, '.mq')) {
+        await scrollTo(p, await topOf(p, '.mq'));
+        const m1 = await p.evaluate(() => document.querySelector('[data-mq]').style.transform);
+        await p.waitForTimeout(400);
+        const m2 = await p.evaluate(() => document.querySelector('[data-mq]').style.transform);
+        ok('frameworks: marquee is moving', m1 !== m2, `${m1} -> ${m2}`);
+    } else skip('frameworks marquee', 'frameworks section hidden for launch');
 
     // industries hover preview + cursor modes
     await p.hover('.ind-row[data-v="3"]');
@@ -101,7 +110,12 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     const prev = await p.evaluate(() => { const e = document.querySelector('.prev'); return { show: e.dataset.show, v: e.dataset.v }; });
     ok('industries: preview follows the hovered row', prev.show === '1' && prev.v === '3', JSON.stringify(prev));
     const curRow = await p.evaluate(() => { const c = document.querySelector('.cur'); return c.dataset.mode + '/' + c.dataset.label; });
-    ok('cursor: VIEW over an industry row', curRow === 'view/VIEW', curRow);
+    // Launch rows are not links, so no VIEW affordance; a row without
+    // artwork shows no preview frame.
+    ok('cursor: no VIEW over a plain (unlinked) industry row', curRow !== 'view/VIEW', curRow);
+    await p.hover('.ind-row:not([data-v])');
+    await p.waitForTimeout(300);
+    ok('industries: no empty preview over a row without artwork', (await p.evaluate(() => document.querySelector('.prev').dataset.show)) !== '1');
 
     // back to pin progress 0 so the first card sits inside the viewport again
     await scrollTo(p, svcTop);
@@ -117,7 +131,9 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     await p.waitForTimeout(250);
     ok('cursor: shrinks over form fields', (await p.evaluate(() => document.querySelector('.cur').dataset.mode)) === 'text');
 
-    // magnetic
+    // magnetic (the launch form is taller, so bring its button into view first)
+    await p.evaluate(() => document.querySelector('.cta-b .btn.mag').scrollIntoView({ block: 'center' }));
+    await p.waitForTimeout(450);
     const mag = await p.evaluate(() => { const b = document.querySelector('.cta-b .btn.mag'); const r = b.getBoundingClientRect(); return [r.left + r.width / 2 + 20, r.top + r.height / 2 + 6]; });
     await p.mouse.move(mag[0], mag[1]);
     await p.waitForTimeout(250);
@@ -130,7 +146,7 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     await p.context().close();
 }
 
-// ---------- posture-review form, scripted path ----------
+// ---------- enquiry form, scripted path ----------
 {
     const p = await page();
     await scrollTo(p, await topOf(p, '.strip'));
@@ -171,6 +187,11 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     await p.fill('#v6n', 'A');
     await p.fill('#v6e', 'someone@example.com');
     await p.fill('#v6c', 'B');
+    // launch brief fields: browser-valid, server-invalid (min:2 / min:10)
+    await p.fill('#v6t', 'C');
+    await p.fill('#v6m', 'short');
+    await p.selectOption('#v6s', { index: 1 });
+    await p.check('#v6k');
     await p.click('[data-review-form] button[type="submit"]');
     await p.waitForSelector('.f .err', { timeout: 15000 }).catch(() => {});
     const errs = await p.evaluate(() => ({
@@ -182,7 +203,7 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     ok('form: renders inline errors without a page reload', errs.count >= 2, JSON.stringify(errs));
     ok('form: marks invalid fields with aria-invalid', errs.invalid >= 2, String(errs.invalid));
     ok('form: links each error to its field with aria-describedby', errs.described);
-    ok('form: restores the button label after a failure', errs.label === 'Request my review', errs.label);
+    ok('form: restores the button label after a failure', errs.label === 'Submit enquiry', errs.label);
 
     await p.context().close();
 }
@@ -228,7 +249,7 @@ const topOf = (p, sel) => p.evaluate((s) => document.querySelector(s).getBoundin
     ok('reduced-motion: no mo / rvon / pinon / has-cur', !['mo', 'rvon', 'pinon', 'has-cur'].some((k) => c.includes(k)), `"${c}"`);
     const hidden = await p.evaluate(() => [getComputedStyle(document.querySelector('.cur')).display, getComputedStyle(document.querySelector('.prev')).display]);
     ok('reduced-motion: cursor and preview are display:none', hidden.every((d) => d === 'none'), hidden.join(','));
-    const anim = await p.evaluate(() => getComputedStyle(document.querySelector('.sweep')).animationName);
+    const anim = await p.evaluate(() => getComputedStyle(document.querySelector('.sweep, .spin')).animationName);
     ok('reduced-motion: infinite animations are off', anim === 'none', anim);
     await p.context().close();
 }

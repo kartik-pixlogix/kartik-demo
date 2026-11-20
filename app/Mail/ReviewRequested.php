@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/** Internal notification: a new posture review has been requested. */
+/** Internal notification: a new website enquiry has arrived. */
 class ReviewRequested extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
@@ -20,7 +20,7 @@ class ReviewRequested extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Posture review request — '.$this->lead->company,
+            subject: 'Website enquiry — '.$this->lead->company,
             replyTo: [$this->lead->email],
         );
     }

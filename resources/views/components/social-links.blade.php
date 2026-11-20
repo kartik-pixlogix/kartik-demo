@@ -26,10 +26,9 @@
             ->reject(fn (array $l) => is_placeholder($l['url']))
             ->values();
 @endphp
+{{-- No profiles set: no column, rather than the prototype's dead #top links (launch brief §11). --}}
+@if ($links->isNotEmpty())
 <div><h3>Follow<i class="dot"></i></h3><ul>
-@if ($links->isEmpty())
-<li><a href="#top">LinkedIn</a></li><li><a href="#top">X</a></li>
-@else
 @foreach ($links as $link)<li><a href="{{ $link['url'] }}" target="_blank" rel="noopener me">{{ $link['label'] }}</a></li>@endforeach
-@endif
 </ul></div>
+@endif

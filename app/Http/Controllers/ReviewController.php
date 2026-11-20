@@ -33,7 +33,10 @@ class ReviewController extends Controller
         );
 
         $lead = Lead::create([
-            ...$request->safe()->only(['name', 'email', 'company', 'service']),
+            ...$request->safe()->only(['name', 'email', 'company', 'city', 'service', 'requirement']),
+            // Validation requires the box ticked, so reaching here means consent
+            // was given now. Stored as a time, not a flag, for the record.
+            'consented_at' => now(),
             'source_page' => $this->sourcePage($request->input('source_page')),
             'utm_source' => $request->input('utm_source'),
             'utm_medium' => $request->input('utm_medium'),
@@ -110,7 +113,7 @@ class ReviewController extends Controller
         } catch (\Throwable $e) {
             // The lead is already saved. Queueing failing is an operations
             // problem, not the visitor's, so it is logged rather than shown.
-            Log::error('Could not queue posture-review mail.', [
+            Log::error('Could not queue enquiry mail.', [
                 'lead_id' => $lead->id,
                 'exception' => $e->getMessage(),
             ]);

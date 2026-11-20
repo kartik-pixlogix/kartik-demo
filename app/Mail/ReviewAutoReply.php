@@ -19,7 +19,7 @@ class ReviewAutoReply extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'We have your posture review request');
+        return new Envelope(subject: 'We have received your enquiry');
     }
 
     public function content(): Content

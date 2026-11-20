@@ -1,19 +1,25 @@
 <x-mail::message>
-# New posture review request
+# New website enquiry
 
-**{{ $lead->name }}** at **{{ $lead->company }}** has asked for a posture review.
+**{{ $lead->name }}** at **{{ $lead->company }}** has sent an enquiry.
 
 <x-mail::table>
 | | |
 |:---|:---|
 | **Name** | {{ $lead->name }} |
-| **Work email** | {{ $lead->email }} |
-| **Company** | {{ $lead->company }} |
-| **Service interest** | {{ $lead->service }} |
+| **Business email** | {{ $lead->email }} |
+| **Company / organization** | {{ $lead->company }} |
+| **City** | {{ $lead->city ?: '—' }} |
+| **Service interested in** | {{ $lead->service }} |
+| **Consent to be contacted** | {{ $lead->consented_at ? 'Yes, '.$lead->consented_at->timezone('Asia/Kolkata')->format('d M Y, H:i').' IST' : '—' }} |
 | **Source page** | {{ $lead->source_page ?: '—' }} |
 | **Campaign** | {{ collect([$lead->utm_source, $lead->utm_medium, $lead->utm_campaign])->filter()->implode(' / ') ?: '—' }} |
 | **Received** | {{ $lead->created_at->timezone('Asia/Kolkata')->format('d M Y, H:i') }} IST |
 </x-mail::table>
+
+**Brief requirement**
+
+{{ $lead->requirement ?: '—' }}
 
 Reply directly to this message to reach them.
 

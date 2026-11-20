@@ -1,24 +1,18 @@
 {{--
-    Industries: 6 hover rows.
-    Ported verbatim from design/v7/index.html lines 741-760.
-    Regenerate with scripts/split-prototype-html.mjs — do not retype markup.
+    Industries we aim to serve. Row markup from design/v7/index.html lines
+    741-760; the nine sectors are the launch brief's §4 (config/site.php).
+    The brief presents these as intended sectors, not client references, and
+    gives no per-sector page content, so the rows are not links and there are
+    no industry detail pages (old URLs redirect here — routes/web.php).
 --}}
 <section class="sec" id="industries">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span><span class="tnw">Industries<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">The same five practices, shaped to the rules your sector is inspected against.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span><span class="tnw">Industries<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Industries we aim to serve.</p></div>
 <div class="inds rs">
+@foreach (config('site.industries') as $i => [$name, $detail, $preview])
 
-<a href="{{ route('industries.show', 'banking-finance') }}" class="ind-row" data-v="1"><span class="lab-s">01</span><h3>Banking &amp; finance</h3><p>RBI and SEBI frameworks, payment data and vendor risk.</p><x-ui.arrow-circle /></a>
-
-<a href="{{ route('industries.show', 'healthcare') }}" class="ind-row" data-v="2"><span class="lab-s">02</span><h3>Healthcare</h3><p>Patient data under DPDPA, and HIPAA for US work.</p><x-ui.arrow-circle /></a>
-
-<a href="{{ route('industries.show', 'saas-it') }}" class="ind-row" data-v="3"><span class="lab-s">03</span><h3>SaaS &amp; IT</h3><p>SOC 2 and ISO 27001 so security reviews stop stalling deals.</p><x-ui.arrow-circle /></a>
-
-<a href="{{ route('industries.show', 'manufacturing') }}" class="ind-row" data-v="4"><span class="lab-s">04</span><h3>Manufacturing</h3><p>Plant and office networks kept apart, supplier access controlled.</p><x-ui.arrow-circle /></a>
-
-<a href="{{ route('industries.show', 'education') }}" class="ind-row" data-v="5"><span class="lab-s">05</span><h3>Education</h3><p>Student and parent data, consent records and campus networks.</p><x-ui.arrow-circle /></a>
-
-<a href="{{ route('industries.show', 'e-commerce') }}" class="ind-row" data-v="6"><span class="lab-s">06</span><h3>E-commerce</h3><p>PCI DSS, checkout integrity and account-takeover defence.</p><x-ui.arrow-circle /></a>
+<div class="ind-row"@if ($preview) data-v="{{ $preview }}"@endif><span class="lab-s">{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span><h3>{{ $name }}</h3><p>{{ $detail }}</p></div>
+@endforeach
 
 </div>
 </div>

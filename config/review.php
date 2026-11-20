@@ -3,7 +3,7 @@
 return [
     /*
     |---------------------------------------------------------------------------
-    | Posture-review form
+    | Enquiry form
     |---------------------------------------------------------------------------
     |
     | Spam defences for the public lead form. The honeypot and the minimum fill
@@ -40,5 +40,5 @@ return [
     'notification_email' => env('MAIL_ADMIN_ADDRESS'),
 
     // Shown on success, and swapped into the button label by the JS path.
-    'success_message' => 'Request received. We reply within one business day',
+    'success_message' => 'Enquiry received. Our team will review it and get in touch.',
 ];

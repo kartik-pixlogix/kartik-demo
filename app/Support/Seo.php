@@ -40,12 +40,18 @@ class Seo
                 'width' => 512,
                 'height' => 512,
             ],
-            'description' => 'Cybersecurity and compliance services: VAPT, data privacy, GRC, infrastructure and cloud security, and a 24/7 managed SOC.',
+            'description' => config('site.description'),
             'address' => [
                 '@type' => 'PostalAddress',
                 'addressLocality' => 'Ahmedabad',
                 'addressRegion' => 'Gujarat',
                 'addressCountry' => 'IN',
+            ],
+            // Launch brief §1: Ahmedabad and Rajkot are the initial service locations.
+            'areaServed' => [
+                ['@type' => 'City', 'name' => 'Ahmedabad'],
+                ['@type' => 'City', 'name' => 'Rajkot'],
+                ['@type' => 'State', 'name' => 'Gujarat'],
             ],
         ];
 
@@ -104,17 +110,17 @@ class Seo
         return [
             '@type' => 'Service',
             'name' => $practice['nav'],
-            'serviceType' => $practice['title'],
+            'serviceType' => $practice['kicker'],
             'description' => $practice['lead'],
             'provider' => ['@id' => url('/').'#organization'],
-            'areaServed' => ['@type' => 'Country', 'name' => 'India'],
+            'areaServed' => ['@type' => 'State', 'name' => 'Gujarat'],
             'url' => route('services.show', $practice['slug']),
             'hasOfferCatalog' => [
                 '@type' => 'OfferCatalog',
                 'name' => $practice['nav'],
-                'itemListElement' => array_map(fn (array $item) => [
+                'itemListElement' => array_map(fn (string $item) => [
                     '@type' => 'Offer',
-                    'itemOffered' => ['@type' => 'Service', 'name' => $item[0], 'description' => $item[1]],
+                    'itemOffered' => ['@type' => 'Service', 'name' => $item],
                 ], $practice['included'] ?? []),
             ],
         ];

@@ -1,27 +1,24 @@
 <x-mail::message>
 # Thank you, {{ $lead->name }}
 
-We have your request for a free posture review and a senior consultant will be
-in touch **within one business day**.
-
-The session takes about forty-five minutes. You will leave it with your five
-biggest risks and the order to fix them in — no obligation, and nothing to
-prepare beforehand.
+We have received your enquiry. Our team will review it and get in touch to
+discuss the next steps.
 
 For reference, here is what you sent us:
 
 <x-mail::table>
 | | |
 |:---|:---|
-| **Company** | {{ $lead->company }} |
-| **Service interest** | {{ $lead->service }} |
+| **Company / organization** | {{ $lead->company }} |
+| **City** | {{ $lead->city ?: '—' }} |
+| **Service interested in** | {{ $lead->service }} |
 </x-mail::table>
 
 If anything there is wrong, just reply to this message and we will correct it.
 
 Thanks,<br>
 UB Shield<br>
-Ahmedabad, India
+{{ config('site.locations') }}
 
 <x-slot:subcopy>
 You are receiving this because someone submitted this address on

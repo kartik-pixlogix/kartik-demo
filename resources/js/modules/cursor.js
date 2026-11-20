@@ -8,7 +8,7 @@ export function updateCursor(cur, t) {
     let mode = '';
     let label = '';
     if (t.closest('input,select,textarea')) mode = 'text';
-    else if (t.closest('.ind-row')) {
+    else if (t.closest('a.ind-row')) { // only linked rows; the launch rows are plain
         mode = 'view';
         label = 'VIEW';
     } else if (t.closest('.card,.case,.post')) {

@@ -25,10 +25,7 @@ class SeoTest extends TestCase
     {
         return [
             'home' => ['/'],
-            'service' => ['/services/offensive-security'],
-            'industry' => ['/industries/banking-finance'],
-            'insights index' => ['/insights'],
-            'article' => ['/insights/dpdpa-2023-consent-flows'],
+            'service' => ['/services/vulnerability-assessment-penetration-testing'],
             'contact' => ['/contact'],
             'about' => ['/about'],
             'privacy' => ['/privacy'],
@@ -78,26 +75,24 @@ class SeoTest extends TestCase
         $this->assertContains('WebSite', $types);
     }
 
-    public function test_the_service_page_describes_the_service_and_its_faq(): void
+    public function test_the_service_page_describes_the_service(): void
     {
-        $data = $this->graph('/services/offensive-security');
+        $data = $this->graph('/services/vulnerability-assessment-penetration-testing');
         $types = array_column($data['@graph'], '@type');
 
         $this->assertContains('Service', $types);
-        $this->assertContains('FAQPage', $types);
         $this->assertContains('BreadcrumbList', $types);
+        // the FAQ went with the launch content, so its schema must not stay
+        $this->assertNotContains('FAQPage', $types);
     }
 
-    public function test_the_article_describes_itself_as_an_article_with_a_machine_readable_date(): void
+    public function test_the_organization_describes_the_launch_positioning(): void
     {
-        $data = $this->graph('/insights/dpdpa-2023-consent-flows');
-        $article = collect($data['@graph'])->firstWhere('@type', 'Article');
+        $org = collect($this->graph('/')['@graph'])->firstWhere('@type', 'Organization');
 
-        $this->assertNotNull($article);
-        // date_label is the design's "[DD MMM 2026]" placeholder — the
-        // structured data must carry a real ISO date instead.
-        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T/', $article['datePublished']);
-        $this->assertStringNotContainsString('[DD MMM', json_encode($article));
+        $this->assertSame(config('site.description'), $org['description']);
+        $this->assertStringNotContainsString('SOC', json_encode($org));
+        $this->assertContains('Rajkot', array_column($org['areaServed'], 'name'));
     }
 
     public function test_structured_data_never_publishes_a_placeholder_as_fact(): void
@@ -108,7 +103,8 @@ class SeoTest extends TestCase
         // contact details are still "[email address]" / "[phone number]"
         $this->assertArrayNotHasKey('contactPoint', $org, 'placeholders must not be published as contact data');
         $this->assertArrayNotHasKey('streetAddress', $org['address']);
-        $this->assertStringNotContainsString('[', json_encode($org));
+        // a bracketed placeholder such as "[email address]" (JSON arrays are fine)
+        $this->assertDoesNotMatchRegularExpression('/\[[A-Za-z]/', json_encode($org));
     }
 
     public function test_structured_data_publishes_contact_details_once_they_are_real(): void
@@ -134,24 +130,14 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('<urlset', $xml);
 
         foreach (array_merge(
-            [route('home'), route('contact'), route('about'), route('insights.index'), route('privacy')],
+            [route('home'), route('contact'), route('about'), route('privacy')],
             array_map(fn ($s) => route('services.show', $s), array_keys(require __DIR__.'/../../config/practices.php')),
-            array_map(fn ($s) => route('industries.show', $s), array_keys(require __DIR__.'/../../config/industries.php')),
         ) as $url) {
             $this->assertStringContainsString("<loc>{$url}</loc>", $xml, "{$url} missing from the sitemap");
         }
 
         // valid XML, not just a string that looks like it
         $this->assertNotFalse(simplexml_load_string($xml));
-    }
-
-    public function test_the_sitemap_omits_unpublished_articles(): void
-    {
-        \App\Models\Insight::query()->update(['published_at' => null]);
-
-        $xml = $this->get('/sitemap.xml')->getContent();
-
-        $this->assertStringNotContainsString('/insights/dpdpa', $xml);
     }
 
     public function test_robots_txt_keeps_crawlers_out_of_the_admin(): void

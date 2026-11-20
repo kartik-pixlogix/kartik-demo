@@ -9,15 +9,19 @@ use Illuminate\Validation\Validator;
 
 class ReviewRequest extends FormRequest
 {
-    /** The service-interest options, in the prototype's order. */
-    public const SERVICES = [
-        'Offensive Security / VAPT',
-        'Data Privacy',
-        'Governance, Risk & Compliance',
-        'Infrastructure & Cloud',
-        'Managed Security Services',
-        'Not sure yet',
-    ];
+    /** The last service-interest option, for enquiries that do not fit one. */
+    public const NOT_SURE = 'Not sure yet';
+
+    /**
+     * The service-interest options: the six approved services in catalogue
+     * order (config/practices.php), then "Not sure yet".
+     *
+     * @return list<string>
+     */
+    public static function services(): array
+    {
+        return [...\App\Support\Practices::all()->pluck('nav')->values()->all(), self::NOT_SURE];
+    }
 
     /** Field a human never sees and never fills. */
     public const HONEYPOT = 'website';
@@ -42,7 +46,11 @@ class ReviewRequest extends FormRequest
             'company' => ['required', 'string', 'min:2', 'max:120'],
             // Rule::in, not the string form: two of the options contain a comma,
             // which the string parser would split into separate values.
-            'service' => ['required', 'string', Rule::in(self::SERVICES)],
+            'service' => ['required', 'string', Rule::in(self::services())],
+            // Launch brief §6: City, Brief Requirement and consent to be contacted.
+            'city' => ['required', 'string', 'min:2', 'max:80'],
+            'requirement' => ['required', 'string', 'min:10', 'max:2000'],
+            'consent' => ['accepted'],
         ];
     }
 
@@ -52,12 +60,17 @@ class ReviewRequest extends FormRequest
         return [
             'name.required' => 'Please tell us your name',
             'name.min' => 'Please tell us your name',
-            'email.required' => 'Please give us a work email',
+            'email.required' => 'Please give us a business email',
             'email.email' => 'That does not look like a working email address',
             'company.required' => 'Please tell us your company',
             'company.min' => 'Please tell us your company',
             'service.required' => 'Please choose a service',
             'service.in' => 'Please choose a service from the list',
+            'city.required' => 'Please tell us your city',
+            'city.min' => 'Please tell us your city',
+            'requirement.required' => 'Please describe your requirement briefly',
+            'requirement.min' => 'Please add a little more detail',
+            'consent.accepted' => 'Please confirm we may contact you',
         ];
     }
 

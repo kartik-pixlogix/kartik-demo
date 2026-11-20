@@ -69,9 +69,16 @@ class LeadResource extends Resource
                 ->columns(2)
                 ->schema([
                     TextEntry::make('name')->label('Name'),
-                    TextEntry::make('email')->label('Work email')->copyable(),
-                    TextEntry::make('company')->label('Company'),
+                    TextEntry::make('email')->label('Business email')->copyable(),
+                    TextEntry::make('company')->label('Company / organization'),
+                    TextEntry::make('city')->label('City')->placeholder('—'),
                     TextEntry::make('service')->label('Service interest')->badge(),
+                    TextEntry::make('requirement')->label('Brief requirement')->placeholder('—')->columnSpanFull(),
+                    TextEntry::make('consented_at')
+                        ->label('Consent to be contacted')
+                        ->dateTime('d M Y, H:i')
+                        ->timezone('Asia/Kolkata')
+                        ->placeholder('Not recorded'),
                     TextEntry::make('created_at')
                         ->label('Received')
                         ->dateTime('d M Y, H:i')
@@ -137,9 +144,9 @@ class LeadResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('service')
-                    ->options(array_combine(
-                        \App\Http\Requests\ReviewRequest::SERVICES,
-                        \App\Http\Requests\ReviewRequest::SERVICES
+                    ->options(fn () => array_combine(
+                        \App\Http\Requests\ReviewRequest::services(),
+                        \App\Http\Requests\ReviewRequest::services()
                     )),
                 Filter::make('recent')
                     ->label('Last 7 days')

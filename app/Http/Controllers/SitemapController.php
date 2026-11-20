@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Insight;
-use App\Support\Industries;
 use App\Support\Practices;
 use Illuminate\Http\Response;
 
@@ -22,25 +20,13 @@ class SitemapController extends Controller
             ['loc' => route('home'), 'priority' => '1.0', 'changefreq' => 'monthly'],
             ['loc' => route('contact'), 'priority' => '0.9', 'changefreq' => 'yearly'],
             ['loc' => route('about'), 'priority' => '0.7', 'changefreq' => 'yearly'],
-            ['loc' => route('insights.index'), 'priority' => '0.7', 'changefreq' => 'weekly'],
         ];
 
         foreach (Practices::slugs() as $slug) {
             $urls[] = ['loc' => route('services.show', $slug), 'priority' => '0.9', 'changefreq' => 'monthly'];
         }
 
-        foreach (Industries::slugs() as $slug) {
-            $urls[] = ['loc' => route('industries.show', $slug), 'priority' => '0.8', 'changefreq' => 'monthly'];
-        }
-
-        foreach (Insight::query()->published()->orderByDesc('published_at')->get() as $insight) {
-            $urls[] = [
-                'loc' => route('insights.show', $insight->slug),
-                'priority' => '0.6',
-                'changefreq' => 'yearly',
-                'lastmod' => $insight->updated_at?->toAtomString(),
-            ];
-        }
+        // Industry pages and field notes are withdrawn for launch (routes/web.php).
 
         foreach (['privacy', 'terms', 'responsible-disclosure'] as $name) {
             $urls[] = ['loc' => route($name), 'priority' => '0.2', 'changefreq' => 'yearly'];

@@ -4,7 +4,9 @@
 export function updatePreview(prev, t) {
     if (!prev || !t) return;
     const row = t.closest('.ind-row');
-    if (row) {
+    // Only rows with artwork (data-v) get a preview; the launch list has
+    // sectors without one, and an empty frame would follow the cursor.
+    if (row && row.dataset.v) {
         prev.dataset.show = '1';
         prev.dataset.v = row.dataset.v;
     } else {

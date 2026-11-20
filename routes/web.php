@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\IndustryController;
-use App\Http\Controllers\InsightController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
@@ -11,11 +9,35 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
-Route::get('/industries/{slug}', [IndustryController::class, 'show'])->name('industries.show');
+/*
+ * Launch brief (23 November): the five original practices became six services
+ * with new URLs (§7). The old URLs were live briefly, so each one redirects
+ * permanently to its closest new service rather than 404ing.
+ */
+$legacyServices = [
+    'offensive-security' => 'vulnerability-assessment-penetration-testing',
+    'infrastructure-cloud' => 'network-design-architecture',
+    'managed-security-services' => 'network-security-assessment',
+    'governance-risk-compliance' => 'security-configuration-hardening',
+    'data-privacy' => null, // no equivalent service: back to the list
+];
 
-Route::get('/insights', [InsightController::class, 'index'])->name('insights.index');
-Route::get('/insights/{slug}', [InsightController::class, 'show'])->name('insights.show');
+foreach ($legacyServices as $old => $new) {
+    Route::permanentRedirect("/services/{$old}", $new ? "/services/{$new}" : '/#services');
+}
+
+Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
+
+/*
+ * Industry detail pages and field notes are withdrawn for launch: the brief
+ * lists industries as intended sectors with no page content (§4), and the
+ * field notes carry placeholder dates and compliance claims (§8). Their URLs
+ * redirect rather than 404. The controllers and the admin stay, so either can
+ * come back by restoring these routes.
+ */
+Route::permanentRedirect('/industries/{slug}', '/#industries')->name('industries.show');
+Route::redirect('/insights', '/')->name('insights.index');
+Route::redirect('/insights/{slug}', '/')->name('insights.show');
 
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/about', [PageController::class, 'about'])->name('about');

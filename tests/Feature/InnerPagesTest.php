@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Insight;
 use Database\Seeders\CaseStudySeeder;
 use Database\Seeders\InsightSeeder;
 use Database\Seeders\SettingSeeder;
@@ -21,17 +20,9 @@ class InnerPagesTest extends TestCase
         $this->seed([SettingSeeder::class, CaseStudySeeder::class, InsightSeeder::class]);
     }
 
-    public static function industries(): array
-    {
-        $slugs = array_keys(require __DIR__.'/../../config/industries.php');
-
-        return array_combine($slugs, array_map(fn (string $s) => [$s], $slugs));
-    }
-
     public static function standalonePages(): array
     {
         return [
-            'insights index' => ['/insights'],
             'contact' => ['/contact'],
             'about' => ['/about'],
             'privacy' => ['/privacy'],
@@ -40,97 +31,30 @@ class InnerPagesTest extends TestCase
         ];
     }
 
-    // ---- industries --------------------------------------------------------
+    // ---- withdrawn for launch ------------------------------------------------
 
-    #[DataProvider('industries')]
-    public function test_each_industry_page_renders(string $slug): void
+    public function test_industry_pages_redirect_to_the_homepage_list(): void
     {
-        $industry = require __DIR__.'/../../config/industries.php';
-
-        $this->get("/industries/{$slug}")
-            ->assertOk()
-            ->assertSeeText($industry[$slug]['title']) // text, not HTML: the h1 holds the last word in a no-wrap span (F8)
-            ->assertSee($industry[$slug]['lead'], escape: false);
-    }
-
-    public function test_an_unknown_industry_is_a_404(): void
-    {
-        $this->get('/industries/atlantis')->assertNotFound();
-    }
-
-    #[DataProvider('industries')]
-    public function test_each_industry_links_to_the_practices_it_names(string $slug): void
-    {
-        $industries = require __DIR__.'/../../config/industries.php';
-        $html = $this->get("/industries/{$slug}")->getContent();
-
-        foreach ($industries[$slug]['practices'] as $practice) {
-            $this->assertStringContainsString(route('services.show', $practice), $html);
+        // Launch brief §4: industries are intended sectors with no page content.
+        foreach (['banking-finance', 'healthcare', 'saas-it', 'manufacturing', 'education', 'e-commerce'] as $slug) {
+            $this->get("/industries/{$slug}")->assertStatus(301)->assertRedirect('/#industries');
         }
     }
 
-    public function test_the_homepage_industry_rows_link_to_the_industry_pages(): void
+    public function test_field_notes_redirect_to_the_homepage(): void
     {
-        $html = $this->get('/')->getContent();
-
-        foreach (array_keys(require __DIR__.'/../../config/industries.php') as $slug) {
-            $this->assertStringContainsString(route('industries.show', $slug), $html);
-        }
+        $this->get('/insights')->assertRedirect('/');
+        $this->get('/insights/dpdpa-2023-consent-flows')->assertRedirect('/');
     }
 
-    // ---- insights ----------------------------------------------------------
-
-    public function test_the_insights_index_lists_published_notes(): void
+    public function test_the_sitemap_lists_only_live_pages(): void
     {
-        $html = $this->get('/insights')->getContent();
+        $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
 
-        foreach (Insight::all() as $insight) {
-            $this->assertStringContainsString(route('insights.show', $insight->slug), $html);
-            $this->assertStringContainsString(e($insight->title), $html);
-        }
-    }
-
-    public function test_an_unpublished_note_is_hidden_from_the_index_and_404s(): void
-    {
-        $draft = Insight::create([
-            'title' => 'Draft note',
-            'slug' => 'draft-note',
-            'category' => 'Advisory',
-            'published_at' => null,
-        ]);
-
-        $this->assertStringNotContainsString('Draft note', $this->get('/insights')->getContent());
-        $this->get("/insights/{$draft->slug}")->assertNotFound();
-    }
-
-    public function test_a_future_dated_note_is_not_published_yet(): void
-    {
-        $scheduled = Insight::create([
-            'title' => 'Scheduled note',
-            'slug' => 'scheduled-note',
-            'category' => 'Guide',
-            'published_at' => now()->addWeek(),
-        ]);
-
-        $this->get("/insights/{$scheduled->slug}")->assertNotFound();
-    }
-
-    public function test_an_article_renders_its_body(): void
-    {
-        $insight = Insight::query()->where('slug', 'dpdpa-2023-consent-flows')->sole();
-
-        $this->get("/insights/{$insight->slug}")
-            ->assertOk()
-            ->assertSee($insight->title, escape: false)
-            ->assertSee('What a compliant record looks like', escape: false);
-    }
-
-    public function test_an_article_links_back_to_the_index_and_to_siblings(): void
-    {
-        $html = $this->get('/insights/dpdpa-2023-consent-flows')->getContent();
-
-        $this->assertStringContainsString(route('insights.index'), $html);
-        $this->assertStringContainsString(route('insights.show', 'sebi-cscrf-control-by-control'), $html);
+        $this->assertStringContainsString(route('services.show', 'network-design-architecture'), $xml);
+        $this->assertStringNotContainsString('/industries/', $xml);
+        $this->assertStringNotContainsString('/insights', $xml);
+        $this->assertStringNotContainsString('/services/offensive-security', $xml);
     }
 
     // ---- standalone pages ---------------------------------------------------
@@ -161,14 +85,31 @@ class InnerPagesTest extends TestCase
         $this->assertStringContainsString(route('responsible-disclosure'), $html);
     }
 
-    public function test_about_shows_credential_statuses_from_settings_without_inventing_any(): void
+    public function test_about_carries_the_launch_positioning_without_credentials(): void
     {
-        $html = $this->get('/about')->getContent();
+        $page = $this->get('/about');
 
-        // the statuses are placeholders until the client confirms them
-        $this->assertStringContainsString('[status]', $html);
-        $this->assertStringContainsString('[if applicable]', $html);
-        $this->assertStringNotContainsString('ISO/IEC 27001 certified', $html);
+        // Launch brief §1: newly launching, small core team, partner support,
+        // Ahmedabad and Rajkot.
+        $page->assertSeeText('small core team')
+            ->assertSeeText('technical partners')
+            ->assertSeeText('Ahmedabad and Rajkot, Gujarat, India');
+
+        // §8 / §10: no credential statuses until they can be substantiated.
+        $text = strip_tags($page->getContent());
+        foreach (['ISO/IEC 27001', 'SOC 2', 'CERT-In', '[status]', '24/7'] as $claim) {
+            $this->assertStringNotContainsString($claim, $text);
+        }
+    }
+
+    public function test_contact_makes_no_response_time_or_free_review_promise(): void
+    {
+        $text = html_entity_decode(strip_tags($this->get('/contact')->getContent()));
+
+        $this->assertStringContainsString('Let’s discuss your network & security requirements', $text);
+        foreach (['one business day', 'Forty-five minutes', 'posture review', '[email address]', '[phone number]'] as $claim) {
+            $this->assertStringNotContainsString($claim, $text);
+        }
     }
 
     // ---- navigation ---------------------------------------------------------
@@ -178,8 +119,7 @@ class InnerPagesTest extends TestCase
         $pages = array_merge(
             ['/'],
             array_map(fn ($s) => "/services/{$s}", array_keys(require __DIR__.'/../../config/practices.php')),
-            array_map(fn ($s) => "/industries/{$s}", array_keys(require __DIR__.'/../../config/industries.php')),
-            ['/insights', '/insights/dpdpa-2023-consent-flows', '/contact', '/about', '/privacy', '/terms', '/responsible-disclosure'],
+            ['/contact', '/about', '/privacy', '/terms', '/responsible-disclosure'],
         );
 
         $checked = [];
@@ -213,14 +153,14 @@ class InnerPagesTest extends TestCase
             }
         }
 
-        $this->assertGreaterThan(15, count($checked), 'expected the crawl to find the inner pages');
+        $this->assertGreaterThan(10, count($checked), 'expected the crawl to find the inner pages');
     }
 
     public function test_no_page_still_points_at_a_dead_prototype_anchor(): void
     {
         // #contact is legitimate — the closing strip is on every page.
         // #top is the hero. Anything else would scroll nowhere off the homepage.
-        foreach (['/services/offensive-security', '/industries/healthcare', '/about', '/contact', '/privacy'] as $url) {
+        foreach (['/services/vulnerability-assessment-penetration-testing', '/about', '/contact', '/privacy'] as $url) {
             $html = $this->get($url)->getContent();
 
             preg_match_all('/href="#([a-z-]+)"/', $html, $matches);

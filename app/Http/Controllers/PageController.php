@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\Industries;
 use App\Support\Practices;
 use App\Support\Seo;
 use Illuminate\View\View;
@@ -21,7 +20,7 @@ class PageController extends Controller
                 ],
                 Seo::breadcrumbs([
                     ['UB Shield', route('home')],
-                    ['Talk to an expert', null],
+                    ['Contact us', null],
                 ]),
             ),
         ]);
@@ -31,7 +30,6 @@ class PageController extends Controller
     {
         return view('pages.about', [
             'practices' => Practices::all()->map(fn (array $p, string $s) => $p + ['slug' => $s]),
-            'industries' => Industries::all(),
             'schema' => Seo::graph(
                 [
                     '@type' => 'AboutPage',

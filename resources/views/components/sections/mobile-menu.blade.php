@@ -1,14 +1,13 @@
 {{--
-    Mobile circular-reveal menu.
-    Ported verbatim from design/v7/index.html lines 547-555.
-    Regenerate with scripts/split-prototype-html.mjs — do not retype markup.
+    Mobile circular-reveal menu. Markup from design/v7/index.html lines
+    547-555; items per the launch brief §7.
 --}}
 <nav class="mmenu" id="mmenu" aria-label="Mobile">
+<a href="{{ route('home') }}">Home</a>
+<a href="{{ route('about') }}">About us</a>
 <a href="{{ home_anchor('services') }}">Services</a>
 <a href="{{ home_anchor('industries') }}">Industries</a>
-<a href="{{ home_anchor('compliance') }}">Compliance</a>
-<a href="{{ route('insights.index') }}">Resources</a>
-<a href="{{ route('about') }}">About</a>
-<a href="{{ route('contact') }}">Talk to us</a>
-<p>Secure / Privacy / Compliance / Infrastructure / MSS</p>
+<a href="{{ home_anchor('approach') }}">Our approach</a>
+<a href="{{ route('contact') }}">Contact us</a>
+<p>{{ config('site.eyebrow') }}</p>
 </nav>

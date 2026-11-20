@@ -1,6 +1,6 @@
 @props([
-    'title' => 'UB Shield — Cybersecurity & Compliance, Ahmedabad',
-    'description' => 'UB Shield tests, fixes, monitors and certifies Indian enterprises: VAPT, DPDPA privacy, ISO 27001 / SOC 2 / RBI / SEBI compliance, cloud security and a 24/7 managed SOC.',
+    'title' => 'UB Shield — Cybersecurity & Network Solutions, Ahmedabad & Rajkot',
+    'description' => 'Cybersecurity and network infrastructure services in Ahmedabad and Rajkot: network design, VAPT, network security assessment, firewall review, security hardening and infrastructure deployment.',
     // The floating industry artwork belongs to the homepage industries list;
     // every other page would ship six unused SVGs.
     'preview' => false,
@@ -30,7 +30,7 @@
 <meta property="og:image" content="{{ url('/images/brand/og-default.png') }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="UB Shield — tested, fixed, watched, proven.">
+<meta property="og:image:alt" content="UB Shield — secure today, stronger tomorrow.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $description }}">

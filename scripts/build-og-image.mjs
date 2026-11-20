@@ -51,9 +51,9 @@ p{font-size:24px;line-height:32px;max-width:36ch;margin-top:28px;color:#C7D0D8}
 </style>
 <div class="dots"></div>
 <div class="l">
-  <span class="chip">Cybersecurity &amp; compliance</span>
-  <h1>Tested.<br>Fixed.<br>Watched.<br>Proven.<span class="dot"></span></h1>
-  <p>UB Shield &mdash; Ahmedabad, India</p>
+  <span class="chip">Cybersecurity &bull; Network solutions &bull; IT infrastructure</span>
+  <h1>Secure today.<br>Stronger<br>tomorrow<span class="dot"></span></h1>
+  <p>UB Shield &mdash; Ahmedabad &amp; Rajkot, Gujarat</p>
 </div>
 <div class="r">${EMBLEM}</div>
 <div class="bar"></div>`;

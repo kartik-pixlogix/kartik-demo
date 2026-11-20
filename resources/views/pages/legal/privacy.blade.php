@@ -1,19 +1,19 @@
 <x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
 <h2>Who we are</h2>
-<p>[legal review] UB Shield, of [Street address], Ahmedabad, Gujarat, India, is the Data Fiduciary responsible for the personal data described in this notice. Our contact point for privacy matters is [email address].</p>
+<p>[legal review] UB Shield, of Ahmedabad and Rajkot, Gujarat, India, is the Data Fiduciary responsible for the personal data described in this notice. Our contact point for privacy matters is [email address].</p>
 
 <h2>What we collect</h2>
 <p>[legal review] Through this website we collect only what you send us:</p>
 <ul>
-    <li>the name, work email address, company and service interest you submit through the posture-review form;</li>
+    <li>the name, business email address, company or organization, city, service interest and brief requirement you submit through the enquiry form, and the time you gave consent to be contacted;</li>
     <li>the page you submitted from and any campaign parameters in the link you followed;</li>
     <li>a one-way keyed hash of your IP address, and your browser&rsquo;s user-agent string.</li>
 </ul>
 <p>We do not store your IP address itself. The hash lets us identify repeated automated submissions without retaining the address.</p>
 
 <h2>Why we process it</h2>
-<p>[legal review] To respond to your enquiry, to arrange and deliver the posture review you asked for, and to protect the form against automated abuse. [Confirm the lawful basis relied upon for each purpose.]</p>
+<p>[legal review] To respond to your enquiry and discuss the next steps with you, and to protect the form against automated abuse. [Confirm the lawful basis relied upon for each purpose.]</p>
 
 <h2>How long we keep it</h2>
 <p>[legal review] [Retention period to be confirmed.] We delete enquiry records once the retention period expires or you ask us to, whichever is sooner.</p>

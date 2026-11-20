@@ -1,10 +1,11 @@
 {{--
-    Contact. The closing strip already carries the form and the contact
-    details, so this page frames it rather than repeating it.
+    Contact us — launch brief §6. The closing strip carries the enquiry form
+    and the contact details; this page frames it. No free 45-minute review and
+    no response-time promise (brief §6, §8).
 --}}
 <x-layout
-    title="Talk to an expert — UB Shield"
-    description="Forty-five minutes with a senior consultant. You leave with your five biggest risks and the order to fix them in."
+    title="Contact us — UB Shield"
+    :description="config('site.contact_lead')"
     :schema="$schema"
 >
 
@@ -15,14 +16,14 @@
 <nav class="crumbs" aria-label="Breadcrumb">
 <a href="{{ route('home') }}">UB Shield</a>
 <i aria-hidden="true">/</i>
-<span aria-current="page">Talk to an expert</span>
+<span aria-current="page">Contact us</span>
 </nav>
 
 <div class="phero-g solo">
 <div>
-<span class="chip">Contact</span>
-<h1>Talk to an <span class="tnw">expert<i class="dot"></i></span></h1>
-<p class="lead">No gatekeeping and no discovery call about a discovery call. You speak to someone who does the work.</p>
+<span class="chip">Contact us</span>
+<h1>Let&rsquo;s discuss your network &amp; security <span class="tnw">requirements<i class="dot"></i></span></h1>
+<p class="lead">{{ config('site.contact_lead') }}</p>
 </div>
 </div>
 
@@ -31,13 +32,11 @@
 
 <section class="sec" style="padding-top: 0">
 <div class="wrap split">
-<h2 class="dl rm"><span>What happens <span class="tnw">next<i class="dot"></i></span></span></h2>
+<h2 class="dl rm"><span>Where we <span class="tnw">work<i class="dot"></i></span></span></h2>
 <div>
-<ul class="rows rs">
-<li><span class="n" aria-hidden="true"></span><div><h3>You send the form</h3><p>Four fields. We only ask for what we need to route it to the right person.</p></div></li>
-<li><span class="n" aria-hidden="true"></span><div><h3>We reply within one business day</h3><p>From a named consultant, not a shared inbox. If your question is quick, you get an answer rather than a meeting invitation.</p></div></li>
-<li><span class="n" aria-hidden="true"></span><div><h3>Forty-five minutes, scoped to you</h3><p>We go through your estate, what you are inspected against and where the exposure is. Bring whoever owns the systems.</p></div></li>
-<li><span class="n" aria-hidden="true"></span><div><h3>You leave with a written summary</h3><p>Your five biggest risks and the order to fix them in. No obligation, and it is yours whether or not you engage us.</p></div></li>
+<ul class="soc-list rs" style="border-color: var(--ink)">
+<li><span>Service locations</span><span>{{ config('site.locations') }}</span></li>
+<li><span>Coverage</span><span>{{ config('site.coverage') }}</span></li>
 </ul>
 <div class="ask">
 <p>Reporting a vulnerability in our own systems? Please use our <a href="{{ route('responsible-disclosure') }}" class="lnk">responsible disclosure</a> process instead.</p>

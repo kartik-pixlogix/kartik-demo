@@ -39,7 +39,10 @@ class ReviewFormTest extends TestCase
             'name' => 'Priya Shah',
             'email' => 'priya@example.com',
             'company' => 'Example Finance',
-            'service' => 'Governance, Risk & Compliance',
+            'city' => 'Rajkot',
+            'service' => 'Network Security Assessment',
+            'requirement' => 'Two offices on one flat network; we want a review before adding a third.',
+            'consent' => '1',
             ReviewRequest::HONEYPOT => '',
             ReviewRequest::TIMESTAMP => Crypt::encryptString((string) (time() - $openedSecondsAgo)),
         ], $overrides);
@@ -58,7 +61,10 @@ class ReviewFormTest extends TestCase
         $this->assertSame('Priya Shah', $lead->name);
         $this->assertSame('priya@example.com', $lead->email);
         $this->assertSame('Example Finance', $lead->company);
-        $this->assertSame('Governance, Risk & Compliance', $lead->service);
+        $this->assertSame('Network Security Assessment', $lead->service);
+        $this->assertSame('Rajkot', $lead->city);
+        $this->assertStringStartsWith('Two offices', $lead->requirement);
+        $this->assertNotNull($lead->consented_at, 'consent is recorded as a time');
     }
 
     public function test_it_queues_the_admin_notification_and_the_visitor_auto_reply(): void
@@ -158,6 +164,40 @@ class ReviewFormTest extends TestCase
         $this->assertSame(0, Lead::count());
     }
 
+    public function test_it_requires_consent_to_be_contacted(): void
+    {
+        $payload = $this->payload();
+        unset($payload['consent']);
+
+        $this->from('/')
+            ->post(route('review.store'), $payload)
+            ->assertSessionHasErrors('consent');
+
+        $this->assertSame(0, Lead::count());
+    }
+
+    public function test_it_requires_a_city_and_a_brief_requirement(): void
+    {
+        $this->from('/')
+            ->post(route('review.store'), $this->payload(['city' => '', 'requirement' => 'short']))
+            ->assertSessionHasErrors(['city', 'requirement']);
+
+        $this->assertSame(0, Lead::count());
+    }
+
+    public function test_the_form_offers_the_six_approved_services(): void
+    {
+        $this->assertSame([
+            'Enterprise Network Design & Architecture',
+            'Vulnerability Assessment & Penetration Testing (VAPT)',
+            'Network Security Assessment',
+            'Firewall Configuration & Security Review',
+            'Security Configuration & Hardening Review',
+            'Security Infrastructure Installation & Deployment',
+            'Not sure yet',
+        ], ReviewRequest::services());
+    }
+
     public function test_it_rejects_an_invalid_email(): void
     {
         $this->from('/')
@@ -178,7 +218,7 @@ class ReviewFormTest extends TestCase
 
     public function test_it_accepts_every_service_option_the_form_offers(): void
     {
-        foreach (ReviewRequest::SERVICES as $i => $service) {
+        foreach (ReviewRequest::services() as $i => $service) {
             RateLimiter::clear($this->throttleKey());
             $this->post(route('review.store'), $this->payload([
                 'email' => "person{$i}@example.com",
@@ -186,7 +226,7 @@ class ReviewFormTest extends TestCase
             ]))->assertSessionHasNoErrors();
         }
 
-        $this->assertSame(count(ReviewRequest::SERVICES), Lead::count());
+        $this->assertSame(count(ReviewRequest::services()), Lead::count());
     }
 
     // ---- spam defences -----------------------------------------------------

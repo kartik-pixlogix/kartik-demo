@@ -143,7 +143,8 @@ class AdminTest extends TestCase
 
         $csv = $this->renderCsv(collect([$lead]));
 
-        $this->assertStringContainsString('Work email', $csv);
+        $this->assertStringContainsString('Business email', $csv);
+        $this->assertStringContainsString('Brief requirement', $csv);
         $this->assertStringContainsString('Priya Shah', $csv);
         $this->assertStringContainsString('priya@example.com', $csv);
         $this->assertStringContainsString('linkedin', $csv);
@@ -222,8 +223,12 @@ class AdminTest extends TestCase
 
         $this->assertSame('hello@ubshield.in', Setting::get('contact_email'));
 
+        // The stats row is hidden for launch (brief §8), so a stat setting is
+        // stored but not shown.
+        $this->assertSame('450+', Setting::get('stat_assessments'));
+
         $html = $this->get('/')->getContent();
-        $this->assertStringContainsString('450+', $html);
+        $this->assertStringNotContainsString('450+', $html);
         $this->assertStringContainsString('hello@ubshield.in', $html);
 
         // a real value becomes a real link; a placeholder does not
@@ -231,11 +236,13 @@ class AdminTest extends TestCase
         $this->assertStringContainsString('tel:+917912345678', $html);
     }
 
-    public function test_a_placeholder_contact_detail_does_not_become_a_mailto_link(): void
+    public function test_a_placeholder_contact_detail_is_left_out(): void
     {
         $html = $this->get('/')->getContent();
 
-        $this->assertStringContainsString('[email address]', $html);
+        // Launch brief §6: only confirmed details are shown, so a placeholder
+        // is omitted entirely rather than printed or linked.
+        $this->assertStringNotContainsString('[email address]', $html);
         $this->assertStringNotContainsString('mailto:[email', $html);
         $this->assertStringNotContainsString('tel:', $html);
     }

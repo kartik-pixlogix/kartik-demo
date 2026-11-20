@@ -32,7 +32,7 @@ class RecentLeads extends TableWidget
             ->queryStringIdentifier('recent-leads')
             ->modifyQueryUsing(fn (Builder $query) => $query->limit(5))
             ->emptyStateHeading('No requests yet')
-            ->emptyStateDescription('Submissions from the posture-review form on the site appear here.')
+            ->emptyStateDescription('Submissions from the enquiry form on the site appear here.')
             ->emptyStateIcon(Heroicon::OutlinedInbox)
             ->columns([
                 TextColumn::make('created_at')

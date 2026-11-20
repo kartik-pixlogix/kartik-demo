@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CaseStudy;
 use App\Support\Practices;
 use App\Support\Seo;
 use Illuminate\View\View;
@@ -20,16 +19,9 @@ class ServiceController extends Controller
 
         return view('pages.service', [
             'practice' => $practice,
-            'caseStudy' => CaseStudy::query()
-                ->published()
-                ->where('slug', $practice['case'] ?? '')
-                ->first(),
+            'others' => Practices::except($slug)->values(),
             'schema' => Seo::graph(
                 Seo::service($practice),
-                // Only the questions actually rendered on the page are marked
-                // up. Describing an answer the visitor cannot see is what earns
-                // a manual action.
-                Seo::faq($practice['faq'] ?? []),
                 Seo::breadcrumbs([
                     ['UB Shield', route('home')],
                     ['Services', route('home').'#services'],

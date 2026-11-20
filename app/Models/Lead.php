@@ -10,14 +10,14 @@ class Lead extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'company', 'service',
+        'name', 'email', 'company', 'city', 'service', 'requirement', 'consented_at',
         'source_page', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
         'ip_hash', 'user_agent', 'notified_at',
     ];
 
     protected function casts(): array
     {
-        return ['notified_at' => 'datetime'];
+        return ['notified_at' => 'datetime', 'consented_at' => 'datetime'];
     }
 
     /**

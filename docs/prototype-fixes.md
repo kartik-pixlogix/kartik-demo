@@ -317,3 +317,38 @@ the baseline up to date.
 - At wider phone/tablet widths (seen at 760px) the hero's lower-left crosshair sits on the
   "TLS 1.3 ONLY" badge. The crosshairs are positioned in percentages of the width, while the
   artwork scales with the stage height. F5 moves both together, so this is exactly as before.
+
+---
+
+## Launch content (client brief, 2026-11-20)
+
+Source: `docs/launch-brief-2026-11-23.pdf`, "UB Shield — Final Website Content & Developer Handover
+Brief", launch 23 November. **For content, the brief now outranks the prototype.** The design
+system (tokens, fonts, square corners, components) is unchanged; what changed is what the site
+says and which sections it shows.
+
+| # | Change | Where |
+|---|---|---|
+| **C1** | Five practices → the brief's six services, with its names, categories, descriptions and URLs (§3, §7). Old service URLs 301 to the nearest new one. | `config/practices.php`, `routes/web.php` |
+| **C2** | Hero, About, Why work with UB Shield, Our approach, Industries (nine target sectors, not links), Contact copy, navigation and footer from the brief (§2, §4–§7). | `config/site.php`, `resources/views/components/sections/*` |
+| **C3** | Hidden: hero stats, trust strip (credentials + sample logos), SOC section, frameworks, case files + stats, field notes, About credentials (§8; the client's screenshots). Components kept; `pages/home.blade.php` lists them. Industry pages and field notes redirect. | `pages/home.blade.php`, `routes/web.php` |
+| **C4** | Enquiry form: City, Brief requirement, consent (stored as `consented_at`), "Submit enquiry". No free 45-minute review, no response-time promise. Placeholder contact details are omitted, not printed; only city-level locations show until real details are set in Site settings. | `sections/strip.blade.php`, `ReviewRequest`, migration `2026_11_20_090000` |
+| **C5** | Three service illustrations re-used without labels the brief rules out ("24/7", "SOC 2", "AUDIT READY"). No stock photos: the brief suggests photography, which has not been supplied. | `components/art/service-{netsec,firewall,deploy}` |
+| **C6** | Type fitted to the longer copy: hero headline scales to its column ("TOMORROW." is wider than "WATCHED."), approach and service-page headings step down, chips grow. | `resources/css/launch.css` |
+
+**The visual diff and the pinned-track comparison against the prototype no longer apply to the
+homepage**: the sections, copy and card count (six, not five) differ by design. `visual:behaviour`
+is the regression gate for motion and interaction: it now checks the pin, the counter (which counts
+cards instead of assuming five), the enquiry form's new fields, and skips — rather than fails — the
+behaviours of hidden sections. The feature tests assert the launch content and the absence of
+placeholders and unverified claims.
+
+### Still needed from the client (brief §14)
+
+- Official business email and phone, working hours, and whether a public office address exists.
+  Enter them in **Site settings**; they appear automatically once they are not placeholders.
+- The inbox that receives enquiries (`MAIL_ADMIN_ADDRESS` or the "Lead notification inbox" setting)
+  and SMTP credentials. Production mail is `MAIL_MAILER=log`, so no email is sent yet (§11).
+- Service photography, if wanted in place of the illustrations.
+- Legal review of the Privacy Policy, Terms and Responsible Disclosure (still marked `[legal review]`).
+- Confirmation that the LinkedIn/Instagram links in Site settings are UB Shield's own profiles.

@@ -1,4 +1,4 @@
-/* Posture-review form.
+/* Enquiry form (formerly the posture-review form).
  *
  * Progressive enhancement over a form that already works: the markup is a
  * normal POST to the Laravel route, so with scripting off the browser submits,
@@ -10,7 +10,7 @@
  * paths look identical.
  */
 
-const SUCCESS_FALLBACK = 'Request received. We reply within one business day';
+const SUCCESS_FALLBACK = 'Enquiry received. Our team will review it and get in touch.';
 
 export function initReviewForm($) {
     const form = $('[data-review-form]');
@@ -50,8 +50,10 @@ export function initReviewForm($) {
         if (response.ok) {
             const data = await response.json().catch(() => ({}));
             if (label) label.textContent = data.message || SUCCESS_FALLBACK;
-            form.querySelectorAll('input, select').forEach((f) => {
-                if (f.type !== 'hidden') f.value = '';
+            form.querySelectorAll('input, select, textarea').forEach((f) => {
+                if (f.type === 'hidden') return;
+                if (f.type === 'checkbox') f.checked = false;
+                else f.value = '';
             });
             return;
         }

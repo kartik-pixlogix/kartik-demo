@@ -78,3 +78,43 @@
         line-height: 26px;
     }
 }
+
+/* Launch brief §6 fields: Brief requirement (textarea) and consent.
+ * The textarea takes the input's underline treatment; the checkbox is drawn
+ * square (no rounded corners anywhere) with the brand's tick in Acid. */
+.f textarea {
+    min-height: 96px;
+    border: 0;
+    border-bottom: 2px solid var(--ink);
+    background: transparent;
+    font: 500 18px/24px var(--text);
+    color: var(--ink);
+    padding: 10px 2px;
+    border-radius: 0;
+    resize: vertical;
+    transition: border-width 0.2s, padding 0.2s;
+}
+.cta-b .f textarea { border-bottom-color: #061522; color: #061522; }
+.f textarea::placeholder { color: #061522; opacity: 0.55; }
+.f textarea:focus { outline: none; border-bottom-width: 4px; padding-left: 8px; }
+.cta-b .f textarea[aria-invalid='true'] { border-bottom-color: #061522; }
+
+.f.consent { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 12px; }
+.f.consent label { flex: 1; min-width: 0; font: 500 15px/22px var(--text); text-transform: none; }
+.f.consent .err { flex-basis: 100%; }
+.f.consent input[type='checkbox'] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    border: 2px solid #061522;
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.f.consent input[type='checkbox']:checked {
+    background: #061522 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 12 5 5 9-10' fill='none' stroke='%2327B8ED' stroke-width='3'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
+.f.consent input[type='checkbox']:focus-visible { outline: 2px solid #061522; outline-offset: 3px; }

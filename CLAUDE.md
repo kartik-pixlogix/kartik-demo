@@ -13,6 +13,13 @@ simplify anything visual. Port the prototype's CSS values and JS behaviour exact
 writing new versions from memory. If something is broken or impossible as drawn, stop and ask —
 every approved deviation is logged in `docs/prototype-fixes.md`.
 
+## Launch content (since 2026-11-20)
+
+The client's launch brief, `docs/launch-brief-2026-11-23.pdf`, is the source of truth for **content**:
+six services, nine target industries, no unverified claims. It overrides the prototype's copy and
+section list (see `docs/prototype-fixes.md`, "Launch content"). The prototype still governs the
+**design system**. Copy lives in `config/site.php` and `config/practices.php`.
+
 ## Hard rules
 
 - **Colours:** only `#061522`, `#0C2944`, `#1479D4`, `#27B8ED`, `#F4F6F8`, `#C7D0D8` and the
@@ -74,15 +81,16 @@ tests/visual/              Playwright visual + behaviour regression harness
 php artisan serve                 # the harness needs the app running
 npm run visual:diff               # must stay at 0 differing pixels, all five widths
 npm run visual:pinned             # the pinned services track, motion on
-npm run visual:behaviour          # 45 interaction checks
+npm run visual:behaviour          # interaction checks (hidden sections are skipped)
 php artisan test                  # runs against ubshield_test on MySQL, not SQLite
 ```
 
 Lead mail is queued, so `php artisan queue:work` must be running to see it.
 `MAIL_MAILER=log` writes messages to `storage/logs/laravel.log` in development.
 
-The homepage is currently **pixel-identical** to the prototype at all five widths. Treat any
-non-zero `visual:diff` as a regression and find the cause before moving on. The CSS and markup
+Before the launch brief the homepage was pixel-identical to the prototype. It now differs by design
+(launch content), so `visual:diff` is expected to report differences on the homepage; use the
+behaviour and pinned checks, and the feature tests, as the regression gate. The CSS and markup
 were generated from the prototype by `scripts/split-prototype-*.mjs`, so prefer fixing the source
 of a difference over hand-editing the output.
 

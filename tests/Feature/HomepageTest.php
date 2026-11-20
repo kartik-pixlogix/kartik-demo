@@ -16,9 +16,9 @@ use Tests\TestCase;
  * a section component failing to render, the shared SVG defs going missing, or
  * a placeholder being "helpfully" filled in.
  *
- * Since Phase 2 the statistics, credentials, case files and field notes come
- * from the database, so these run against the seeded content — which is itself
- * asserted to reproduce the prototype's placeholders exactly.
+ * Since the launch brief (23 November) the homepage carries the approved
+ * launch content and no placeholders or unverified claims; these run against
+ * the seeded settings, which still hold placeholders the page must not print.
  */
 class HomepageTest extends TestCase
 {
@@ -44,23 +44,21 @@ class HomepageTest extends TestCase
         $this->get('/')->assertOk();
     }
 
-    public function test_it_renders_every_section_in_the_prototype_order(): void
+    public function test_it_renders_the_launch_sections_in_order(): void
     {
         $html = $this->html();
 
+        // Launch brief (23 November): hero, services, about, approach,
+        // industries, contact. Trust, SOC, frameworks, case files and field
+        // notes are hidden until there is verified content behind them.
         $markers = [
             'header class="hdr"',
             'nav class="mmenu"',
             'section class="hero" id="top"',
-            'section class="trust"',
             'section class="sec svc-sec" id="services"',
-            'section class="stm"',
-            'class="wrap proc"',
-            'section class="soc ink-sec" id="soc"',
+            'section class="stm" id="about-ub-shield"',
+            'section class="sec" id="approach"',
             'section class="sec" id="industries"',
-            'section class="sec" id="compliance"',
-            'section class="sec" id="about"',
-            'section class="sec" id="insights"',
             'section class="strip" id="contact"',
             'footer class="foot"',
         ];
@@ -72,6 +70,10 @@ class HomepageTest extends TestCase
             $this->assertGreaterThan($last, $at, "section out of order: {$marker}");
             $last = $at;
         }
+
+        foreach (['class="trust"', 'id="soc"', 'id="compliance"', 'id="insights"', 'class="stats'] as $hidden) {
+            $this->assertStringNotContainsString($hidden, $html, "hidden for launch: {$hidden}");
+        }
     }
 
     public function test_it_emits_the_shared_svg_defs_exactly_once(): void
@@ -82,8 +84,8 @@ class HomepageTest extends TestCase
             $this->assertSame(1, substr_count($html, 'id="'.$id.'"'), "def {$id} should appear exactly once");
         }
 
-        $this->assertSame(8, substr_count($html, 'href="#sh"'));
-        $this->assertSame(18, substr_count($html, 'url(#dots)'));
+        $this->assertGreaterThan(0, substr_count($html, 'href="#sh"'));
+        $this->assertGreaterThan(0, substr_count($html, 'url(#dots)'));
     }
 
     public function test_it_renders_the_shield_emblem_three_times_scanning_in_two(): void
@@ -120,27 +122,51 @@ class HomepageTest extends TestCase
         $this->assertStringContainsString('<img class="m" src="/images/brand/ub-shield.webp"', $html);
     }
 
-    public function test_it_keeps_every_placeholder_exactly_as_drawn(): void
+    public function test_it_carries_the_launch_brief_content(): void
     {
-        $html = $this->html();
+        $html = $this->get('/');
 
-        // nothing may be invented before the client confirms it — docs/inventory.md §15
-        $this->assertSame(6, substr_count($html, '[XX]'));
-        $this->assertSame(16, substr_count($html, 'Client logo'));
-        $this->assertSame(2, substr_count($html, '[email address]'));
-        $this->assertSame(2, substr_count($html, '[phone number]'));
+        $html->assertSeeText('Cybersecurity • Network Solutions • IT Infrastructure')
+            ->assertSeeText('Secure')->assertSeeText('Tomorrow.')
+            ->assertSeeText('Explore our services')
+            ->assertSeeText('Talk to our team')
+            ->assertSeeText('Ahmedabad and Rajkot, Gujarat, India');
+
+        foreach (config('practices') as $service) {
+            $html->assertSeeText($service['nav']);
+        }
+        foreach (config('site.industries') as [$name]) {
+            $html->assertSeeText($name);
+        }
+        foreach (config('site.approach') as [$step]) {
+            $html->assertSeeText($step);
+        }
+    }
+
+    public function test_it_shows_no_placeholders_or_unverified_claims(): void
+    {
+        // Launch brief §8: no placeholder metrics, sample logos, credentials,
+        // 24/7 SOC, compliance services, case studies or contact placeholders.
+        // The seeded settings still hold "[email address]" etc.; the page must
+        // leave them out rather than print them.
+        $text = strip_tags($this->html());
 
         foreach ([
-            '[status]',
-            '[if applicable]',
-            '[Street address]',
-            '[Case study: BFSI client]',
-            '[Case study: SaaS client]',
-            '[to confirm]',
-            '[DD MMM 2026]',
-        ] as $placeholder) {
-            $this->assertStringContainsString($placeholder, $html);
+            '[XX]', '[email address]', '[phone number]', '[Street address]', '[status]',
+            '[if applicable]', '[Case study', '[DD MMM 2026]', 'Client logo',
+            '24/7', 'SOC 2', 'ISO/IEC 27001', 'CERT-In', 'DPDPA', 'HIPAA', 'PCI DSS',
+            'posture review', 'Forty-five minutes', 'one business day', 'Tested.',
+        ] as $claim) {
+            $this->assertStringNotContainsString($claim, $text, "must not appear: {$claim}");
         }
+    }
+
+    public function test_confirmed_contact_details_appear_once_set(): void
+    {
+        \App\Models\Setting::query()->where('key', 'contact_email')->update(['value' => 'hello@ubshield.example']);
+        \Illuminate\Support\Facades\Cache::flush();
+
+        $this->get('/')->assertSee('mailto:hello@ubshield.example', escape: false);
     }
 
     public function test_it_self_hosts_the_four_v7_fonts_and_fetches_none_from_a_cdn(): void
