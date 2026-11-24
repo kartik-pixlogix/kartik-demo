@@ -79,3 +79,10 @@
 
 /* "Subject to the agreed scope" line above a service's possible deliverables. */
 .split .svc-scope, .svc-scope { margin-bottom: 32px; max-width: 62ch; font: 500 16px/24px var(--text); color: var(--cool); }
+
+/* .prose list items were a two-column grid (marker | text), so any inline
+ * element inside an item — a <strong> label, a link — became its own grid
+ * cell and the text wrapped one word per line. Same square marker, laid out
+ * as an absolutely positioned bullet so inline content flows normally. */
+.ds6 .prose ul li { display: block; position: relative; padding-left: 28px; }
+.ds6 .prose ul li:before { position: absolute; left: 2px; top: 0; }
