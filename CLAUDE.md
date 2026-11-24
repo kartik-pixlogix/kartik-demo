@@ -15,8 +15,10 @@ every approved deviation is logged in `docs/prototype-fixes.md`.
 
 ## Launch content (since 2026-11-20)
 
-The client's launch brief, `docs/launch-brief-2026-11-23.pdf`, is the source of truth for **content**:
-six services, nine target industries, no unverified claims. It overrides the prototype's copy and
+The client's launch brief, `docs/launch-brief-2026-11-23.pdf`, and the follow-up
+`docs/change-preserve-guide-2026-11-20.pdf` are the source of truth for **content**:
+six services, nine target industries, no unverified claims, no certifications (UB Shield has none),
+no SLA or response-time promises, and no placeholders (omit what is not confirmed). It overrides the prototype's copy and
 section list (see `docs/prototype-fixes.md`, "Launch content"). The prototype still governs the
 **design system**. Copy lives in `config/site.php` and `config/practices.php`.
 

@@ -67,14 +67,41 @@ class InnerPagesTest extends TestCase
         $this->assertSame(1, substr_count($html, '<h1'), "{$url} must have exactly one h1");
     }
 
-    public function test_the_legal_pages_are_marked_for_review(): void
+    public function test_the_legal_pages_are_complete_with_no_placeholders(): void
     {
+        // Change & Preserve Guide §3: complete before publication, remove
+        // placeholder text and [legal review] notes.
         foreach (['/privacy', '/terms', '/responsible-disclosure'] as $url) {
-            $html = $this->get($url)->getContent();
+            $text = strip_tags($this->get($url)->getContent());
 
-            $this->assertStringContainsString('Legal review required', $html);
-            $this->assertStringContainsString('[legal review]', $html);
+            $this->assertStringNotContainsString('Legal review required', $text);
+            $this->assertDoesNotMatchRegularExpression('/\\[[A-Za-z][^\\]]*\\]/', $text, "{$url} still has a [placeholder]");
+            $this->assertStringContainsString('24 November 2026', $text);
         }
+    }
+
+    public function test_the_privacy_policy_covers_what_the_guide_requires(): void
+    {
+        $page = $this->get('/privacy');
+
+        // what is collected, why, who can access it, how to contact us
+        $page->assertSeeText('What we collect')
+            ->assertSeeText('Why we use it')
+            ->assertSeeText('Who can access it')
+            ->assertSeeText('How to contact us about your data')
+            ->assertSeeText('brief requirement');
+    }
+
+    public function test_responsible_disclosure_sets_boundaries_without_inviting_testing(): void
+    {
+        $text = html_entity_decode(strip_tags($this->get('/responsible-disclosure')->getContent()));
+
+        $this->assertStringContainsString('It is not an invitation to test our systems', $text);
+        $this->assertStringContainsString('Responsible testing boundaries', $text);
+        $this->assertStringContainsString('How to report', $text);
+        $this->assertStringContainsString('does not currently offer payment or rewards', $text);
+        // no response-time commitment (guide §3)
+        $this->assertDoesNotMatchRegularExpression('/within \\d+|business day|hours of/i', $text);
     }
 
     public function test_the_legal_pages_cross_link_to_each_other(): void

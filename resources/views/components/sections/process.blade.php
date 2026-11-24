@@ -8,7 +8,7 @@
 <div class="proc-l">
 <h2 class="dl rm"><span>Our <span class="tnw">approach<i class="dot"></i></span></span></h2>
 <div class="counter" aria-hidden="true"><span data-stepno>01</span><i></i><span class="tot">{{ str_pad((string) count(config('site.approach')), 2, '0', STR_PAD_LEFT) }}</span></div>
-<p class="rv" style="max-width: 420px">{{ config('site.delivery') }}</p>
+<p class="rv" style="max-width: 420px">{{ config('site.approach_note') }} {{ config('site.delivery') }}</p>
 </div>
 <div class="steps">
 @foreach (config('site.approach') as $i => [$title, $detail])

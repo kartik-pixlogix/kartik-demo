@@ -156,6 +156,19 @@ class ServicePageTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('practices')]
+    public function test_deliverables_are_conditional_on_the_agreed_scope(string $slug): void
+    {
+        // Change & Preserve Guide §3 / §7: deliverables subject to scope.
+        $page = $this->get("/services/{$slug}");
+
+        $page->assertSeeText('Possible deliverables')
+            ->assertSeeText('Subject to the agreed scope');
+        foreach (Practices::find($slug)['deliverables'] as $item) {
+            $page->assertSeeText($item);
+        }
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('practices')]
     public function test_service_pages_make_no_unverified_claims(string $slug): void
     {
         // Launch brief §8 / §10: no placeholder figures, certifications,

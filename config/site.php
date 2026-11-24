@@ -20,10 +20,17 @@ return [
     // §2 Hero
     'eyebrow' => 'Cybersecurity • Network Solutions • IT Infrastructure',
     'headline' => ['Secure', 'Today.', 'Stronger', 'Tomorrow.'],
-    'hero_lead' => 'UB Shield provides cybersecurity and network infrastructure services to help businesses build secure, reliable and resilient IT environments. From network architecture and security assessments to firewall configuration and infrastructure deployment, we help organizations identify risks and strengthen their digital infrastructure.',
+    // Change & Preserve Guide (20 November) §6 "Homepage headline".
+    'hero_lead' => 'UB Shield provides cybersecurity and network infrastructure services to help businesses protect their systems, strengthen their networks and build reliable IT environments.',
 
     // §1 Recommended company description
     'description' => 'UB Shield is a growing cybersecurity and network infrastructure services company focused on helping businesses build secure, reliable and resilient IT environments.',
+
+    // Guide §6 "Short company description" (full).
+    'description_long' => 'UB Shield is a growing cybersecurity and network infrastructure services company focused on helping businesses build secure, reliable and resilient IT environments. We provide practical solutions across network design, vulnerability assessment, network security, firewall configuration, security hardening and infrastructure deployment. We work with organizations to understand their requirements, identify risks and implement suitable security and network solutions.',
+
+    // Guide §6 "About Us commitment copy".
+    'commitment' => "As a growing cybersecurity and network infrastructure company, UB Shield is focused on delivering practical, reliable and scope-driven technology solutions. We believe in transparent communication, responsible security practices and continuous technical improvement. Our delivery approach combines our core team's capabilities with specialized technical partners when additional expertise is required. We aim to build long-term client relationships through quality execution, clear documentation and dependable support.",
 
     // §2 About UB Shield
     'about' => [
@@ -50,6 +57,12 @@ return [
         ['Implement & Configure', 'Carry out agreed network, security or infrastructure work using the core team and approved technical partners as required.'],
         ['Validate & Handover', 'Test the agreed implementation, document the work and provide handover information and recommendations.'],
     ],
+
+    // Guide §3 "Our Approach": show that scope, timelines and deliverables are agreed.
+    'approach_note' => 'Scope, timelines and deliverables are agreed with you before work begins.',
+
+    // Guide §3 "Industries": target sectors, not existing clients.
+    'industries_note' => 'Sectors UB Shield aims to serve. These are the markets we are building towards, not a list of existing clients.',
 
     // §4 Target industries — sectors UB Shield aims to serve, not client claims.
     // `preview` picks the hover artwork (resources/views/components/ui/

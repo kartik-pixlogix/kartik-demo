@@ -352,3 +352,29 @@ placeholders and unverified claims.
 - Service photography, if wanted in place of the illustrations.
 - Legal review of the Privacy Policy, Terms and Responsible Disclosure (still marked `[legal review]`).
 - Confirmation that the LinkedIn/Instagram links in Site settings are UB Shield's own profiles.
+
+---
+
+## Change & Preserve Guide (client, 2026-11-20; applied 2026-11-24)
+
+Source: `docs/change-preserve-guide-2026-11-20.pdf`. Preserves the six services, their names,
+categories and URLs, Ahmedabad and Rajkot, and the four-stage approach. Changes:
+
+| # | Change | Where |
+|---|---|---|
+| **G1** | Hero lead replaced with the guide's §6 line; About lead uses the full §6 company description; About gains the §6 "Our commitment" copy (partner-supported delivery stated). | `config/site.php`, `pages/about.blade.php` |
+| **G2** | Service pages: "What you get" becomes **Possible deliverables**, using the guide's §7 lists verbatim, under "Subject to the agreed scope…". | `config/practices.php`, `pages/service.blade.php` |
+| **G3** | Our approach (homepage, service pages, About) states that scope, timelines and deliverables are agreed before work begins. | `config/site.php` (`approach_note`) |
+| **G4** | Industries say explicitly that they are target markets, not existing clients. | `config/site.php` (`industries_note`) |
+| **G5** | Breadcrumbs and footer use the full approved service names, matching cards and page titles. | `pages/service.blade.php`, `sections/footer.blade.php` |
+| **G6** | Privacy Policy, Terms of Use and Responsible Disclosure completed: no placeholders, no `[legal review]` banner. Written only from how the site actually works; no court, retention period, response time or reward that has not been approved. Reporting/contact channel is the enquiry form until a company email is confirmed. **Still needs review by a qualified professional** (guide §3). | `pages/legal/*`, `components/legal-layout.blade.php`, `routes/web.php` |
+| **G7** | `public/favicon.ico` was an empty file; now a 16/32/48 px icon from the brand mark. | `public/favicon.ico` |
+
+### Not done — needs UB Shield (guide §3, §10, §14)
+
+- **Company email, phone, office address, working hours**: none confirmed, so none shown (Site
+  settings fill them in automatically once real).
+- **Form delivery to a monitored inbox**: needs the recipient address and SMTP credentials.
+  Production mail is still `MAIL_MAILER=log`, so enquiries are stored in the admin but not emailed.
+- **Staging**: the guide asks for staging approval before production. This round was prepared
+  for approval (screenshots + changed-page list) and **not deployed** until UB Shield approves.

@@ -42,9 +42,6 @@
 @endforeach
 </nav>
 <div class="legal prose rv">
-<p><span class="flag">Legal review required</span></p>
-<p>This text is a placeholder. It sets out the structure the final document needs and must be reviewed and replaced by the client&rsquo;s counsel before launch. Every section below is marked <strong>[legal review]</strong>.</p>
-<hr>
 {{ $slot }}
 </div>
 </div>

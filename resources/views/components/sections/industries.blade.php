@@ -7,7 +7,7 @@
 --}}
 <section class="sec" id="industries">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span><span class="tnw">Industries<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">Industries we aim to serve.</p></div>
+<div class="sec-t"><h2 class="dl rm"><span><span class="tnw">Industries<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">{{ config('site.industries_note') }}</p></div>
 <div class="inds rs">
 @foreach (config('site.industries') as $i => [$name, $detail, $preview])
 

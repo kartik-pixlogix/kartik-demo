@@ -16,7 +16,8 @@
 |   nav          the service name, used in menus, cards, titles
 |   lead         the brief's description
 |   included     scope items named in the description
-|   deliverables outputs named in the description (omitted where none are)
+|   deliverables possible deliverables, subject to the agreed scope: the
+|                Change & Preserve Guide (20 November) section 7, verbatim
 |   note         an authorization/scope line required by §10 of the brief
 |
 | The old five practices are redirected in routes/web.php ($legacyServices).
@@ -43,6 +44,10 @@ return [
             'Network documentation',
         ],
         'deliverables' => [
+            'Network topology diagram',
+            'IP addressing and VLAN plan',
+            'Routing/switching and redundancy design',
+            'VPN connectivity plan',
             'Network documentation',
         ],
     ],
@@ -62,10 +67,11 @@ return [
             'Other authorized systems',
         ],
         'deliverables' => [
-            'Risk ratings',
-            'Evidence',
+            'Scope and methodology',
+            'Findings with severity/risk ratings',
+            'Evidence for validated findings',
             'Remediation recommendations',
-            'Retesting to verify fixes',
+            'Retest results where included',
         ],
         'note' => 'VAPT and penetration testing are performed only with written authorization and a clearly agreed scope. Testing is limited to systems and environments explicitly authorized by the client.',
     ],
@@ -87,7 +93,9 @@ return [
             'Potential attack paths',
         ],
         'deliverables' => [
-            'Prioritized risk report',
+            'Review of exposed services, segmentation, firewall boundaries, remote access and access controls',
+            'Prioritized findings',
+            'Risk-reduction recommendations',
         ],
         'note' => 'Assessments are performed only with written authorization and a clearly agreed scope.',
     ],
@@ -109,8 +117,10 @@ return [
             'Rule conflicts',
         ],
         'deliverables' => [
-            'Unnecessary access identified',
-            'Recommended improvements',
+            'Review of policies, NAT, VPN, administrator access, firmware and logging',
+            'Identified misconfigurations',
+            'Recommended policy improvements',
+            'Agreed change record',
         ],
     ],
 
@@ -130,10 +140,10 @@ return [
             'Security products',
         ],
         'deliverables' => [
-            'Secure baselines applied',
-            'Unnecessary services removed',
-            'Authentication strengthened',
-            'Attack surfaces reduced',
+            'Configuration gap report',
+            'Baseline comparison where applicable',
+            'Hardening recommendations',
+            'Implementation/validation record where included',
         ],
     ],
 
@@ -155,9 +165,11 @@ return [
             'Backup solutions',
         ],
         'deliverables' => [
-            'Initial testing',
+            'Deployment plan',
+            'Installation and configuration records',
+            'Initial test results',
             'Handover documentation',
-            'Administrator training',
+            'Administrator guidance/training where included',
         ],
     ],
 

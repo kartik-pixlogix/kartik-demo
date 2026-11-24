@@ -76,3 +76,6 @@
 .ds6 .prose > * + * { margin-top: 28px; }
 .ds6 .prose > h2 { margin-top: 56px; }
 .ds6 .prose > h3 { margin-top: 40px; }
+
+/* "Subject to the agreed scope" line above a service's possible deliverables. */
+.split .svc-scope, .svc-scope { margin-bottom: 32px; max-width: 62ch; font: 500 16px/24px var(--text); color: var(--cool); }

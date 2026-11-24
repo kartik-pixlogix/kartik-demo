@@ -2,8 +2,8 @@
     Service page template, shared by the six approved services
     (config/practices.php, launch brief §3).
 
-    Sections: hero, what's included, what you get (where the brief names
-    outputs), our approach (brief §5), the authorization note where §10
+    Sections: hero, what's included, possible deliverables (Change &
+    Preserve Guide section 7, subject to scope), our approach (brief §5), the authorization note where §10
     requires one, the other services, closing strip. The prototype-era
     frameworks, case-file and FAQ sections are gone: the brief supplies no
     content for them and rules out the compliance and case-study claims.
@@ -23,7 +23,7 @@
 <i aria-hidden="true">/</i>
 <a href="{{ route('home') }}#services">Services</a>
 <i aria-hidden="true">/</i>
-<span aria-current="page">{{ $practice['short'] }}</span>
+<span aria-current="page">{{ $practice['nav'] }}</span>
 </nav>
 
 <div class="phero-g">
@@ -61,19 +61,23 @@
 @if (! empty($practice['deliverables']))
 <section class="sec">
 <div class="wrap split">
-<h2 class="dl rm"><span>What you <span class="tnw">get<i class="dot"></i></span></span></h2>
+<h2 class="dl rm"><span>Possible <span class="tnw">deliverables<i class="dot"></i></span></span></h2>
+<div>
+<p class="rv svc-scope">Subject to the agreed scope. Deliverables are confirmed for each engagement; not every project includes every item below.</p>
 <ul class="rows rs">
 @foreach ($practice['deliverables'] as $item)
-<li><span class="n" aria-hidden="true"></span><div><h3>{{ $item }}</h3></div></li>
+{{-- <wbr> after each slash: "Implementation/validation" is otherwise one unbreakable word at 320px --}}
+<li><span class="n" aria-hidden="true"></span><div><h3>{!! str_replace('/', '/<wbr>', e($item)) !!}</h3></div></li>
 @endforeach
 </ul>
+</div>
 </div>
 </section>
 @endif
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Our <span class="tnw">approach<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">{{ config('site.delivery') }}</p></div>
+<div class="sec-t"><h2 class="dl rm"><span>Our <span class="tnw">approach<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">{{ config('site.approach_note') }} {{ config('site.delivery') }}</p></div>
 <div class="fw-notes rs">
 @foreach (config('site.approach') as $i => [$phase, $detail])
 <div><b>{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }} / {{ $phase }}</b>{{ $detail }}</div>

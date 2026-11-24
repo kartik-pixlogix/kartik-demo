@@ -7,7 +7,7 @@
 <footer class="foot">
 <div class="wrap">
 <div class="foot-g rs">
-<div><h3>Services<i class="dot"></i></h3><ul>@foreach (\App\Support\Practices::all() as $slug => $service)<li><a href="{{ route('services.show', $slug) }}">{{ $service['short'] }}</a></li>@endforeach</ul></div>
+<div><h3>Services<i class="dot"></i></h3><ul>@foreach (\App\Support\Practices::all() as $slug => $service)<li><a href="{{ route('services.show', $slug) }}">{{ $service['nav'] }}</a></li>@endforeach</ul></div>
 <div><h3>Company<i class="dot"></i></h3><ul><li><a href="{{ route('about') }}">About us</a></li><li><a href="{{ home_anchor('industries') }}">Industries</a></li><li><a href="{{ home_anchor('approach') }}">Our approach</a></li><li><a href="{{ route('contact') }}">Contact us</a></li></ul></div>
 <div><h3>Contact<i class="dot"></i></h3><ul>@unless (is_placeholder(setting('contact_email')))<li><a href="mailto:{{ setting('contact_email') }}">{{ setting('contact_email') }}</a></li>@endunless @unless (is_placeholder(setting('contact_phone')))<li><a href="{{ contact_href(setting('contact_phone'), 'tel') }}">{{ setting('contact_phone') }}</a></li>@endunless<li><a href="{{ route('contact') }}">Ahmedabad &amp; Rajkot, Gujarat</a></li></ul></div>
 <x-social-links />

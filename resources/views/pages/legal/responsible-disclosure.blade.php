@@ -1,41 +1,46 @@
 <x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
-<h2>Our commitment</h2>
-<p>[legal review] We ask our clients to run a disclosure process, so we run one ourselves. If you have found a vulnerability in a UB Shield system, we want to hear about it, and we will not take legal action against anyone who reports one in good faith under this policy.</p>
+{{--
+    Change & Preserve Guide (20 November) §3: define an approved reporting
+    channel, permitted scope, handling expectations and responsible testing
+    boundaries, and do not invite unauthorized testing. No response-time
+    promise and no reward (none approved). Have it reviewed by a qualified
+    professional before treating it as final.
+--}}
+
+<h2>Purpose</h2>
+<p>If you believe you have found a security vulnerability in a UB Shield system, we want to hear about it. This policy explains how to report it and what we ask of you. It is not an invitation to test our systems: it does not authorize any testing beyond the boundaries set out below.</p>
 
 <h2>Scope</h2>
-<p>[legal review] [Confirm the systems in scope before publishing — at minimum the public website and any client-facing portal. List explicitly rather than saying "all our systems".]</p>
+<p>This policy covers the UB Shield website at ubshield.in. It does not cover:</p>
+<ul>
+    <li>systems belonging to our clients, partners or suppliers, including our hosting and email providers;</li>
+    <li>any system you do not have explicit permission to access.</li>
+</ul>
+<p>If you are unsure whether something is in scope, report what you have observed without testing further.</p>
 
 <h2>How to report</h2>
-<p>[legal review] Email [security contact address] with:</p>
-<ul>
-    <li>the affected system or URL;</li>
-    <li>what the issue is and what an attacker could do with it;</li>
-    <li>the steps to reproduce it;</li>
-    <li>how you would like to be credited, if at all.</li>
-</ul>
-<p>[Confirm whether a PGP key will be published for encrypted reports.]</p>
+<p>Use the enquiry form on our <a href="/contact">Contact us</a> page, choose &ldquo;Not sure yet&rdquo; as the service and start your message with &ldquo;Security report&rdquo;. Give a short description of the issue and the affected page, but do not include exploit code, sensitive data or full technical details in the form. We will reply to the email address you give and agree how you can send the details safely.</p>
 
-<h2>What we ask of you</h2>
+<h2>Responsible testing boundaries</h2>
 <ul>
-    <li>Give us a reasonable opportunity to fix the issue before disclosing it publicly.</li>
-    <li>Do not access, modify or delete data that is not yours, and stop as soon as you have confirmed the issue.</li>
-    <li>Do not run denial-of-service testing, send spam, or use social engineering against our staff or clients.</li>
-    <li>Do not use automated scanning that degrades service for others.</li>
+    <li>Only observe or test what is needed to confirm the issue, and stop as soon as you have.</li>
+    <li>Do not access, download, modify or delete data that does not belong to you. If you come across personal data, stop and tell us.</li>
+    <li>Do not run denial-of-service tests, high-volume or automated scanning, or anything that could degrade the website for others.</li>
+    <li>Do not use social engineering, phishing or physical methods against UB Shield, its staff, clients or partners.</li>
+    <li>Do not submit test enquiries in bulk or use the enquiry form to send malicious content.</li>
+    <li>Keep the details confidential until we have had a reasonable opportunity to fix the issue.</li>
 </ul>
 
 <h2>What you can expect from us</h2>
 <ul>
-    <li>Acknowledgement of your report within [response time].</li>
-    <li>An assessment and an indicative timeline for a fix.</li>
-    <li>Updates while we work on it, and confirmation when it is resolved.</li>
-    <li>Credit, if you want it. [Confirm whether a hall of fame will be published.]</li>
+    <li>We will acknowledge your report and keep you informed of our progress.</li>
+    <li>We will look into it, decide how to address it and tell you when it has been resolved.</li>
+    <li>We will treat your report and your details confidentially.</li>
+    <li>If you would like to be credited once the issue is resolved, tell us how.</li>
 </ul>
 
-<h2>Out of scope</h2>
-<p>[legal review] [List the usual exclusions once confirmed — missing headers with no demonstrated impact, reports from automated scanners without validation, issues in third-party services we do not control, and so on.]</p>
-
 <h2>Rewards</h2>
-<p>[legal review] [Confirm whether any bounty is offered. If none, say so plainly rather than leaving it unstated.]</p>
+<p>UB Shield does not currently offer payment or rewards for vulnerability reports.</p>
 
 </x-legal-layout>

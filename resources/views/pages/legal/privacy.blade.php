@@ -1,36 +1,49 @@
 <x-legal-layout :pageTitle="$pageTitle" :lastUpdated="$lastUpdated" :description="$description" :schema="$schema">
 
+{{--
+    Change & Preserve Guide (20 November) §3: explain what the enquiry form
+    collects, why, who can access it and how to contact us about it. Every
+    statement here is a fact about how this site works (see
+    App\Http\Controllers\ReviewController and App\Models\Lead). Have it
+    reviewed by a qualified professional before treating it as final.
+--}}
+
 <h2>Who we are</h2>
-<p>[legal review] UB Shield, of Ahmedabad and Rajkot, Gujarat, India, is the Data Fiduciary responsible for the personal data described in this notice. Our contact point for privacy matters is [email address].</p>
+<p>This website is operated by UB Shield, a cybersecurity and network infrastructure services company serving Ahmedabad and Rajkot, Gujarat, India. This policy explains how we handle the personal data you give us through this website.</p>
 
 <h2>What we collect</h2>
-<p>[legal review] Through this website we collect only what you send us:</p>
+<p>We collect only what you choose to send us through the enquiry form:</p>
 <ul>
-    <li>the name, business email address, company or organization, city, service interest and brief requirement you submit through the enquiry form, and the time you gave consent to be contacted;</li>
-    <li>the page you submitted from and any campaign parameters in the link you followed;</li>
-    <li>a one-way keyed hash of your IP address, and your browser&rsquo;s user-agent string.</li>
+    <li>your name, business email address, company or organization and city;</li>
+    <li>the service you are interested in and the brief requirement you describe;</li>
+    <li>the time you confirmed you agree to be contacted about your enquiry.</li>
 </ul>
-<p>We do not store your IP address itself. The hash lets us identify repeated automated submissions without retaining the address.</p>
+<p>When you submit the form we also record the page you submitted it from, any campaign parameters in the link you followed, your browser&rsquo;s user-agent string and a one-way keyed hash of your IP address. We do not store your IP address itself; the hash only lets us recognise repeated automated submissions.</p>
 
-<h2>Why we process it</h2>
-<p>[legal review] To respond to your enquiry and discuss the next steps with you, and to protect the form against automated abuse. [Confirm the lawful basis relied upon for each purpose.]</p>
+<h2>Why we use it</h2>
+<p>We use your enquiry to understand your requirements, reply to you and discuss the next steps, and to protect the form against spam and automated abuse. We do not use it for advertising, and we do not sell it or share it for marketing.</p>
+<p>We process your enquiry because you have asked us to and confirmed that we may contact you about it. You can withdraw that consent at any time by asking us to delete your enquiry.</p>
+
+<h2>Who can access it</h2>
+<ul>
+    <li><strong>UB Shield.</strong> Enquiries are stored in our website&rsquo;s database and can be seen only by UB Shield personnel who have an administrator login, which requires two-factor authentication.</li>
+    <li><strong>Our service providers.</strong> The website and its database are hosted by our hosting provider, and enquiry notifications are sent through our email service. They process the data only to provide those services to us.</li>
+    <li><strong>Technical partners.</strong> We sometimes work with technical partners when a project needs additional expertise. We will not share your enquiry with a partner without telling you first.</li>
+</ul>
 
 <h2>How long we keep it</h2>
-<p>[legal review] [Retention period to be confirmed.] We delete enquiry records once the retention period expires or you ask us to, whichever is sooner.</p>
-
-<h2>Who we share it with</h2>
-<p>[legal review] [List processors: email delivery, hosting, any CRM.] We do not sell personal data and we do not share it for advertising.</p>
+<p>We keep an enquiry for as long as we need it to respond to you and follow up. If it does not lead to an engagement, we delete it once it is no longer needed, or sooner if you ask us to.</p>
 
 <h2>Cookies</h2>
-<p>[legal review] [Confirm which cookies this site sets. At the time of writing it sets only the session and CSRF cookies required for the form to work, and uses no analytics or advertising cookies — confirm before publishing.]</p>
+<p>This website sets only the cookies it needs to work: a session cookie and a security token that protects the enquiry form against cross-site request forgery. It uses no analytics, advertising or tracking cookies.</p>
 
 <h2>Your rights</h2>
-<p>[legal review] Under the Digital Personal Data Protection Act 2023 you may ask for access to your personal data, correction or completion of it, and its erasure. You may also nominate another person to exercise these rights on your behalf. To make a request, contact [email address].</p>
+<p>Under the Digital Personal Data Protection Act 2023 you may ask us for a summary of the personal data we hold about you, ask us to correct, complete or erase it, withdraw your consent, and nominate another person to exercise these rights for you. If you are not satisfied with how we handle a request, you may complain to the Data Protection Board of India.</p>
 
-<h2>Grievance redressal</h2>
-<p>[legal review] [Name and contact details of the Grievance Officer, and the response timeline committed to.] If you are not satisfied with our response you may complain to the Data Protection Board of India.</p>
+<h2>How to contact us about your data</h2>
+<p>Send us a message through the enquiry form on our <a href="/contact">Contact us</a> page, choose &ldquo;Not sure yet&rdquo; as the service and start your message with &ldquo;Privacy request&rdquo;. We will reply to the email address you give.</p>
 
-<h2>Changes</h2>
-<p>[legal review] We will post any change to this notice on this page and update the date above.</p>
+<h2>Changes to this policy</h2>
+<p>If we change how we handle personal data, we will update this page and the date at the top.</p>
 
 </x-legal-layout>

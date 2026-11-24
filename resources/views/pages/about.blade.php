@@ -1,5 +1,7 @@
 {{--
-    About us — launch brief §1 and §2.
+    About us — launch brief §1 and §2, and the Change & Preserve Guide
+    (20 November) §3 and §6: newly launching, small core team, technical
+    partners for specialist delivery, no team names or certifications.
 
     Built only from what the brief states: a newly launching company with a
     small core team, technical partners where a project needs them, initial
@@ -27,7 +29,7 @@
 <div>
 <span class="chip">About us</span>
 <h1>Secure today. Stronger <span class="tnw">tomorrow.<i class="dot"></i></span></h1>
-<p class="lead">{{ config('site.description') }}</p>
+<p class="lead">{{ config('site.description_long') }}</p>
 <div class="cta-row">
 <a href="#contact" class="btn mag">Talk to our team <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"></path></svg></a>
 </div>
@@ -45,6 +47,15 @@
 <p>{{ $paragraph }}</p>
 @endforeach
 <p>{{ config('site.delivery') }}</p>
+</div>
+</div>
+</section>
+
+<section class="sec">
+<div class="wrap split">
+<h2 class="dl rm"><span>Our <span class="tnw">commitment<i class="dot"></i></span></span></h2>
+<div class="prose rv">
+<p>{{ config('site.commitment') }}</p>
 </div>
 </div>
 </section>
@@ -73,7 +84,7 @@
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Our <span class="tnw">approach<i class="dot"></i></span></span></h2></div>
+<div class="sec-t"><h2 class="dl rm"><span>Our <span class="tnw">approach<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">{{ config('site.approach_note') }}</p></div>
 <div class="fw-notes rs">
 @foreach (config('site.approach') as $i => [$phase, $detail])
 <div><b>{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }} / {{ $phase }}</b>{{ $detail }}</div>
@@ -84,7 +95,7 @@
 
 <section class="sec">
 <div class="wrap">
-<div class="sec-t"><h2 class="dl rm"><span>Industries we aim to <span class="tnw">serve<i class="dot"></i></span></span></h2></div>
+<div class="sec-t"><h2 class="dl rm"><span>Industries we aim to <span class="tnw">serve<i class="dot"></i></span></span></h2><p class="rv" style="max-width: 420px">{{ config('site.industries_note') }}</p></div>
 <ul class="chips rv">
 @foreach (config('site.industries') as [$name])
 <li>{{ $name }}</li>
