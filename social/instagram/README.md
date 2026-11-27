@@ -37,9 +37,9 @@ numbers, offers or promises.
 Nothing important sits in the top 200 px or the bottom 380 px of a reel, where Instagram
 draws its own interface.
 
-**Voice files.** `audio/vo/<nn>.mp3` is the raw take for each reel. A reel with no voice
-file is rendered with music and captions only, at an estimated pace. To add or replace a
-voice: record the five lines from `output/reel-scripts.md` with a clear pause between
+**Voice files.** `audio/vo/<nn>.mp3` is the raw take for each reel (all 15 have one). A
+reel with no voice file is rendered with music and captions only, at an estimated pace. To
+replace a voice: record the five lines from `output/reel-scripts.md` with a clear pause between
 beats, save it as `audio/vo/<nn>.mp3`, then run `prep-audio.mjs` and re-render that reel.
 
 ## Design
