@@ -41,3 +41,6 @@ Thumbs.db
 /docs/diff/build
 /docs/diff/pinned
 /docs/diff/diff-*.png
+
+# Instagram kit: intermediate audio cuts (prep-audio.mjs regenerates them).
+/social/instagram/audio/tmp

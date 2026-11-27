@@ -6,9 +6,14 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 import { posts } from './content.mjs';
+import { reels } from './reels.mjs';
 
-const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'output');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const OUT = join(HERE, '..', 'output');
+const hasVoice = (id) => existsSync(join(HERE, '..', 'audio', 'vo', `${String(id).padStart(2, '0')}.mp3`));
+const silent = posts.filter((p) => !hasVoice(p.id)).map((p) => p.id);
 const pad = (n) => String(n).padStart(2, '0');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -25,8 +30,9 @@ const sections = posts.map((p) => {
   </header>
   <div class="media">
     <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0">${pages}</div></figure>
-    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/${name}.mp4" controls playsinline muted loop preload="none" poster="reels/${name}-cover.jpg"></video></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920, ${hasVoice(p.id) ? 'voiceover + music' : 'music only (voice pending)'}</figcaption><video src="reels/${name}.mp4" controls playsinline preload="none" poster="reels/${name}-cover.jpg"></video></figure>
   </div>
+  <details class="vo"><summary>Reel voiceover script</summary><ol>${reels[p.id].vo.map((l) => `<li>${esc(l)}</li>`).join('')}</ol></details>
   <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="${esc(caption)}">Copy caption</button></div><p>${esc(p.caption)}</p><p class="tags">${esc(p.hashtags)}</p></div>
 </article>`;
 }).join('\n');
@@ -68,6 +74,7 @@ figcaption{font:600 12px/1 var(--text);letter-spacing:.06em;text-transform:upper
 .strip:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 .strip img{flex:none;width:min(326px,74vw);height:auto;scroll-snap-align:start;display:block}
 video{width:100%;aspect-ratio:9/16;background:#000;display:block;object-fit:cover}
+.vo{border:1px solid var(--line);padding:12px 20px}.vo summary{cursor:pointer;font:600 13px/1.4 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.vo ol{margin:12px 0 4px;padding-left:22px;display:flex;flex-direction:column;gap:6px;max-width:78ch}
 .cap{background:var(--surface);border:1px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:10px}
 .cap-h{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .cap p{max-width:78ch}
@@ -80,12 +87,12 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);paddin
 <div class="wrap">
 <div class="top">
   <h1>Instagram kit</h1>
-  <p class="lead">Fifteen carousel posts and fifteen matching reels for UB Shield, built from the carousel content document. Text is the document&rsquo;s, word for word.</p>
-  <ul class="facts"><li>15 carousels &times; 5 pages</li><li>15 reels, about 20 seconds each</li><li>Posts 1&ndash;3: company</li><li>Posts 4&ndash;15: two per service</li><li>Reels are silent: add audio in Instagram</li></ul>
+  <p class="lead">Fifteen carousel posts and fifteen reels for UB Shield, built from the carousel content document. Carousel text is the document&rsquo;s, word for word. Each reel is its own edit: a hook, three scenes and a call to action, with a voiceover, music and captions that follow the voice.</p>
+  <ul class="facts"><li>15 carousels &times; 5 pages</li><li>15 reels, 30 to 38 seconds each</li><li>Posts 1&ndash;3: company</li><li>Posts 4&ndash;15: two per service</li><li>Female voiceover + music${silent.length ? `: reels ${silent.join(', ')} are music only for now` : ''}</li></ul>
   <nav class="nav" aria-label="Jump to a post">${nav}</nav>
 </div>
 ${sections}
-<footer>Scroll each strip sideways to see all five pages. Press play on a reel to load it.</footer>
+<footer>Scroll each strip sideways to see all five pages. Press play on a reel to load it, with sound on.</footer>
 </div>
 <script>
 document.querySelectorAll('.copy').forEach(function (b) {

@@ -1,10 +1,11 @@
 /*
  * Renders one reel per post to output/reels/<nn-slug>.mp4: 1080x1920, 30 fps,
- * H.264 + a silent AAC track (add music in Instagram).
+ * H.264 + AAC, with the voiceover, music and transition sounds from
+ * audio/mix/<nn>.m4a (run prep-audio.mjs first), plus a cover still.
  *
- * The stage animates with CSS. Each frame pauses every animation at an exact
- * time and takes a screenshot, so the result is identical on every run and
- * never drops a frame. Needs ffmpeg on PATH.
+ * reel.html animates with CSS. Each frame pauses every animation at an exact
+ * time and takes a screenshot, so the result is identical on every run, never
+ * drops a frame and stays in step with the audio. Needs ffmpeg on PATH.
  *
  *   node social/instagram/src/render-reels.mjs          # all 15
  *   node social/instagram/src/render-reels.mjs 4 5      # only posts 4 and 5
@@ -17,47 +18,50 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { posts } from './content.mjs';
 
 const FPS = 30;
-const HOLD = 0.6; // seconds held on the last frame
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = join(HERE, '..', 'output', 'reels');
-const STAGE = pathToFileURL(join(HERE, 'stage.html')).href;
+const MIX = join(HERE, '..', 'audio', 'mix');
+const STAGE = pathToFileURL(join(HERE, 'reel.html')).href;
 const only = process.argv.slice(2).map(Number);
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => { console.error('PAGE ERROR', e); process.exitCode = 1; });
+const seek = (t) => page.evaluate((ms) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = ms; } }, t * 1000);
 
 for (const post of posts) {
     if (only.length && !only.includes(post.id)) continue;
-    const name = `${String(post.id).padStart(2, '0')}-${post.slug}`;
-    await page.goto(`${STAGE}?mode=reel&post=${post.id}`);
+    const nn = String(post.id).padStart(2, '0');
+    const name = `${nn}-${post.slug}`;
+    await page.goto(`${STAGE}?post=${post.id}`);
     await page.waitForSelector('html[data-ready]');
-    const seconds = (await page.evaluate(() => window.REEL_SECONDS)) + HOLD;
-    const frames = Math.round(seconds * FPS);
+    const { dur, hookDone } = await page.evaluate(() => ({ dur: window.REEL_SECONDS, hookDone: window.HOOK_DONE }));
+    const frames = Math.round(dur * FPS);
 
     const ff = spawn('ffmpeg', [
         '-y', '-loglevel', 'error',
         '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-        '-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100',
-        '-c:v', 'libx264', '-preset', 'medium', '-crf', '22', '-pix_fmt', 'yuv420p',
+        '-i', join(MIX, `${nn}.m4a`),
+        '-map', '0:v', '-map', '1:a',
+        '-c:v', 'libx264', '-preset', 'slow', '-crf', '23', '-pix_fmt', 'yuv420p',
         '-profile:v', 'high', '-level', '4.2', '-r', String(FPS),
-        '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart',
+        '-c:a', 'copy', '-t', String(frames / FPS), '-movflags', '+faststart',
         join(OUT, `${name}.mp4`),
     ], { stdio: ['pipe', 'inherit', 'inherit'] });
     const done = new Promise((res, rej) => ff.on('close', (c) => (c === 0 ? res() : rej(new Error('ffmpeg ' + c)))));
 
     for (let f = 0; f < frames; f++) {
-        await page.evaluate((ms) => {
-            for (const a of document.getAnimations()) { a.pause(); a.currentTime = ms; }
-        }, (f / FPS) * 1000);
-        const buf = await page.screenshot({ type: 'jpeg', quality: 94 });
+        await seek(f / FPS);
+        const buf = await page.screenshot({ type: 'jpeg', quality: 93 });
         if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
     }
     ff.stdin.end();
     await done;
-    // A still from the cover scene, to use as the reel's cover image in Instagram.
-    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-ss', '3.4', '-i', join(OUT, `${name}.mp4`), '-frames:v', '1', '-q:v', '3', join(OUT, `${name}-cover.jpg`)]);
-    console.log(`${name}.mp4  ${seconds.toFixed(1)}s  ${frames} frames`);
+    // Cover image for Instagram: the finished hook, every line lit, with the logo and no caption.
+    await seek(hookDone);
+    await page.addStyleTag({ content: '.caps,.pulse,.fl{display:none}.hl{color:var(--paper)!important}.hl.last{color:var(--cyan)!important}.hd{opacity:1!important}.sting img{opacity:1!important;transform:translate(-436px,-532px) scale(.229)!important}' });
+    await page.screenshot({ type: 'jpeg', quality: 92, path: join(OUT, `${name}-cover.jpg`) });
+    console.log(`${name}.mp4  ${dur.toFixed(1)}s  ${frames} frames`);
 }
 await browser.close();

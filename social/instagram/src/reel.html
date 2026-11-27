@@ -1,0 +1,314 @@
+<!doctype html>
+<!--
+  UB Shield reel stage (1080x1920): reel.html?post=6
+
+  Format: big hook words that land one by one -> logo sting -> three scenes
+  (title + animated cards or a tilted illustration card, blur-swipe cuts) ->
+  logo close with the web address. Voiceover captions run along the bottom.
+
+  Everything is on one CSS timeline. Times come from timing.js, which
+  prep-audio.mjs derives from the voiceover, so cuts land on her beats.
+  render-reels.mjs seeks every animation per frame.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'Sofia Sans Extra Condensed';src:url('../../../public/fonts/sofia-sans-extra-condensed-var.woff2') format('woff2');font-weight:700 900}
+@font-face{font-family:'Instrument Sans';src:url('../../../public/fonts/instrument-sans-var.woff2') format('woff2');font-weight:500 700}
+:root{--navy:#061522;--mid:#0C2944;--blue:#1479D4;--cyan:#27B8ED;--paper:#F4F6F8;--cool:#C7D0D8;--line:rgba(199,208,216,.22);
+  --disp:'Sofia Sans Extra Condensed','Arial Narrow',sans-serif;--text:'Instrument Sans','Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(.16,.84,.24,1);--snap:cubic-bezier(.2,.9,.2,1)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--navy)}
+.cv{position:relative;width:1080px;height:1920px;overflow:hidden;color:var(--paper);font-family:var(--text);font-weight:500;background:var(--navy)}
+
+/* ---------- backdrop: the theme gradient, always moving ---------- */
+.bg,.bg i{position:absolute}
+.bg{inset:0;background:linear-gradient(170deg,#04101b 0%,var(--navy) 38%,var(--mid) 100%)}
+.bg .g1{width:1500px;height:1500px;right:-640px;top:-560px;background:radial-gradient(closest-side,rgba(20,121,212,.78),rgba(20,121,212,0));animation:drift 9s ease-in-out infinite alternate}
+.bg .g2{width:900px;height:900px;right:-330px;top:-330px;background:radial-gradient(closest-side,rgba(39,184,237,.5),rgba(39,184,237,0));animation:drift 7s ease-in-out -2s infinite alternate-reverse}
+.bg .g3{width:1400px;height:1400px;left:-700px;bottom:-560px;background:radial-gradient(closest-side,rgba(20,121,212,.55),rgba(20,121,212,0));animation:drift 11s ease-in-out -4s infinite alternate}
+.bg .dots{inset:0;background-image:radial-gradient(circle at 2px 2px,rgba(39,184,237,.3) 1.7px,transparent 2.2px);background-size:34px 34px;-webkit-mask-image:radial-gradient(70% 45% at 60% 40%,#000,transparent 80%);mask-image:radial-gradient(70% 45% at 60% 40%,#000,transparent 80%);animation:dots 7s linear infinite}
+.orbit{position:absolute;left:50%;top:1540px;width:1200px;height:1200px;margin-left:-600px;opacity:.45}
+.orbit svg{width:100%;height:100%;overflow:visible}
+.orbit .o1{transform-origin:600px 600px;animation:rot 40s linear infinite}
+.orbit .o2{transform-origin:600px 600px;animation:rot 28s linear infinite reverse}
+/* a pulse of light on every cut */
+.pulse{position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 42%,rgba(39,184,237,.42),transparent 70%);opacity:0;animation:pulse .7s ease-out calc(var(--t)*1s) both}
+.fl{position:absolute;top:-15%;height:130%;width:340px;left:0;transform:translateX(-1100px) skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(39,184,237,.55) 35%,rgba(244,246,248,.9) 50%,rgba(39,184,237,.55) 65%,transparent);mix-blend-mode:screen;filter:blur(6px);animation:flash .5s cubic-bezier(.6,0,.3,1) calc((var(--t) - .16)*1s) both;z-index:7}
+
+/* ---------- 1. hook ---------- */
+.hook{position:absolute;left:72px;right:72px;transform-origin:20% 50%;animation:hookOut .34s cubic-bezier(.6,0,.9,.4) calc(var(--out)*1s) forwards,zoom calc(var(--out)*1s) linear both}
+.hl{display:block;width:max-content;font:900 200px/.9 var(--disp);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;opacity:0;transform-origin:left center;
+  animation:slam .3s var(--snap) calc(var(--t)*1s) forwards,dim .3s linear calc(var(--dim)*1s) forwards}
+.hl.last{color:var(--cyan);animation:slam .3s var(--snap) calc(var(--t)*1s) forwards}
+.hook .bar{display:block;height:12px;width:0;background:var(--cyan);margin-top:44px;animation:bar .6s var(--ease) calc(var(--t)*1s) forwards}
+
+/* ---------- 2. logo sting, which settles into the header ---------- */
+.sting{position:absolute;left:400px;top:660px;width:280px;height:280px;z-index:6}
+.sting img{width:100%;height:100%;object-fit:contain;display:block;opacity:0;animation:sting .9s var(--ease) calc(var(--t)*1s) forwards,gone .25s linear calc(var(--out)*1s) forwards}
+.sting .ring{position:absolute;left:50%;top:50%;width:1000px;height:1000px;margin:-500px 0 0 -500px;border:4px solid var(--cyan);border-radius:50%;opacity:0;transform:scale(0);animation:ring .9s cubic-bezier(.2,.7,.2,1) calc(var(--t)*1s) forwards}
+.sting .ring.b{border-width:2px;animation-delay:calc((var(--t) + .14)*1s)}
+.hd{position:absolute;left:152px;right:72px;top:236px;height:64px;display:flex;align-items:center;justify-content:space-between;opacity:0;z-index:6;animation:fadeIn .4s linear calc(var(--t)*1s) forwards,gone .25s linear calc(var(--out)*1s) forwards}
+.hd .w{height:27px;width:auto;display:block}
+.dash{display:flex;gap:10px}
+.dash span{width:64px;height:6px;background:rgba(244,246,248,.24);overflow:hidden}
+.dash i{display:block;height:100%;background:var(--cyan);transform:scaleX(0);transform-origin:left;animation:fill calc((var(--e) - var(--s))*1s) linear calc(var(--s)*1s) forwards}
+
+/* ---------- 3. scenes ---------- */
+.sc{position:absolute;inset:0;opacity:0;transform-origin:50% 45%;animation:scIn .46s var(--ease) calc(var(--s)*1s) forwards,scOut .26s cubic-bezier(.6,0,.9,.4) calc((var(--e) - .26)*1s) forwards,zoom calc((var(--e) - var(--s))*1s) linear calc(var(--s)*1s) both}
+.kick{position:absolute;left:72px;top:372px;display:flex;align-items:center;gap:16px;font:600 30px/1 var(--text);text-transform:uppercase;letter-spacing:.06em}
+.kick b{font:900 54px/1 var(--disp);color:var(--cyan);letter-spacing:0}
+.kick span{border:2px solid var(--line);padding:10px 14px;color:var(--cool)}
+.ttl{position:absolute;left:72px;right:72px;top:452px;margin:0;font:900 180px/.88 var(--disp);text-transform:uppercase;letter-spacing:-.008em}
+.ttl .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.09em 0 .1em;margin:-.09em 0 -.1em}
+.ttl .w>i{display:inline-block;font-style:normal;transform:translateY(118%);animation:up .7s var(--ease) calc((var(--s) + .12 + var(--i)*.06)*1s) forwards}
+.ttl .dot{display:inline-block;width:.17em;height:.17em;border-radius:50%;background:var(--cyan);margin-left:.07em;transform:scale(0);animation:popDot .5s var(--snap) calc((var(--s) + .75)*1s) forwards}
+.ttl .nb{white-space:nowrap}
+.zone{position:absolute;left:72px;right:72px;perspective:1300px}
+
+/* rows: the list items arrive as cards, one per beat of the voice */
+.row{display:flex;align-items:center;gap:26px;background:linear-gradient(100deg,rgba(20,121,212,.30),rgba(12,41,68,.62));border:2px solid rgba(199,208,216,.2);padding:0 28px 0 18px;opacity:0;transform-origin:50% 0;
+  animation:rowIn .55s var(--ease) calc(var(--t)*1s) forwards,rowGlow 1.1s ease-out calc(var(--t)*1s) forwards}
+.row + .row{margin-top:16px}
+.row .ic{flex:none;display:flex;align-items:center;justify-content:center;background:var(--cyan)}
+.row .ic svg{width:56%;height:56%;fill:none;stroke:var(--navy);stroke-width:3.4}
+.row.warn .ic{background:transparent;border:3px solid var(--cyan)}
+.row.warn .ic svg{stroke:var(--cyan)}
+.row p{margin:0;font-weight:600;line-height:1.14}
+
+/* the illustration as a floating, tilted card */
+.card{position:relative;opacity:0;transform-style:preserve-3d;animation:cardIn .95s var(--ease) calc((var(--s) + .35)*1s) forwards}
+.card .in{position:relative;height:100%;background:linear-gradient(155deg,rgba(20,121,212,.34) 0%,rgba(12,41,68,.72) 55%,rgba(6,21,34,.86) 100%);border:2px solid rgba(39,184,237,.42);overflow:hidden;animation:float 7s ease-in-out calc((var(--s) + 1.3)*1s) infinite alternate}
+.card.k1{animation-name:cardIn1}.card.k1 .in{animation-name:float1}.card.k2{animation-name:cardIn2}.card.k2 .in{animation-name:float2}
+.card .in:before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 2px 2px,rgba(39,184,237,.3) 1.6px,transparent 2.1px);background-size:28px 28px}
+.card .in:after{content:'';position:absolute;top:-20%;bottom:-20%;width:38%;left:-60%;background:linear-gradient(90deg,transparent,rgba(244,246,248,.2),transparent);transform:skewX(-18deg);animation:sweep 1.5s ease-in-out calc((var(--s) + 1)*1s) forwards}
+.card svg{position:absolute;left:50%;top:50%;height:86%;width:auto;aspect-ratio:5/4;transform:translate(-50%,-50%);overflow:visible}
+.card .tabs{position:absolute;left:22px;top:20px;display:flex;gap:9px;z-index:2}
+.card .tabs i{width:13px;height:13px;border-radius:50%;background:rgba(199,208,216,.4)}
+
+.pairs .pr{background:linear-gradient(100deg,rgba(20,121,212,.30),rgba(12,41,68,.62));border:2px solid rgba(199,208,216,.2);border-left:10px solid var(--cyan);padding:30px 34px 34px;opacity:0;transform-origin:50% 0;animation:rowIn .6s var(--ease) calc(var(--t)*1s) forwards}
+.pairs .pr + .pr{margin-top:22px;border-left-color:var(--blue)}
+.pairs span{display:block;font:600 30px/1 var(--text);text-transform:uppercase;letter-spacing:.06em;color:var(--cyan);margin-bottom:16px}
+.pairs p{margin:0;font:600 58px/1.14 var(--text)}
+
+/* ---------- 4. close ---------- */
+.close{position:absolute;inset:0;opacity:0;animation:scIn .5s var(--ease) calc(var(--s)*1s) forwards}
+.close .halo{position:absolute;left:50%;top:500px;width:760px;height:760px;margin:-380px 0 0 -380px;border-radius:50%;border:3px solid rgba(39,184,237,.7);opacity:0;animation:halo 2.4s ease-out calc((var(--s) + .3)*1s) infinite}
+.close .halo.b{animation-delay:calc((var(--s) + 1.5)*1s)}
+.close .glow{position:absolute;left:50%;top:500px;width:900px;height:900px;margin:-450px 0 0 -450px;background:radial-gradient(closest-side,rgba(39,184,237,.42),transparent)}
+.close .mk{position:absolute;left:50%;top:340px;width:310px;height:320px;margin-left:-155px;object-fit:contain;opacity:0;animation:markIn .8s var(--snap) calc((var(--s) + .12)*1s) forwards}
+.close .wm{position:absolute;left:50%;top:706px;width:560px;margin-left:-280px;opacity:0;animation:fu .6s var(--ease) calc((var(--s) + .45)*1s) forwards}
+.close h2{position:absolute;left:72px;right:72px;top:826px;margin:0;text-align:center;font:900 128px/.9 var(--disp);text-transform:uppercase}
+.close h2 .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.09em 0 .1em;margin:-.09em 0 -.1em}
+.close h2 .w>i{display:inline-block;font-style:normal;transform:translateY(118%);animation:up .7s var(--ease) calc((var(--s) + .6 + var(--i)*.06)*1s) forwards}
+.close .btn{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:30px;background:var(--paper);color:var(--navy);padding:0 20px 0 40px;height:120px;font:600 50px/1 var(--text);white-space:nowrap;opacity:0;animation:btnIn .6s var(--snap) calc((var(--s) + 1.25)*1s) forwards}
+.close .btn i{width:82px;height:82px;border-radius:50%;background:var(--cyan);display:flex;align-items:center;justify-content:center;animation:beat 1.5s ease-in-out calc((var(--s) + 2)*1s) infinite}
+.close .btn svg{width:36px;height:36px;fill:none;stroke:var(--navy);stroke-width:2.6}
+.close .loc{position:absolute;left:0;right:0;text-align:center;font:500 34px/1.2 var(--text);color:var(--cool);opacity:0;animation:fu .6s var(--ease) calc((var(--s) + 1.6)*1s) forwards}
+
+/* ---------- captions: what she is saying, in step with her ---------- */
+.caps{position:absolute;left:0;right:0;top:1436px;height:96px;z-index:8}
+.cap{position:absolute;left:50%;top:0;transform:translateX(-50%);white-space:nowrap;background:rgba(4,16,27,.82);border-bottom:5px solid var(--cyan);padding:16px 28px 14px;font:600 50px/1.15 var(--text);opacity:0;
+  animation:capIn .16s ease-out calc(var(--a)*1s) forwards,gone .1s linear calc(var(--b)*1s) forwards}
+
+/* ---------- illustration classes (from the website) ---------- */
+.spin{transform-box:fill-box;transform-origin:center;animation:rot 22s linear infinite}
+.flow{stroke-dasharray:6 10;animation:flow 2.2s linear infinite}
+.pl2{animation:pl2 2.4s ease-in-out infinite}
+.scanY{animation:scanY 2.4s ease-in-out infinite alternate}
+.scanX{animation:scanX 3.6s ease-in-out infinite alternate}
+.redact{transform-box:fill-box;transform-origin:left;animation:redact 3s ease-in-out infinite alternate}
+.tick{stroke-dasharray:40;animation:tick 3.2s ease-out infinite}
+.hunt{animation:hunt 6s cubic-bezier(.65,0,.35,1) infinite}
+.knob{animation:knob 2.6s ease-in-out infinite alternate}
+
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(-90px,80px) scale(1.14)}}
+@keyframes dots{to{background-position:34px 34px}}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes pulse{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@keyframes flash{from{transform:translateX(-1100px) skewX(-18deg)}to{transform:translateX(1700px) skewX(-18deg)}}
+@keyframes slam{from{opacity:0;transform:translateY(46px) scale(1.2);filter:blur(18px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes dim{to{color:rgba(244,246,248,.3)}}
+@keyframes bar{to{width:210px}}
+@keyframes hookOut{to{opacity:0;transform:translateY(-150px) scale(.95);filter:blur(22px)}}
+@keyframes sting{0%{opacity:0;transform:scale(.25)}20%{opacity:1;transform:scale(1.1)}30%{transform:scale(1)}52%{opacity:1;transform:scale(1)}100%{opacity:1;transform:translate(-436px,-532px) scale(.229)}}
+@keyframes ring{0%{opacity:.9;transform:scale(0)}100%{opacity:0;transform:scale(1.25)}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes gone{to{opacity:0}}
+@keyframes fill{to{transform:scaleX(1)}}
+@keyframes scIn{from{opacity:0;transform:translateX(240px) scaleX(1.05);filter:blur(24px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes scOut{to{opacity:0;transform:translateX(-240px) scaleX(1.06);filter:blur(24px)}}
+@keyframes up{to{transform:none}}
+@keyframes zoom{from{scale:1}to{scale:1.045}}
+@keyframes popDot{from{transform:scale(0)}60%{transform:scale(1.35)}to{transform:scale(1)}}
+@keyframes rowIn{from{opacity:0;transform:rotateX(-46deg) translateY(56px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rowGlow{0%{border-color:var(--cyan);box-shadow:0 0 0 0 rgba(39,184,237,.0)}30%{border-color:var(--cyan)}100%{border-color:rgba(199,208,216,.2)}}
+@keyframes cardIn{from{opacity:0;transform:translateX(200px) rotateY(-34deg) rotateX(14deg) scale(.84);filter:blur(12px)}to{opacity:1;transform:rotateY(-9deg) rotateX(5deg);filter:blur(0)}}
+@keyframes float{from{transform:rotateY(0deg) translateY(0)}to{transform:rotateY(14deg) rotateX(-4deg) translateY(-14px)}}
+@keyframes sweep{to{left:130%}}
+@keyframes cardIn1{from{opacity:0;transform:translateX(-200px) rotateY(34deg) rotateX(14deg) scale(.84);filter:blur(12px)}to{opacity:1;transform:rotateY(9deg) rotateX(5deg);filter:blur(0)}}
+@keyframes float1{from{transform:rotateY(0deg) translateY(0)}to{transform:rotateY(-14deg) rotateX(-4deg) translateY(-14px)}}
+@keyframes cardIn2{from{opacity:0;transform:translateY(160px) rotateX(-38deg) scale(.84);filter:blur(12px)}to{opacity:1;transform:rotateX(8deg);filter:blur(0)}}
+@keyframes float2{from{transform:rotateX(0deg) scale(1)}to{transform:rotateX(-12deg) rotateY(6deg) scale(1.04)}}
+@keyframes halo{0%{opacity:.8;transform:scale(.45)}100%{opacity:0;transform:scale(1.5)}}
+@keyframes markIn{from{opacity:0;transform:scale(.4);filter:blur(14px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes btnIn{from{opacity:0;transform:translateX(-50%) translateY(40px) scale(.9)}to{opacity:1;transform:translateX(-50%)}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+@keyframes capIn{from{opacity:0;transform:translateX(-50%) translateY(12px) scale(.95)}to{opacity:1;transform:translateX(-50%)}}
+@keyframes flow{to{stroke-dashoffset:-64}}
+@keyframes pl2{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes scanY{from{transform:translateY(-80px)}to{transform:translateY(80px)}}
+@keyframes scanX{from{transform:translateX(0)}to{transform:translateX(290px)}}
+@keyframes redact{from{transform:scaleX(.08)}to{transform:scaleX(1)}}
+@keyframes tick{0%{stroke-dashoffset:40}30%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes hunt{0%,22%{transform:translate(329px,160px)}33%,55%{transform:translate(174px,220px)}66%,88%{transform:translate(359px,280px)}100%{transform:translate(329px,160px)}}
+@keyframes knob{from{transform:translateX(0)}to{transform:translateX(16px)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#27B8ED" opacity=".22"></circle></pattern>
+<path id="sh" d="M40 0 76 13v34c0 26-17 42-36 50C21 89 4 73 4 47V13Z"></path>
+</defs></svg>
+<div id="root"></div>
+<script src="data.js"></script>
+<script src="timing.js"></script>
+<script>
+const BRAND = '../../../public/images/brand/';
+const id = new URLSearchParams(location.search).get('post') || '1';
+const post = IG.posts.find((p) => String(p.id) === id);
+const T = TIMING[id];
+const [b0, b1, b2, b3, b4] = T.b;
+window.REEL_SECONDS = T.dur;
+window.HOOK_DONE = +(b1 - 0.62).toFixed(2); // every hook line on screen: the cover still
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const pad = (n) => String(n).padStart(2, '0');
+const art = (key) => IG.art[key].replace('__SHIELD__', BRAND + 'ub-shield.png');
+const CHECK = '<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>';
+const BANG = '<svg viewBox="0 0 24 24"><path d="M12 5v9M12 18.4v.6"></path></svg>';
+const NE = '<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg>';
+
+function splitHeading(h) {
+  let m = h.match(/^((?:Steps?|Mistake|Check) [\d &]+): (.+)$/);
+  if (m) return { kick: m[1], title: m[2] };
+  m = h.match(/^(\d(?: & \d)?)\. (.+)$/);
+  if (m) return { kick: 'Step ' + m[1], title: m[2] };
+  return { kick: null, title: h };
+}
+const words = (text, tail = '') => text.split(' ').map((w, i, all) => {
+  const span = `<span class="w" style="--i:${i}"><i>${esc(w)}</i></span>`;
+  return i === all.length - 1 && tail ? `<span class="nb">${span}${tail}</span>` : span;
+}).join(' ');
+
+/* 1. hook: one line per beat, each dimming as the next lands */
+const hook = IG.hooks[id];
+const step = Math.min(0.85, (b1 - 1.5) / hook.length);
+const hookHTML = hook.map((line, i) => {
+  const t = 0.22 + i * step, last = i === hook.length - 1;
+  return `<span class="hl${last ? ' last' : ''}" style="--t:${t.toFixed(2)};--dim:${(t + step).toFixed(2)}">${esc(line)}</span>`;
+}).join('') + `<i class="bar" style="--t:${(0.22 + hook.length * step).toFixed(2)}"></i>`;
+
+/* 3. scenes */
+const bounds = [[b1, b2], [b2, b3], [b3, b4]];
+const scenes = bounds.map(([s0, e], i) => {
+  const s = i === 0 ? +(s0 + 0.36).toFixed(3) : s0; // the first scene waits for the logo
+  const p = post.pages[i + 1];
+  const { kick, title } = splitHeading(p.h);
+  const label = kick || post.service || 'UB Shield';
+  const warn = /warning|weak|mistake|problem/i.test(p.h);
+  let zone;
+  if (p.bullets) {
+    const gap = Math.min(1.0, (e - s - 1.9) / p.bullets.length);
+    zone = `<div class="zone rows">${p.bullets.map((b, k) => `<div class="row${warn ? ' warn' : ''}" style="--t:${(s + 0.85 + k * gap).toFixed(2)}"><span class="ic">${warn ? BANG : CHECK}</span><p>${esc(b)}</p></div>`).join('')}</div>`;
+  } else if (p.pairs) {
+    zone = `<div class="zone pairs">${p.pairs.map(([k, v], n) => `<div class="pr" style="--t:${(s + 0.9 + n * ((e - s - 1.4) / 2.2)).toFixed(2)}"><span>${esc(k)}</span><p>${esc(v)}</p></div>`).join('')}</div>`;
+  } else {
+    zone = `<div class="zone"><div class="card k${i}"><div class="in"><div class="tabs"><i></i><i></i><i></i></div>${art(post.art)}</div></div></div>`;
+  }
+  const dot = /[?!]$/.test(title) ? '' : '<i class="dot"></i>';
+  return `<section class="sc" style="--s:${s};--e:${e}"><p class="kick"><b>${pad(i + 1)}</b><span>${esc(label)}</span></p><h2 class="ttl">${words(title, dot)}</h2>${zone}</section>`;
+}).join('');
+
+/* 4. close */
+const last = post.pages[4];
+const close = `<section class="close" style="--s:${b4}"><i class="glow"></i><i class="halo"></i><i class="halo b"></i>
+<img class="mk" src="${BRAND}ub-shield.png" alt=""><img class="wm" src="${BRAND}ub-wordmark.png" alt="UB Shield">
+<h2>${words(last.h)}</h2>
+<div class="btn"><span>ubshield.in/contact</span><i>${NE}</i></div>
+<p class="loc">Ahmedabad &amp; Rajkot, Gujarat</p></section>`;
+
+const caps = T.caps.map((c) => `<span class="cap" style="--a:${c.a};--b:${c.b}">${esc(c.text)}</span>`).join('');
+const cuts = [b1 - 0.1, b2, b3, b4].map((t) => `<i class="pulse" style="--t:${t}"></i><i class="fl" style="--t:${t}"></i>`).join('');
+const dashes = bounds.map(([s, e]) => `<span><i style="--s:${s};--e:${e}"></i></span>`).join('');
+const orbit = '<div class="orbit"><svg viewBox="0 0 1200 1200"><g fill="none" stroke="#27B8ED"><circle cx="600" cy="600" r="590" stroke-width="2" opacity=".5"></circle><g class="o1"><circle cx="600" cy="600" r="510" stroke-width="2" stroke-dasharray="4 14"></circle><path d="M600 90a510 510 0 0 1 360 150" stroke-width="5"></path></g><g class="o2"><circle cx="600" cy="600" r="420" stroke-width="2" stroke-dasharray="2 10" opacity=".7"></circle><circle cx="600" cy="180" r="9" fill="#27B8ED" stroke="none"></circle></g></g></svg></div>';
+
+document.getElementById('root').innerHTML = `<div class="cv">
+<div class="bg"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="dots"></i></div>${orbit}
+<div class="hook" style="--out:${(b1 - 0.5).toFixed(2)}">${hookHTML}</div>
+${scenes}${close}
+<div class="sting" style="--t:${(b1 - 0.3).toFixed(2)};--out:${(b4 - 0.3).toFixed(2)}"><i class="ring"></i><i class="ring b"></i><img src="${BRAND}ub-shield.png" alt=""></div>
+<div class="hd" style="--t:${(b1 + 0.46).toFixed(2)};--out:${(b4 - 0.3).toFixed(2)}"><img class="w" src="${BRAND}ub-wordmark.png" alt="UB Shield"><div class="dash">${dashes}</div></div>
+${cuts}<div class="caps">${caps}</div></div>`;
+
+/* ---- fitting ---- */
+document.fonts.ready.then(() => {
+  const cv = document.querySelector('.cv');
+  // hook: as large as the widest line allows, centred in the upper two thirds
+  const hk = cv.querySelector('.hook'), lines = [...hk.querySelectorAll('.hl')];
+  // each line is set as wide as the column allows, so the stack reads as one block
+  let cap = 330;
+  const setHook = () => lines.forEach((l) => { l.style.fontSize = '200px'; l.style.fontSize = Math.max(96, Math.min(cap, Math.floor((200 * 936) / l.offsetWidth))) + 'px'; });
+  setHook();
+  while (hk.offsetHeight > 960 && cap > 120) { cap -= 10; setHook(); }
+  hk.style.top = Math.round(800 - hk.offsetHeight / 2) + 'px';
+
+  cv.querySelectorAll('.sc').forEach((sc) => {
+    const ttl = sc.querySelector('.ttl'), zone = sc.querySelector('.zone');
+    const rows = [...zone.querySelectorAll('.row')];
+    const FLOOR = 1396;
+    let ts = 184;
+    const lay = () => {
+      ttl.style.fontSize = ts + 'px';
+      const top = ttl.offsetTop + ttl.offsetHeight + 54;
+      zone.style.top = top + 'px';
+      return FLOOR - top;
+    };
+    let avail = lay();
+    while ((ttl.scrollWidth > ttl.clientWidth || Math.round(ttl.offsetHeight / (ts * 0.88)) > 3) && ts > 100) { ts -= 6; avail = lay(); }
+    if (rows.length) {
+      const need = () => (avail - (rows.length - 1) * 16) / rows.length;
+      while (need() < 124 && ts > 142) { ts -= 6; avail = lay(); }
+      while (need() < 96 && ts > 104) { ts -= 6; avail = lay(); }
+      const h = Math.max(78, Math.min(176, need()));
+      rows.forEach((r) => {
+        r.style.minHeight = h + 'px';
+        r.querySelector('.ic').style.cssText += `width:${Math.min(96, h - 36)}px;height:${Math.min(96, h - 36)}px`;
+        r.querySelector('p').style.fontSize = Math.min(60, h * 0.4) + 'px';
+      });
+      // long items wrap: shrink until the stack fits
+      let fs = Math.min(60, h * 0.4);
+      while (zone.offsetTop + zone.offsetHeight > FLOOR && fs > 28) { fs -= 2; rows.forEach((r) => { r.querySelector('p').style.fontSize = fs + 'px'; }); }
+    } else if (zone.classList.contains('pairs')) {
+      let fs = 58;
+      while (zone.offsetTop + zone.offsetHeight > FLOOR && fs > 36) { fs -= 2; zone.querySelectorAll('p').forEach((p) => { p.style.fontSize = fs + 'px'; }); }
+    } else {
+      zone.querySelector('.card').style.height = Math.min(640, avail - 20) + 'px';
+    }
+  });
+
+  // close: heading up to three lines, then the button and locations under it
+  const cl = cv.querySelector('.close'), h2 = cl.querySelector('h2');
+  let cs = 132;
+  h2.style.fontSize = cs + 'px';
+  while (Math.round(h2.offsetHeight / (cs * 0.9)) > 3 && cs > 84) { cs -= 4; h2.style.fontSize = cs + 'px'; }
+  const y = h2.offsetTop + h2.offsetHeight + 52;
+  cl.querySelector('.btn').style.top = y + 'px';
+  cl.querySelector('.loc').style.top = y + 120 + 36 + 'px';
+  document.documentElement.dataset.ready = '1';
+});
+</script>
+</body>
+</html>
