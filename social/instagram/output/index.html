@@ -1,0 +1,273 @@
+<title>UB Shield Instagram Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Sofia+Sans+Extra+Condensed:wght@800;900&display=swap">
+<style>
+/* Layout: a contact sheet. Each post is one band: its five pages in a strip, its reel beside them, its caption below. */
+:root{--bg:#061522;--surface:#0C2944;--fg:#F4F6F8;--muted:#C7D0D8;--line:#1d3d5c;--accent:#27B8ED;--accent-fg:#061522;
+  --disp:'Sofia Sans Extra Condensed','Arial Narrow',sans-serif;--text:'Instrument Sans','Helvetica Neue',Arial,sans-serif;color-scheme:dark}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#F4F6F8;--surface:#FFFFFF;--fg:#061522;--muted:#44566a;--line:#C7D0D8;--accent:#1479D4;--accent-fg:#FFFFFF;color-scheme:light}}
+:root[data-theme="light"]{--bg:#F4F6F8;--surface:#FFFFFF;--fg:#061522;--muted:#44566a;--line:#C7D0D8;--accent:#1479D4;--accent-fg:#FFFFFF;color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--text);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;padding-block:44px 80px;display:flex;flex-direction:column;gap:44px}
+h1,h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;line-height:.94;margin:0;text-wrap:balance}
+h1{font-size:clamp(44px,8vw,84px)}
+h2{font-size:clamp(26px,3.6vw,38px)}
+h3{font:600 13px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+p{margin:0}
+.top{display:flex;flex-direction:column;gap:16px}
+.lead{color:var(--muted);font-size:18px;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.facts li{border:1px solid var(--line);background:var(--surface);padding:7px 12px;font-weight:500;font-size:14px}
+.nav{display:flex;flex-wrap:wrap;gap:6px}
+.nav a{min-width:44px;text-align:center;color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--surface);padding:8px 0;font:900 20px/1 var(--disp)}
+.nav a:hover,.nav a:focus-visible{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);outline:none}
+.post{display:flex;flex-direction:column;gap:18px;border-top:2px solid var(--line);padding-top:28px;scroll-margin-top:12px}
+.post header{display:flex;gap:18px;align-items:flex-start}
+.num{font:900 54px/.9 var(--disp);color:var(--accent);flex:none}
+.kind{color:var(--muted);font-weight:500;margin-top:6px}
+.media{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:20px;align-items:start}
+figure{margin:0;min-width:0;display:flex;flex-direction:column;gap:8px}
+figcaption{font:600 12px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px}
+.strip:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.strip img{flex:none;width:min(326px,74vw);height:auto;scroll-snap-align:start;display:block}
+video{width:100%;aspect-ratio:9/16;background:#000;display:block;object-fit:cover}
+.cap{background:var(--surface);border:1px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.cap-h{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cap p{max-width:78ch}
+.tags{color:var(--accent);font-weight:500}
+.copy{font:600 14px/1 var(--text);background:var(--accent);color:var(--accent-fg);border:0;padding:10px 14px;cursor:pointer}
+.copy:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:18px}
+@media (max-width:760px){.media{grid-template-columns:minmax(0,1fr)}.reel{max-width:260px}.post header{gap:12px}.num{font-size:42px}}
+</style>
+<div class="wrap">
+<div class="top">
+  <h1>Instagram kit</h1>
+  <p class="lead">Fifteen carousel posts and fifteen matching reels for UB Shield, built from the carousel content document. Text is the document&rsquo;s, word for word.</p>
+  <ul class="facts"><li>15 carousels &times; 5 pages</li><li>15 reels, about 20 seconds each</li><li>Posts 1&ndash;3: company</li><li>Posts 4&ndash;15: two per service</li><li>Reels are silent: add audio in Instagram</li></ul>
+  <nav class="nav" aria-label="Jump to a post"><a href="#post-1">01</a><a href="#post-2">02</a><a href="#post-3">03</a><a href="#post-4">04</a><a href="#post-5">05</a><a href="#post-6">06</a><a href="#post-7">07</a><a href="#post-8">08</a><a href="#post-9">09</a><a href="#post-10">10</a><a href="#post-11">11</a><a href="#post-12">12</a><a href="#post-13">13</a><a href="#post-14">14</a><a href="#post-15">15</a></nav>
+</div>
+
+<article class="post" id="post-1">
+  <header>
+    <span class="num">01</span>
+    <div><h2>Who is UB Shield, and how can we help secure your business?</h2><p class="kind">Company</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/01-who-is-ub-shield/01-who-is-ub-shield-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 1, page 1: Who is UB Shield, and how can we help secure your business?"><img src="posts/01-who-is-ub-shield/01-who-is-ub-shield-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 1, page 2: Who We Are"><img src="posts/01-who-is-ub-shield/01-who-is-ub-shield-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 1, page 3: Our 6 Services"><img src="posts/01-who-is-ub-shield/01-who-is-ub-shield-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 1, page 4: Why UB Shield?"><img src="posts/01-who-is-ub-shield/01-who-is-ub-shield-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 1, page 5: Let's Secure Your Business"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/01-who-is-ub-shield.mp4" controls playsinline muted loop preload="none" poster="reels/01-who-is-ub-shield-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Meet UB Shield. We help businesses build more secure and reliable IT environments. Tell us what you need at ubshield.in/contact
+
+#UBShield #CyberSecurity #NetworkSecurity #Ahmedabad #Rajkot">Copy caption</button></div><p>Meet UB Shield. We help businesses build more secure and reliable IT environments. Tell us what you need at ubshield.in/contact</p><p class="tags">#UBShield #CyberSecurity #NetworkSecurity #Ahmedabad #Rajkot</p></div>
+</article>
+
+<article class="post" id="post-2">
+  <header>
+    <span class="num">02</span>
+    <div><h2>Does your business need cybersecurity, even if it's small?</h2><p class="kind">Company</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/02-small-business-security/02-small-business-security-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 2, page 1: Does your business need cybersecurity, even if it's small?"><img src="posts/02-small-business-security/02-small-business-security-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 2, page 2: Why It Matters"><img src="posts/02-small-business-security/02-small-business-security-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 2, page 3: Common Weak Points"><img src="posts/02-small-business-security/02-small-business-security-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 2, page 4: Start With These"><img src="posts/02-small-business-security/02-small-business-security-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 2, page 5: Know Your Gaps"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/02-small-business-security.mp4" controls playsinline muted loop preload="none" poster="reels/02-small-business-security-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Attackers do not only target large companies. Start with the basics and know where your gaps are.
+
+#UBShield #SmallBusiness #CyberSecurity #MSME #Gujarat">Copy caption</button></div><p>Attackers do not only target large companies. Start with the basics and know where your gaps are.</p><p class="tags">#UBShield #SmallBusiness #CyberSecurity #MSME #Gujarat</p></div>
+</article>
+
+<article class="post" id="post-3">
+  <header>
+    <span class="num">03</span>
+    <div><h2>How does UB Shield work, from finding gaps to fixing them?</h2><p class="kind">Company</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/03-our-4-step-approach/03-our-4-step-approach-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 3, page 1: How does UB Shield work, from finding gaps to fixing them?"><img src="posts/03-our-4-step-approach/03-our-4-step-approach-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 3, page 2: Step 1: Understand &amp; Assess"><img src="posts/03-our-4-step-approach/03-our-4-step-approach-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 3, page 3: Step 2: Identify &amp; Recommend"><img src="posts/03-our-4-step-approach/03-our-4-step-approach-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 3, page 4: Steps 3 &amp; 4: Implement, Validate &amp; Handover"><img src="posts/03-our-4-step-approach/03-our-4-step-approach-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 3, page 5: Have a Requirement?"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/03-our-4-step-approach.mp4" controls playsinline muted loop preload="none" poster="reels/03-our-4-step-approach-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="A clear process helps you know what happens at each stage. Here is how we work.
+
+#UBShield #CyberSecurity #ITSecurity #ITInfrastructure #Gujarat">Copy caption</button></div><p>A clear process helps you know what happens at each stage. Here is how we work.</p><p class="tags">#UBShield #CyberSecurity #ITSecurity #ITInfrastructure #Gujarat</p></div>
+</article>
+
+<article class="post" id="post-4">
+  <header>
+    <span class="num">04</span>
+    <div><h2>Is your office network ready for your business to grow?</h2><p class="kind">Network Design &amp; Architecture</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/04-network-ready-to-grow/04-network-ready-to-grow-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 4, page 1: Is your office network ready for your business to grow?"><img src="posts/04-network-ready-to-grow/04-network-ready-to-grow-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 4, page 2: Warning Signs"><img src="posts/04-network-ready-to-grow/04-network-ready-to-grow-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 4, page 3: What Good Design Covers"><img src="posts/04-network-ready-to-grow/04-network-ready-to-grow-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 4, page 4: How UB Shield Helps"><img src="posts/04-network-ready-to-grow/04-network-ready-to-grow-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 4, page 5: Plan Before You Expand"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/04-network-ready-to-grow.mp4" controls playsinline muted loop preload="none" poster="reels/04-network-ready-to-grow-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Growing your team or opening a new branch? Plan your network first.
+
+#UBShield #NetworkDesign #Networking #ITInfrastructure #BusinessGrowth">Copy caption</button></div><p>Growing your team or opening a new branch? Plan your network first.</p><p class="tags">#UBShield #NetworkDesign #Networking #ITInfrastructure #BusinessGrowth</p></div>
+</article>
+
+<article class="post" id="post-5">
+  <header>
+    <span class="num">05</span>
+    <div><h2>What is VLAN segmentation, and why shouldn't every device share one network?</h2><p class="kind">Network Design &amp; Architecture</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/05-vlan-segmentation/05-vlan-segmentation-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 5, page 1: What is VLAN segmentation, and why shouldn't every device share one network?"><img src="posts/05-vlan-segmentation/05-vlan-segmentation-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 5, page 2: The Problem"><img src="posts/05-vlan-segmentation/05-vlan-segmentation-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 5, page 3: What Is a VLAN?"><img src="posts/05-vlan-segmentation/05-vlan-segmentation-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 5, page 4: Example Zones"><img src="posts/05-vlan-segmentation/05-vlan-segmentation-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 5, page 5: Is Your Network Segmented?"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/05-vlan-segmentation.mp4" controls playsinline muted loop preload="none" poster="reels/05-vlan-segmentation-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Should a guest's phone be on the same network as your office server? Segmentation, with the right access rules, helps keep them apart.
+
+#UBShield #VLAN #NetworkSecurity #Networking #CyberSecurity">Copy caption</button></div><p>Should a guest's phone be on the same network as your office server? Segmentation, with the right access rules, helps keep them apart.</p><p class="tags">#UBShield #VLAN #NetworkSecurity #Networking #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-6">
+  <header>
+    <span class="num">06</span>
+    <div><h2>What is VAPT, and why does your business need it?</h2><p class="kind">VAPT</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/06-what-is-vapt/06-what-is-vapt-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 6, page 1: What is VAPT, and why does your business need it?"><img src="posts/06-what-is-vapt/06-what-is-vapt-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 6, page 2: VAPT Means"><img src="posts/06-what-is-vapt/06-what-is-vapt-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 6, page 3: What Can Be Tested?"><img src="posts/06-what-is-vapt/06-what-is-vapt-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 6, page 4: What You Get"><img src="posts/06-what-is-vapt/06-what-is-vapt-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 6, page 5: Test Your Security"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/06-what-is-vapt.mp4" controls playsinline muted loop preload="none" poster="reels/06-what-is-vapt-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="You cannot fix what you do not know about. VAPT helps you find and prioritize security weaknesses.
+
+#UBShield #VAPT #PenetrationTesting #CyberSecurity #WebSecurity">Copy caption</button></div><p>You cannot fix what you do not know about. VAPT helps you find and prioritize security weaknesses.</p><p class="tags">#UBShield #VAPT #PenetrationTesting #CyberSecurity #WebSecurity</p></div>
+</article>
+
+<article class="post" id="post-7">
+  <header>
+    <span class="num">07</span>
+    <div><h2>Vulnerability Assessment vs. Penetration Testing: what's the difference?</h2><p class="kind">VAPT</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/07-va-vs-pt/07-va-vs-pt-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 7, page 1: Vulnerability Assessment vs. Penetration Testing: what's the difference?"><img src="posts/07-va-vs-pt/07-va-vs-pt-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 7, page 2: Vulnerability Assessment"><img src="posts/07-va-vs-pt/07-va-vs-pt-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 7, page 3: Penetration Testing"><img src="posts/07-va-vs-pt/07-va-vs-pt-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 7, page 4: Simple Example"><img src="posts/07-va-vs-pt/07-va-vs-pt-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 7, page 5: Which Do You Need?"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/07-va-vs-pt.mp4" controls playsinline muted loop preload="none" poster="reels/07-va-vs-pt-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="One finds possible weaknesses. The other checks how they could be exploited. Together they give a clearer picture.
+
+#UBShield #VAPT #EthicalHacking #InfoSec #CyberSecurity">Copy caption</button></div><p>One finds possible weaknesses. The other checks how they could be exploited. Together they give a clearer picture.</p><p class="tags">#UBShield #VAPT #EthicalHacking #InfoSec #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-8">
+  <header>
+    <span class="num">08</span>
+    <div><h2>How could an attacker get into your business network?</h2><p class="kind">Network Security Assessment</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/08-entry-points/08-entry-points-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 8, page 1: How could an attacker get into your business network?"><img src="posts/08-entry-points/08-entry-points-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 8, page 2: Exposed Services"><img src="posts/08-entry-points/08-entry-points-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 8, page 3: Remote Access"><img src="posts/08-entry-points/08-entry-points-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 8, page 4: Inside the Network"><img src="posts/08-entry-points/08-entry-points-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 8, page 5: Review Your Attack Paths"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/08-entry-points.mp4" controls playsinline muted loop preload="none" poster="reels/08-entry-points-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Do you know which parts of your network are exposed? A security assessment helps you find out.
+
+#UBShield #NetworkSecurity #CyberThreats #RiskAssessment #CyberSecurity">Copy caption</button></div><p>Do you know which parts of your network are exposed? A security assessment helps you find out.</p><p class="tags">#UBShield #NetworkSecurity #CyberThreats #RiskAssessment #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-9">
+  <header>
+    <span class="num">09</span>
+    <div><h2>What happens during a Network Security Assessment?</h2><p class="kind">Network Security Assessment</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/09-network-security-assessment/09-network-security-assessment-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 9, page 1: What happens during a Network Security Assessment?"><img src="posts/09-network-security-assessment/09-network-security-assessment-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 9, page 2: Before We Start"><img src="posts/09-network-security-assessment/09-network-security-assessment-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 9, page 3: What We Evaluate"><img src="posts/09-network-security-assessment/09-network-security-assessment-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 9, page 4: What You Get"><img src="posts/09-network-security-assessment/09-network-security-assessment-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 9, page 5: Book an Assessment"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/09-network-security-assessment.mp4" controls playsinline muted loop preload="none" poster="reels/09-network-security-assessment-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="From exposed services to remote access, here is what a network security assessment looks at.
+
+#UBShield #SecurityAssessment #NetworkSecurity #ITAudit #CyberSecurity">Copy caption</button></div><p>From exposed services to remote access, here is what a network security assessment looks at.</p><p class="tags">#UBShield #SecurityAssessment #NetworkSecurity #ITAudit #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-10">
+  <header>
+    <span class="num">10</span>
+    <div><h2>You have a firewall, but is it configured correctly?</h2><p class="kind">Firewall Configuration &amp; Review</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/10-firewall-configured-correctly/10-firewall-configured-correctly-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 10, page 1: You have a firewall, but is it configured correctly?"><img src="posts/10-firewall-configured-correctly/10-firewall-configured-correctly-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 10, page 2: Why Check It?"><img src="posts/10-firewall-configured-correctly/10-firewall-configured-correctly-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 10, page 3: What We Review"><img src="posts/10-firewall-configured-correctly/10-firewall-configured-correctly-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 10, page 4: How UB Shield Helps"><img src="posts/10-firewall-configured-correctly/10-firewall-configured-correctly-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 10, page 5: Get Your Firewall Reviewed"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/10-firewall-configured-correctly.mp4" controls playsinline muted loop preload="none" poster="reels/10-firewall-configured-correctly-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="When was your firewall last reviewed?
+
+#UBShield #Firewall #FirewallSecurity #NetworkSecurity #CyberSecurity">Copy caption</button></div><p>When was your firewall last reviewed?</p><p class="tags">#UBShield #Firewall #FirewallSecurity #NetworkSecurity #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-11">
+  <header>
+    <span class="num">11</span>
+    <div><h2>What are common firewall mistakes businesses make?</h2><p class="kind">Firewall Configuration &amp; Review</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/11-firewall-mistakes/11-firewall-mistakes-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 11, page 1: What are common firewall mistakes businesses make?"><img src="posts/11-firewall-mistakes/11-firewall-mistakes-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 11, page 2: Mistake 1: Broad Rules"><img src="posts/11-firewall-mistakes/11-firewall-mistakes-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 11, page 3: Mistake 2: Weak Admin Access"><img src="posts/11-firewall-mistakes/11-firewall-mistakes-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 11, page 4: Mistake 3: No Maintenance"><img src="posts/11-firewall-mistakes/11-firewall-mistakes-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 11, page 5: Find and Fix the Gaps"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/11-firewall-mistakes.mp4" controls playsinline muted loop preload="none" poster="reels/11-firewall-mistakes-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Small configuration mistakes can create big security gaps. How many of these have you checked?
+
+#UBShield #Firewall #CyberSecurityTips #ITSecurity #NetworkAdmin">Copy caption</button></div><p>Small configuration mistakes can create big security gaps. How many of these have you checked?</p><p class="tags">#UBShield #Firewall #CyberSecurityTips #ITSecurity #NetworkAdmin</p></div>
+</article>
+
+<article class="post" id="post-12">
+  <header>
+    <span class="num">12</span>
+    <div><h2>What is security hardening, and why aren't default settings enough?</h2><p class="kind">Security Hardening Review</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/12-what-is-hardening/12-what-is-hardening-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 12, page 1: What is security hardening, and why aren't default settings enough?"><img src="posts/12-what-is-hardening/12-what-is-hardening-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 12, page 2: The Problem"><img src="posts/12-what-is-hardening/12-what-is-hardening-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 12, page 3: What Is Hardening?"><img src="posts/12-what-is-hardening/12-what-is-hardening-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 12, page 4: What We Review"><img src="posts/12-what-is-hardening/12-what-is-hardening-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 12, page 5: Check Your Configuration"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/12-what-is-hardening.mp4" controls playsinline muted loop preload="none" poster="reels/12-what-is-hardening-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="A system that works is not always a system that is securely configured.
+
+#UBShield #SecurityHardening #ServerSecurity #CloudSecurity #CyberSecurity">Copy caption</button></div><p>A system that works is not always a system that is securely configured.</p><p class="tags">#UBShield #SecurityHardening #ServerSecurity #CloudSecurity #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-13">
+  <header>
+    <span class="num">13</span>
+    <div><h2>How can you make your servers and computers harder to attack?</h2><p class="kind">Security Hardening Review</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/13-hardening-steps/13-hardening-steps-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 13, page 1: How can you make your servers and computers harder to attack?"><img src="posts/13-hardening-steps/13-hardening-steps-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 13, page 2: 1. Apply Secure Baselines"><img src="posts/13-hardening-steps/13-hardening-steps-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 13, page 3: 2. Remove What You Don't Need"><img src="posts/13-hardening-steps/13-hardening-steps-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 13, page 4: 3 &amp; 4. Protect Logins and Update"><img src="posts/13-hardening-steps/13-hardening-steps-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 13, page 5: Need a Hardening Review?"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/13-hardening-steps.mp4" controls playsinline muted loop preload="none" poster="reels/13-hardening-steps-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Save this post and use it as a starting checklist for your IT team.
+
+#UBShield #Hardening #EndpointSecurity #CyberSecurityTips #ITSecurity">Copy caption</button></div><p>Save this post and use it as a starting checklist for your IT team.</p><p class="tags">#UBShield #Hardening #EndpointSecurity #CyberSecurityTips #ITSecurity</p></div>
+</article>
+
+<article class="post" id="post-14">
+  <header>
+    <span class="num">14</span>
+    <div><h2>Which security tools does a growing business need?</h2><p class="kind">Security Infrastructure Deployment</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/14-security-tools/14-security-tools-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 14, page 1: Which security tools does a growing business need?"><img src="posts/14-security-tools/14-security-tools-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 14, page 2: Network Protection"><img src="posts/14-security-tools/14-security-tools-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 14, page 3: Device, Email &amp; Data Protection"><img src="posts/14-security-tools/14-security-tools-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 14, page 4: Visibility"><img src="posts/14-security-tools/14-security-tools-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 14, page 5: Choose What Fits"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/14-security-tools.mp4" controls playsinline muted loop preload="none" poster="reels/14-security-tools-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="More tools do not automatically mean more security. Choose what fits your risks and set it up properly.
+
+#UBShield #SecurityInfrastructure #EndpointProtection #SIEM #CyberSecurity">Copy caption</button></div><p>More tools do not automatically mean more security. Choose what fits your risks and set it up properly.</p><p class="tags">#UBShield #SecurityInfrastructure #EndpointProtection #SIEM #CyberSecurity</p></div>
+</article>
+
+<article class="post" id="post-15">
+  <header>
+    <span class="num">15</span>
+    <div><h2>What should you check before calling a security installation complete?</h2><p class="kind">Security Infrastructure Deployment</p></div>
+  </header>
+  <div class="media">
+    <figure class="carousel"><figcaption>Carousel, 5 pages, 1080 &times; 1350</figcaption><div class="strip" tabindex="0"><img src="posts/15-installation-checks/15-installation-checks-1.jpg" width="1080" height="1350" loading="lazy" alt="Post 15, page 1: What should you check before calling a security installation complete?"><img src="posts/15-installation-checks/15-installation-checks-2.jpg" width="1080" height="1350" loading="lazy" alt="Post 15, page 2: Check 1: Testing"><img src="posts/15-installation-checks/15-installation-checks-3.jpg" width="1080" height="1350" loading="lazy" alt="Post 15, page 3: Check 2: Documentation"><img src="posts/15-installation-checks/15-installation-checks-4.jpg" width="1080" height="1350" loading="lazy" alt="Post 15, page 4: Check 3: Training"><img src="posts/15-installation-checks/15-installation-checks-5.jpg" width="1080" height="1350" loading="lazy" alt="Post 15, page 5: Deploy With a Proper Handover"></div></figure>
+    <figure class="reel"><figcaption>Reel, 1080 &times; 1920</figcaption><video src="reels/15-installation-checks.mp4" controls playsinline muted loop preload="none" poster="reels/15-installation-checks-cover.jpg"></video></figure>
+  </div>
+  <div class="cap"><div class="cap-h"><h3>Caption</h3><button type="button" class="copy" data-copy="Before you close an installation project, check these points.
+
+#UBShield #ITDeployment #SecuritySolutions #ITInfrastructure #CyberSecurity">Copy caption</button></div><p>Before you close an installation project, check these points.</p><p class="tags">#UBShield #ITDeployment #SecuritySolutions #ITInfrastructure #CyberSecurity</p></div>
+</article>
+<footer>Scroll each strip sideways to see all five pages. Press play on a reel to load it.</footer>
+</div>
+<script>
+document.querySelectorAll('.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var text = b.dataset.copy, done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy caption'; }, 1600); };
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(function () {
+      var r = document.createRange(); r.selectNodeContents(b.closest('.cap')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected: press copy';
+    });
+  });
+});
+</script>

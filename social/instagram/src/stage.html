@@ -1,0 +1,366 @@
+<!doctype html>
+<!--
+  UB Shield Instagram stage. One template renders both formats:
+
+    stage.html?mode=post&post=4&page=2   a 1080x1350 carousel page
+    stage.html?mode=reel&post=4          a 1080x1920 reel, driven frame by frame
+
+  Brand system is the website's: the six brand colours, Sofia Sans Extra
+  Condensed for display, Instrument Sans for text, square corners, the site's
+  line illustrations. The "theme gradient" is navy -> blue -> cyan light.
+
+  Reels are CSS animations on one timeline. render-reels.mjs pauses them and
+  sets every animation's currentTime per frame, so the video is deterministic.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'Sofia Sans Extra Condensed';src:url('../../../public/fonts/sofia-sans-extra-condensed-var.woff2') format('woff2');font-weight:700 900}
+@font-face{font-family:'Instrument Sans';src:url('../../../public/fonts/instrument-sans-var.woff2') format('woff2');font-weight:500 700}
+
+:root{--navy:#061522;--mid:#0C2944;--blue:#1479D4;--cyan:#27B8ED;--paper:#F4F6F8;--cool:#C7D0D8;--line:rgba(199,208,216,.24);
+  --disp:'Sofia Sans Extra Condensed','Arial Narrow',sans-serif;--text:'Instrument Sans','Helvetica Neue',Arial,sans-serif;--ease:cubic-bezier(.16,.84,.24,1)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--navy)}
+.cv{position:relative;overflow:hidden;color:var(--paper);font-family:var(--text);font-weight:500}
+.cv.post{width:1080px;height:1350px}
+.cv.reel{width:1080px;height:1920px}
+
+/* ---------- backdrop: the theme gradient ---------- */
+.bg,.bg i{position:absolute;inset:0}
+.bg{background:linear-gradient(162deg,var(--navy) 0%,var(--mid) 56%,#11467c 100%)}
+.bg .g1{inset:auto;width:1250px;height:1250px;right:-420px;top:-380px;background:radial-gradient(closest-side,rgba(20,121,212,.72),rgba(20,121,212,0))}
+.bg .g2{inset:auto;width:760px;height:760px;right:-250px;top:-250px;background:radial-gradient(closest-side,rgba(39,184,237,.42),rgba(39,184,237,0))}
+.bg .g3{inset:auto;width:1000px;height:1000px;left:-460px;bottom:-480px;background:radial-gradient(closest-side,rgba(39,184,237,.26),rgba(39,184,237,0))}
+.bg.alt{background:linear-gradient(18deg,#11467c 0%,var(--mid) 50%,var(--navy) 100%)}
+.bg.alt .g1{right:auto;top:auto;left:-480px;bottom:-520px}
+.bg.alt .g2{right:auto;top:auto;left:-300px;bottom:-340px}
+.bg.alt .g3{left:auto;bottom:auto;right:-520px;top:-300px;opacity:.7}
+.bg .dots{background-image:radial-gradient(circle at 2px 2px,rgba(39,184,237,.34) 1.7px,transparent 2.2px);background-size:30px 30px;-webkit-mask-image:radial-gradient(75% 55% at 72% 26%,#000,transparent 78%);mask-image:radial-gradient(75% 55% at 72% 26%,#000,transparent 78%)}
+.bg.alt .dots{-webkit-mask-image:radial-gradient(75% 55% at 26% 78%,#000,transparent 78%);mask-image:radial-gradient(75% 55% at 26% 78%,#000,transparent 78%)}
+.sl{position:absolute;height:3px;background:linear-gradient(90deg,transparent,var(--blue) 35%,var(--paper) 62%,transparent);transform:rotate(-32deg);transform-origin:left center;opacity:.9}
+.chm{position:absolute;width:44px;height:44px}
+.chm:before,.chm:after{content:'';position:absolute;background:var(--paper)}
+.chm:before{left:21px;top:0;width:2px;height:44px}.chm:after{top:21px;left:0;height:2px;width:44px}
+
+/* ---------- shared pieces ---------- */
+.hd{position:absolute;left:72px;right:72px;top:64px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.logo{display:flex;align-items:center;gap:18px}
+.logo .m{height:62px;width:auto;display:block}
+.logo .w{height:25px;width:auto;display:block}
+.ct{display:flex;align-items:center;gap:14px;font:900 46px/1 var(--disp)}
+.ct i{width:2px;height:40px;background:var(--line)}
+.ct b{font-weight:900;color:rgba(199,208,216,.5)}
+.chip{display:inline-flex;align-items:center;min-height:50px;padding:8px 20px;background:var(--cyan);color:var(--navy);font:600 27px/1.15 var(--text);text-transform:uppercase;letter-spacing:.01em}
+.h{font:900 132px/.88 var(--disp);text-transform:uppercase;letter-spacing:-.006em;margin:0}
+.kick{font:900 170px/.86 var(--disp);text-transform:uppercase;color:transparent;-webkit-text-stroke:2.5px var(--cyan);letter-spacing:.005em;margin:0 0 6px}
+.rule{width:132px;height:9px;background:var(--cyan);margin:34px 0 40px;transform-origin:left}
+.body{font:500 52px/1.28 var(--text);margin:0;max-width:900px}
+.sub{font:600 42px/1.22 var(--text);margin:30px 0 0;display:flex;gap:22px;align-items:flex-start}
+.sub:before{content:'';flex:none;width:44px;height:6px;background:var(--cyan);margin-top:.5em}
+.bl{list-style:none;margin:0;padding:0;border-top:2px solid var(--line)}
+.bl li{display:flex;gap:28px;align-items:flex-start;padding:25px 0;border-bottom:2px solid var(--line);font:600 46px/1.18 var(--text)}
+.bl li:before{content:'';flex:none;width:20px;height:20px;background:var(--cyan);margin-top:.36em}
+.note{font:500 39px/1.3 var(--text);color:var(--cool);margin:34px 0 0;max-width:880px}
+.pair{border-left:8px solid var(--cyan);padding:6px 0 8px 36px}
+.pair + .pair{margin-top:54px;border-left-color:var(--blue)}
+.pair span{display:block;font:600 30px/1.2 var(--text);text-transform:uppercase;color:var(--cyan);margin-bottom:14px;letter-spacing:.02em}
+.pair p{font:600 56px/1.16 var(--text);margin:0}
+.art{position:absolute}
+.art svg{display:block;width:100%;height:100%;overflow:visible}
+.ft{position:absolute;left:72px;right:72px;bottom:62px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.pg{display:flex;gap:10px}
+.pg i{width:58px;height:7px;background:rgba(244,246,248,.26)}
+.pg i.on{background:var(--cyan)}
+.sw{display:flex;align-items:center;gap:20px;font:600 28px/1 var(--text);text-transform:uppercase;letter-spacing:.04em}
+.sw i{width:78px;height:78px;border-radius:50%;background:var(--cyan);display:flex;align-items:center;justify-content:center}
+.sw svg{width:34px;height:34px;fill:none;stroke:var(--navy);stroke-width:2.6}
+
+/* closing page: the website's cyan contact block */
+.cta{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(140deg,var(--cyan) 0%,#1f9ee4 70%,var(--blue) 130%);color:var(--navy);padding:66px 72px 172px}
+.cta .h{color:var(--navy)}
+.cta .body{font-weight:600;font-size:44px;margin-top:26px}
+.btn{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:38px;background:var(--navy);color:var(--paper);padding:0 22px 0 38px;height:116px;font:600 46px/1 var(--text)}
+.btn i{flex:none;width:76px;height:76px;border-radius:50%;background:var(--cyan);display:flex;align-items:center;justify-content:center}
+.btn svg{width:32px;height:32px;fill:none;stroke:var(--navy);stroke-width:2.6}
+.cta + .ft .pg i{background:rgba(6,21,34,.24)}
+.cta + .ft .pg i.on{background:var(--navy)}
+
+/* ---------- post layouts ---------- */
+.post .cover-art{right:40px;top:150px;width:620px;height:496px}
+.post .cover{position:absolute;left:72px;right:72px;bottom:176px}
+.post .cover .chip{margin-bottom:26px}
+.post .inner{position:absolute;left:72px;right:72px;top:232px}
+.post .motif{right:40px;width:380px;height:304px}
+.post .cta-art{left:50%;top:150px;width:640px;height:512px;margin-left:-320px}
+
+/* ---------- illustration classes (from the website) ---------- */
+.spin{transform-box:fill-box;transform-origin:center}
+.flow{stroke-dasharray:6 10}
+.redact{transform-box:fill-box;transform-origin:left}
+.tick{stroke-dasharray:40;stroke-dashoffset:0}
+
+/* ================= reel ================= */
+.reel .hd{top:250px;z-index:9}
+.reel .logo .m{height:70px}.reel .logo .w{height:28px}
+.reel .pb{position:absolute;left:72px;right:72px;top:206px;display:flex;gap:10px;z-index:9}
+.reel .pb span{flex:1;height:6px;background:rgba(244,246,248,.24);overflow:hidden}
+.reel .pb i{display:block;height:100%;background:var(--cyan);transform:scaleX(0);transform-origin:left;animation:pf calc(var(--d)*1s) linear calc(var(--s)*1s) forwards}
+.reel .rs{position:absolute;inset:0;opacity:0;animation:sIn .01s linear calc(var(--s)*1s) forwards,sOut .01s linear calc((var(--s) + var(--d))*1s) forwards}
+.reel .rs.last{animation:sIn .01s linear calc(var(--s)*1s) forwards}
+.reel .rs .cam{position:absolute;inset:0;transform-origin:50% 45%;animation:kb calc(var(--d)*1s) linear calc(var(--s)*1s) both}
+.reel .cover-art{right:36px;top:356px;width:640px;height:512px}
+.reel .cover{position:absolute;left:72px;right:72px;top:900px}
+.reel .cover .chip{margin-bottom:28px}
+.reel .inner{position:absolute;left:72px;right:72px;top:450px}
+.reel .motif{right:40px;width:430px;height:344px}
+.reel .cta-art{left:50%;top:330px;width:660px;height:528px;margin-left:-330px}
+.reel .cta{top:900px;bottom:0;padding:70px 72px 0;transform:translateY(102%);animation:rise .9s var(--ease) calc((var(--s) + .15)*1s) forwards}
+.reel .body{font-size:56px}
+.reel .bl li{font-size:56px;padding:30px 0}
+.reel .note{font-size:45px}
+.reel .pair p{font-size:64px}
+.reel .pair span{font-size:34px}
+.reel .chip{font-size:30px;min-height:56px}
+.reel .sub{font-size:46px}
+.reel .cta .body{font-size:48px}
+
+/* words rise out of a mask, as the website's headlines do */
+.reel .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.09em 0 .1em;margin:-.09em 0 -.1em}
+.reel .w>i{display:inline-block;font-style:normal;transform:translateY(118%);animation:up .9s var(--ease) calc((var(--s) + var(--o,.25) + var(--i)*.05)*1s) forwards}
+.reel .fu{opacity:0;transform:translateY(30px);animation:fu .75s var(--ease) calc((var(--s) + var(--o,.8))*1s) forwards}
+.reel .rule{transform:scaleX(0);animation:sx .7s var(--ease) calc((var(--s) + var(--o,.55))*1s) forwards}
+.reel .bl{border-top-color:transparent;animation:bt .5s linear calc((var(--s) + .7)*1s) forwards}
+.reel .bl li{opacity:0;transform:translateX(-44px);animation:bi .65s var(--ease) calc((var(--s) + .8 + var(--i)*.24)*1s) forwards}
+.reel .pair{opacity:0;transform:translateX(-44px);animation:bi .7s var(--ease) calc((var(--s) + .8 + var(--i)*.7)*1s) forwards}
+.reel .art.in{opacity:0;transform:scale(.86) translateY(30px);animation:ai 1.2s var(--ease) calc((var(--s) + var(--o,.1))*1s) forwards}
+.reel .btn i{animation:pulse 1.6s ease-in-out calc((var(--s) + 1.6)*1s) infinite}
+.reel .wp{position:absolute;top:-12%;height:124%;left:0;width:230%;z-index:8;transform:translateX(-120%) skewX(-16deg);background:linear-gradient(90deg,var(--cyan),var(--blue) 50%,var(--mid) 92%);animation:wp .9s cubic-bezier(.7,0,.3,1) calc((var(--b) - .45)*1s) both}
+.reel .wp:after{content:'';position:absolute;top:0;bottom:0;right:-70px;width:22px;background:var(--paper);opacity:.9}
+/* The bottom of a reel sits under Instagram's caption and buttons: no text there, only a slow orbit. */
+.reel .orbit{position:absolute;left:50%;top:1500px;width:1100px;height:1100px;margin-left:-550px;opacity:.5;z-index:1}
+.reel .orbit svg{width:100%;height:100%;overflow:visible}
+.reel .orbit .o1{transform-origin:550px 550px;animation:rot 40s linear infinite}
+.reel .orbit .o2{transform-origin:550px 550px;animation:rot 28s linear infinite reverse}
+/* ambient life */
+.reel .bg .g1{animation:drift 9s ease-in-out infinite alternate}
+.reel .bg .g2{animation:drift 7s ease-in-out -2s infinite alternate-reverse}
+.reel .bg .g3{animation:drift 11s ease-in-out -4s infinite alternate}
+.reel .bg .dots{animation:dots 6s linear infinite}
+.reel .sl{animation:streak 5.5s ease-in-out infinite}
+.reel .sl.b{animation-delay:-2.4s}
+.reel .chm{animation:chm 4s ease-in-out infinite}
+.reel .spin{animation:rot 22s linear infinite}
+.reel .flow{animation:flow 2.2s linear infinite}
+.reel .pl2{animation:pl2 2.4s ease-in-out infinite}
+.reel .scanY{animation:scanY 2.4s ease-in-out infinite alternate}
+.reel .scanX{animation:scanX 3.6s ease-in-out infinite alternate}
+.reel .redact{animation:redact 3s ease-in-out infinite alternate}
+.reel .tick{animation:tick 3.2s ease-out infinite}
+.reel .hunt{animation:hunt 6s cubic-bezier(.65,0,.35,1) infinite}
+.reel .knob{animation:knob 2.6s ease-in-out infinite alternate}
+
+@keyframes sIn{to{opacity:1}}
+@keyframes sOut{to{opacity:0}}
+@keyframes pf{to{transform:scaleX(1)}}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.035)}}
+@keyframes up{to{transform:none}}
+@keyframes fu{to{opacity:1;transform:none}}
+@keyframes sx{to{transform:scaleX(1)}}
+@keyframes bt{to{border-top-color:var(--line)}}
+@keyframes bi{to{opacity:1;transform:none}}
+@keyframes ai{to{opacity:1;transform:none}}
+@keyframes rise{to{transform:none}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+@keyframes wp{to{transform:translateX(62%) skewX(-16deg)}}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(-70px,60px) scale(1.12)}}
+@keyframes dots{to{background-position:30px 30px}}
+@keyframes streak{0%,100%{opacity:.25;transform:rotate(-32deg) translateX(-60px)}50%{opacity:1;transform:rotate(-32deg) translateX(60px)}}
+@keyframes chm{0%,100%{opacity:.5;transform:rotate(0)}50%{opacity:1;transform:rotate(90deg)}}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes flow{to{stroke-dashoffset:-64}}
+@keyframes pl2{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes scanY{from{transform:translateY(-80px)}to{transform:translateY(80px)}}
+@keyframes scanX{from{transform:translateX(0)}to{transform:translateX(290px)}}
+@keyframes redact{from{transform:scaleX(.08)}to{transform:scaleX(1)}}
+@keyframes tick{0%{stroke-dashoffset:40}30%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes hunt{0%,22%{transform:translate(329px,160px)}33%,55%{transform:translate(174px,220px)}66%,88%{transform:translate(359px,280px)}100%{transform:translate(329px,160px)}}
+@keyframes knob{from{transform:translateX(0)}to{transform:translateX(16px)}}
+/* static posts: the scan marks need a resting place */
+.post .hunt{transform:translate(329px,160px)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#27B8ED" opacity=".22"></circle></pattern>
+<path id="sh" d="M40 0 76 13v34c0 26-17 42-36 50C21 89 4 73 4 47V13Z"></path>
+</defs></svg>
+<div id="root"></div>
+<script src="data.js"></script>
+<script>
+const BRAND = '../../../public/images/brand/';
+const q = new URLSearchParams(location.search);
+const MODE = q.get('mode') || 'post';
+const post = IG.posts.find((p) => String(p.id) === (q.get('post') || '1'));
+const URL_RE = /ubshield\.in\/contact/;
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const pad = (n) => String(n).padStart(2, '0');
+const art = (key) => IG.art[key].replace('__SHIELD__', BRAND + 'ub-shield.png');
+const ARROW = '<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>';
+const NE = '<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"></path></svg>';
+
+/* "Step 1: Understand & Assess" -> a number set large, then the title. */
+function splitHeading(h) {
+  let m = h.match(/^((?:Steps?|Mistake|Check) [\d &]+): (.+)$/);
+  if (m) return { kick: m[1], title: m[2] };
+  m = h.match(/^(\d(?: & \d)?)\. (.+)$/);
+  if (m) return { kick: m[1].replace(/\d/g, (d) => '0' + d), title: m[2] };
+  return { kick: null, title: h };
+}
+
+/* In a reel every word sits in its own mask so it can rise into place. */
+let wi = 0;
+function words(text) {
+  if (MODE !== 'reel') return esc(text);
+  return text.split(' ').map((w) => `<span class="w" style="--i:${wi++}"><i>${esc(w)}</i></span>`).join(' ');
+}
+const fu = (o) => (MODE === 'reel' ? ` fu" style="--o:${o}` : '');
+
+/* Streaks and crosshairs sit in the margins each layout leaves empty, never across the logo or the text. */
+function backdrop(kind) {
+  const alt = kind === 'alt';
+  const marks = {
+    cover: '<i class="sl" style="left:-10%;top:34%;width:40%"></i><i class="sl b" style="right:-36%;top:50%;width:60%"></i><span class="chm" style="left:44%;top:12%"></span><span class="chm" style="right:5%;top:46%"></span>',
+    inner: '<i class="sl" style="right:-30%;top:21%;width:50%"></i><i class="sl b" style="right:-40%;bottom:14%;width:60%"></i><span class="chm" style="right:72px;top:152px"></span>',
+    alt: '<i class="sl" style="right:-30%;top:21%;width:50%"></i><i class="sl b" style="right:-40%;bottom:14%;width:60%"></i><span class="chm" style="right:72px;top:152px"></span>',
+    cta: '<i class="sl" style="left:-10%;top:30%;width:38%"></i><i class="sl b" style="right:-34%;top:38%;width:56%"></i><span class="chm" style="left:9%;top:36%"></span><span class="chm" style="right:9%;top:14%"></span>',
+  }[kind];
+  return `<div class="bg${alt ? ' alt' : ''}"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="dots"></i></div>${marks}`;
+}
+const kindOf = (n) => (n === 1 ? 'cover' : n === 5 ? 'cta' : n === 3 ? 'alt' : 'inner');
+
+function header(n) {
+  const counter = MODE === 'post' ? `<div class="ct"><span>${pad(n)}</span><i></i><b>05</b></div>` : '';
+  return `<div class="hd"><div class="logo"><img class="m" src="${BRAND}ub-shield.png" alt=""><img class="w" src="${BRAND}ub-wordmark.png" alt="UB Shield"></div>${counter}</div>`;
+}
+
+function footer(n) {
+  const segs = [1, 2, 3, 4, 5].map((i) => `<i class="${i === n ? 'on' : ''}"></i>`).join('');
+  return `<div class="ft"><div class="pg">${segs}</div>${n < 5 ? `<div class="sw">Swipe<i>${ARROW}</i></div>` : ''}</div>`;
+}
+
+function coverHTML(p) {
+  wi = 0;
+  return `<div class="art cover-art in">${art(post.art)}</div>
+<div class="cover">${post.service ? `<span class="chip${fu(0.15)}">${esc(post.service)}</span>` : ''}
+<h1 class="h">${words(p.h)}</h1>
+<p class="sub${fu(1.1)}"><span>${esc(p.body)}</span></p></div>`;
+}
+
+function innerHTML(p) {
+  wi = 0;
+  const { kick, title } = splitHeading(p.h);
+  let out = '<div class="inner">';
+  if (kick) out += `<p class="kick${fu(0.1)}">${esc(kick)}</p>`;
+  out += `<h2 class="h" style="--o:${kick ? 0.35 : 0.2}">${words(title)}</h2><div class="rule"></div>`;
+  if (p.body) out += `<p class="body${fu(0.85)}">${esc(p.body)}</p>`;
+  if (p.bullets) out += `<ul class="bl">${p.bullets.map((b, i) => `<li style="--i:${i}">${esc(b)}</li>`).join('')}</ul>`;
+  if (p.pairs) out += p.pairs.map(([k, v], i) => `<div class="pair" style="--i:${i}"><span>${esc(k)}</span><p>${esc(v)}</p></div>`).join('');
+  if (p.note) out += `<p class="note${fu(1.9)}">${esc(p.note)}</p>`;
+  return out + `</div><div class="art motif in" style="--o:.6">${art(post.art)}</div>`;
+}
+
+function ctaHTML(p) {
+  wi = 0;
+  const text = p.body.replace(URL_RE, '').trim();
+  return `<div class="art cta-art in">${art('emblem')}</div>
+<div class="cta"><h2 class="h" style="--o:.55">${words(p.h)}</h2>
+${text ? `<p class="body${fu(1.15)}">${esc(text)}</p>` : ''}
+<div class="btn${fu(1.4)}"><span>ubshield.in/contact</span><i>${NE}</i></div></div>`;
+}
+
+const pageHTML = (p, n) => (n === 1 ? coverHTML(p) : n === 5 ? ctaHTML(p) : innerHTML(p));
+
+/* ---- fitting: headings shrink until their block fits its space ---- */
+function fitCover(cv, floorY) {
+  const block = cv.querySelector('.cover'), h = block.querySelector('.h');
+  const isPost = cv.classList.contains('post');
+  let size = isPost ? 136 : 150;
+  const fits = () => (isPost ? block.offsetTop >= floorY : block.offsetTop + block.offsetHeight <= floorY);
+  h.style.fontSize = size + 'px';
+  while (!fits() && size > 70) { size -= 3; h.style.fontSize = size + 'px'; }
+}
+function fitInner(scope, maxBottom, motifBottom) {
+  const block = scope.querySelector('.inner'), h = block.querySelector('.h'), body = block.querySelector('.body');
+  const reel = MODE === 'reel';
+  let size = reel ? 164 : 150;
+  h.style.fontSize = size + 'px';
+  const lines = () => Math.round(h.offsetHeight / (size * 0.88));
+  while (lines() > 3 && size > 96) { size -= 4; h.style.fontSize = size + 'px'; }
+  if (body) {
+    const n = body.textContent.length;
+    let b = (n < 70 ? 70 : n < 110 ? 62 : n < 150 ? 56 : 52) + (reel ? 6 : 0);
+    body.style.fontSize = b + 'px';
+    while (block.offsetTop + block.offsetHeight > maxBottom && b > 38) { b -= 2; body.style.fontSize = b + 'px'; }
+  }
+  while (block.offsetTop + block.offsetHeight > maxBottom && size > 84) { size -= 4; h.style.fontSize = size + 'px'; }
+  /* The illustration takes the space the text leaves: larger on short pages, absent on full ones. */
+  const motif = scope.querySelector('.motif');
+  if (motif) {
+    const free = motifBottom - (block.offsetTop + block.offsetHeight) - 56;
+    const hgt = Math.min(reel ? 520 : 460, free);
+    if (hgt < 270) motif.remove();
+    else { motif.style.height = hgt + 'px'; motif.style.width = hgt * 1.25 + 'px'; motif.style.top = motifBottom - hgt + 'px'; }
+  }
+}
+function fitCta(scope, isPost) {
+  const h = scope.querySelector('.cta .h');
+  let size = isPost ? 128 : 140;
+  h.style.fontSize = size + 'px';
+  while (Math.round(h.offsetHeight / (size * 0.88)) > 2 && size > 84) { size -= 4; h.style.fontSize = size + 'px'; }
+}
+
+const root = document.getElementById('root');
+
+if (MODE === 'post') {
+  const n = Number(q.get('page') || 1), p = post.pages[n - 1];
+  root.innerHTML = `<div class="cv post">${backdrop(kindOf(n))}${header(n)}${pageHTML(p, n)}${footer(n)}</div>`;
+  const cv = root.firstElementChild;
+  document.fonts.ready.then(() => {
+    if (n === 1) fitCover(cv, 150 + 496 - 50);
+    else if (n === 5) fitCta(cv, true);
+    else fitInner(cv, 1350 - 176, 1350 - 176);
+    document.documentElement.dataset.ready = '1';
+  });
+} else {
+  /* Reel: cover, three content scenes, closing scene. */
+  const dur = post.pages.map((p, i) => {
+    if (i === 0) return 3.9;
+    if (i === 4) return 4.4;
+    const items = (p.bullets || p.pairs || []).length;
+    return items >= 5 ? 5.4 : items >= 3 ? 4.8 : (p.body || '').length > 120 ? 5.0 : 4.4;
+  });
+  let t = 0;
+  const start = dur.map((d) => { const s = t; t += d; return s; });
+  window.REEL_SECONDS = t;
+  const scenes = post.pages.map((p, i) =>
+    `<div class="rs${i === 4 ? ' last' : ''}" style="--s:${start[i]};--d:${dur[i]}" data-n="${i + 1}"><div class="cam">${backdrop(kindOf(i + 1))}${pageHTML(p, i + 1)}</div></div>`).join('');
+  const wipes = start.slice(1).map((s) => `<i class="wp" style="--b:${s}"></i>`).join('');
+  const bars = post.pages.map((_, i) => `<span><i style="--s:${start[i]};--d:${dur[i]}"></i></span>`).join('');
+  const orbit = '<div class="orbit"><svg viewBox="0 0 1100 1100"><g fill="none" stroke="#27B8ED"><circle cx="550" cy="550" r="540" stroke-width="2" opacity=".5"></circle><g class="o1"><circle cx="550" cy="550" r="470" stroke-width="2" stroke-dasharray="4 14"></circle><path d="M550 80a470 470 0 0 1 332 138" stroke-width="5"></path></g><g class="o2"><circle cx="550" cy="550" r="390" stroke-width="2" stroke-dasharray="2 10" opacity=".7"></circle><circle cx="550" cy="160" r="9" fill="#27B8ED" stroke="none"></circle></g></g></svg></div>';
+  root.innerHTML = `<div class="cv reel"><div class="bg"></div>${scenes}${orbit}${wipes}<div class="pb">${bars}</div>${header(0)}</div>`;
+  const cv = root.firstElementChild;
+  document.fonts.ready.then(() => {
+    cv.querySelectorAll('.rs').forEach((rs) => {
+      const n = Number(rs.dataset.n);
+      if (n === 1) fitCover(rs, 1490);
+      else if (n === 5) fitCta(rs, false);
+      else fitInner(rs, 1480, 1480);
+    });
+    document.documentElement.dataset.ready = '1';
+  });
+}
+</script>
+</body>
+</html>
